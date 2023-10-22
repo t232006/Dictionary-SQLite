@@ -1,14 +1,8 @@
 unit saver;
 
 interface
-uses VCL.Graphics, Classes, Sysutils, System.IniFiles, Frame, ShellAPI, Windows ;
+uses VCL.Graphics, Classes, Sysutils, System.IniFiles, Frame ;
 
-type
-  Tcloud = class
-    public
-      procedure saveToCloud;
-      procedure loadFromCloud(whereTo:string);
-  end;
 
    procedure saveForm;
    procedure loadForm;
@@ -110,35 +104,4 @@ begin
     //f.UpdateFile;
     f.Free;
 end;
-{ cloud }
-
-procedure Tcloud.loadFromCloud(whereTo: string);
-var theprogr, command, fullname:string;
-    f:file;
-
-const DICT='\dictionary.db';
-      i:byte=1;
-      function FileNum(num:byte):string;
-      begin
-        result:=whereto+'\dictionary'+inttostr(num)+'.db';
-      end;
-begin
-    fullname:=whereto+DICT;
-    assignfile(f, fullname);
-    if FileExists(fullname) then
-    begin
-      while(FileExists(FileNum(i))) do
-        inc(i);
-      Rename(f, FileNum(i));
-    end;
-    theprogr:=Format('%s\saver\DownloadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Whereto + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
-end;
-
-procedure Tcloud.saveToCloud;
-begin
-
-end;
-
 end.

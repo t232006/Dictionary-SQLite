@@ -113,27 +113,11 @@ end;
 { cloud }
 
 procedure Tcloud.loadFromCloud(whereTo: string);
-var theprogr, command, fullname:string;
-    f:file;
-
-const DICT='\dictionary.db';
-      i:byte=1;
-      function FileNum(num:byte):string;
-      begin
-        result:=whereto+'\dictionary'+inttostr(num)+'.db';
-      end;
+var command:string;
 begin
-    fullname:=whereto+DICT;
-    assignfile(f, fullname);
-    if FileExists(fullname) then
-    begin
-      while(FileExists(FileNum(i))) do
-        inc(i);
-      Rename(f, FileNum(i));
-    end;
-    theprogr:=Format('%s\saver\DownloadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Whereto + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
+    //command:=Format('saver\DownloadDB.exe "%s" "%s" "%s"',['saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    command:=Format('%s saver\HelloApp.exe %s %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0,'open', PChar(command), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure Tcloud.saveToCloud;

@@ -200,6 +200,8 @@ type
     Label17: TLabel;
     Label26: TLabel;
     baseFolder: TLabel;
+    LFromClBut: TSpeedButton;
+    SpeedButton11: TSpeedButton;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -307,6 +309,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure N13Click(Sender: TObject);
     //procedure GridPanel1Click(Sender: TObject);
     procedure baseFolderClick(Sender: TObject);
+    procedure LFromClButClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -422,6 +425,14 @@ begin
         KeyPress(KeyPressed);
       end;
   end;
+end;
+
+procedure TForm1.LFromClButClick(Sender: TObject);
+var Cloud: Tcloud;
+begin
+    Cloud:=Tcloud.Create();
+    Cloud.loadFromCloud(GetCurrentDir+'\db');
+    Cloud.Free;
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
