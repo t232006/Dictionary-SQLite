@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "DownloadDB/1.0.0": {
+      "UploaderDB/1.0.0": {
         "dependencies": {
           "GoogleDriveManipulation": "1.0.0.0"
         },
         "runtime": {
-          "DownloadDB.dll": {}
+          "UploaderDB.dll": {}
         }
       },
       "GoogleDriveManipulation/1.0.0.0": {
@@ -65,7 +65,7 @@
     }
   },
   "libraries": {
-    "DownloadDB/1.0.0": {
+    "UploaderDB/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

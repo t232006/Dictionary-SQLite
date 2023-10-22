@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids, DBTables,
+  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids,
   ExtCtrls, lessons, PoBukvam, lesson4, database, DBCtrls, addnewword, dateform,
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
   OleCtrls, SHDocVw, Gauges, thread2, DdeMan, Menus, System.Actions,
@@ -200,6 +200,8 @@ type
     Label17: TLabel;
     Label26: TLabel;
     baseFolder: TLabel;
+    LFromClBut: TSpeedButton;
+    SpeedButton11: TSpeedButton;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -307,6 +309,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure N13Click(Sender: TObject);
     //procedure GridPanel1Click(Sender: TObject);
     procedure baseFolderClick(Sender: TObject);
+    procedure LFromClButClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -324,7 +327,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
       RowBrushColor2:Tcolor;
     end;
   end;
-  procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
+  //procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
 
 var
   Form1: TForm1;
@@ -338,7 +341,7 @@ var
   f:textfile;
   kolright:word;
   synchtr:synchthread;
-  posgrid:word;
+
 
   YesNo:TYesNo;
   poBukv:TPoBukvam;
@@ -422,6 +425,14 @@ begin
         KeyPress(KeyPressed);
       end;
   end;
+end;
+
+procedure TForm1.LFromClButClick(Sender: TObject);
+var Cloud: Tcloud;
+begin
+    Cloud:=Tcloud.Create();
+    Cloud.loadFromCloud(GetCurrentDir+'\db');
+    Cloud.Free;
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
@@ -792,12 +803,9 @@ end;
 procedure TForm1.searchKeyPress(Sender: TObject; var Key: Char);
 begin
   if ord(key)<128 then
-  {DM2.Dict.IndexName:='TranslationInd' else //если русская буква
-  DM2.Dict.IndexName:='WordInd'; //если латинская буква
-  DM2.Dict.Seek(search.Text);}
-  DM2.Dict.Locate('Translation',Search.Text+key,[loPartialKey, loCaseInsensitive])
+    DM2.Dict.Locate('Translation',Search.Text+key,[loPartialKey, loCaseInsensitive])
   else
-  DM2.Dict.Locate('Word',Search.Text+key,[loPartialKey, loCaseInsensitive])
+    DM2.Dict.Locate('Word',Search.Text+key,[loPartialKey, loCaseInsensitive])
 end;
 
 procedure TForm1.ComboBox1CloseUp(Sender: TObject);
@@ -851,7 +859,7 @@ begin
     with DM2.Dict do
     begin
       Edit;
-      fields[6].AsBoolean:=not(Fields[6].AsBoolean);
+      FieldByName('Usersel').AsBoolean:=not(FieldByName('Usersel').AsBoolean);
       Post;
     end;
     edittable(false);
@@ -984,8 +992,8 @@ end;
 procedure TForm1.rgClick(Sender: TObject);
   procedure delfilt(t:boolean);
    begin
-    if t then system.Delete(filtr,pos('phrase=true',filtr),10 ) else
-    system.Delete(filtr,pos('phrase=false',filtr),11 );
+    if t then system.Delete(filtr,pos('phrase=true',filtr),11 ) else
+    system.Delete(filtr,pos('phrase=false',filtr),12 );
     system.Delete(filtr,pos('and',filtr),4);
    end;
 
@@ -1114,7 +1122,6 @@ begin
   //-------------------------------
   Action3Execute(sender);
 PageControl1Change(sender);
-posgrid:=0;
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
 then form1.BorderStyle:=bsSizeable;
 StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
@@ -1430,18 +1437,14 @@ begin
     //DBGrid2.Refresh;
 if od1.Execute then
   begin
-    DM2.synch.SQL.Clear;
-    dirbase:=ExtractFilePath(od1.FileName);  //открываем
-    DM2.synch.SQL.Add({'SELECT * FROM "'+od1.filename+'" WHERE word NOT IN (SELECT word FROM Dict)'}
-    'SELECT "'+od1.filename+'".word, "'+od1.filename+'".translation, "'+dirbase+'top.db".name, "'+od1.filename+'".daterec, "'+od1.filename+'".topic, "'+od1.FileName+'".score, "'+od1.FileName+'".phrase FROM "'+od1.filename+'" LEFT JOIN "'+dirbase+'top.db" ON "' +od1.filename+'".topic="'+dirbase+'top.db".Id WHERE word NOT IN (SELECT word FROM Dict)');
-  end;
-  try
-    with DM2 do
-    begin
-      synch.Open;
+    dirbase:=od1.FileName;  //открываем
+      //Close;
+      Dm2.synchConn.connectionString:='Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DSN=dictionarySource;Database='+dirbase+';"';
+    try
+      dm2.synch.Open;
+      StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
+    finally
     end;
-    StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
-  finally
   end;
 end;
 
@@ -1472,6 +1475,7 @@ begin
   if PageControl1.ActivePageIndex=0 then
     if search.Focused then
       search.SelectAll;
+    speedbutton9.Enabled:=true;
 
   if PageControl1.ActivePageIndex=8 then
     try
@@ -1554,7 +1558,8 @@ end;
 
 procedure TForm1.DBGrid2MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
-  var posgridnew:word; j:word;
+  var posgridnew, j:word;
+  const posgrid:word=0;
 begin
    with dbgrid2 do
    begin
@@ -1579,6 +1584,7 @@ begin
         end;
    end;
    posgrid:=posgridnew;
+   SpeedButton9.Enabled:=dbgrid2.SelectedIndex > -1;
    end;
 end;
 

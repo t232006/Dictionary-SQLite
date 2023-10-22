@@ -6,7 +6,7 @@ uses VCL.Graphics, Classes, Sysutils, System.IniFiles, Frame, ShellAPI, Windows 
 type
   Tcloud = class
     public
-      procedure saveToCloud(whereFrom:string);
+      procedure saveToCloud;
       procedure loadFromCloud(whereTo:string);
   end;
 
@@ -136,12 +136,9 @@ begin
     shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
 end;
 
-procedure Tcloud.saveToCloud(whereFrom:string);
-var theprogr, command, fullname:string;
+procedure Tcloud.saveToCloud;
 begin
-    theprogr:=Format('%s\saver\UploadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Wherefrom + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
+
 end;
 
 end.
