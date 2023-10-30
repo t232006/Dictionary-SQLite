@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids, DBTables,
+  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids,
   ExtCtrls, lessons, PoBukvam, lesson4, database, DBCtrls, addnewword, dateform,
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
   OleCtrls, SHDocVw, Gauges, thread2, DdeMan, Menus, System.Actions,
@@ -200,6 +200,8 @@ type
     Label17: TLabel;
     Label26: TLabel;
     baseFolder: TLabel;
+    LFromClBut: TSpeedButton;
+    UToClBut: TSpeedButton;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -307,6 +309,8 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure N13Click(Sender: TObject);
     //procedure GridPanel1Click(Sender: TObject);
     procedure baseFolderClick(Sender: TObject);
+    procedure LFromClButClick(Sender: TObject);
+    procedure UToClButClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -324,7 +328,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
       RowBrushColor2:Tcolor;
     end;
   end;
-  procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
+  //procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
 
 var
   Form1: TForm1;
@@ -424,6 +428,14 @@ begin
   end;
 end;
 
+procedure TForm1.LFromClButClick(Sender: TObject);
+var Cloud: Tcloud;
+begin
+    Cloud:=Tcloud.Create();
+    Cloud.loadFromCloud(GetCurrentDir+'\db');
+    Cloud.Free;
+end;
+
 procedure TForm1.baseFolderClick(Sender: TObject);
 begin
     if od1.Execute then
@@ -479,6 +491,14 @@ begin
         YesB.Enabled:=false;
         NoB.Enabled:=false;
      end;
+end;
+
+procedure TForm1.UToClButClick(Sender: TObject);
+var Cloud:Tcloud;
+begin
+    Cloud:=Tcloud.Create();
+    Cloud.SaveToCloud(GetCurrentDir+'\db');
+    Cloud.Free;
 end;
 
 procedure Tform1.InitSlovoPer;
@@ -1511,7 +1531,7 @@ end;
 
 procedure TForm1.SpeedButton10Click(Sender: TObject);
 begin
-   ToExcel;
+  toExcel;
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
