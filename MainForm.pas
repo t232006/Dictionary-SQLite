@@ -149,7 +149,7 @@ type
     GridPanel1: TGridPanel;
     ShTableFontColor: TShape;
     Frame31: TFrame3;
-    ShScaleColor: TShape;
+    ChScaleColor: TShape;
     ChShowNumber: TCheckBox;
     ChShowScale: TCheckBox;
     ShCardColor: TShape;
@@ -202,6 +202,7 @@ type
     baseFolder: TLabel;
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
+    ChShowScore: TCheckBox;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -295,7 +296,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
       Shift: TShiftState; X, Y: Integer);
     procedure Frame31Shape1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure ShScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure ChScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure N5Click(Sender: TObject);
     procedure ChShowNumberClick(Sender: TObject);
@@ -306,12 +307,12 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure cardActivateClick(Sender: TObject);
     procedure Fill4Status;
     procedure N11Click(Sender: TObject);
-    procedure N13Click(Sender: TObject);
     //procedure GridPanel1Click(Sender: TObject);
     procedure baseFolderClick(Sender: TObject);
     procedure LFromClButClick(Sender: TObject);
     procedure UToClButClick(Sender: TObject);
-
+    procedure ChShowScoreClick(Sender: TObject);
+    
   private
     { Private declarations }
     procedure YesNoContinue(b:boolean);
@@ -1086,7 +1087,7 @@ begin
   Grid.Color:=RowColors.RowColor1;
 end;
 
-procedure TForm1.ShScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TForm1.ChScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   n4.Click;
@@ -1375,6 +1376,31 @@ begin
     Grid.Repaint;
 end;
 
+procedure TForm1.ChShowScoreClick(Sender: TObject);
+begin
+    n13.Checked:=ChShowScore.Checked;
+    if n13.Checked then
+    begin
+       Label38.Caption:='Шкала оценки';
+      Label31.Visible:=true;
+      label33.Visible:=true;
+      label34.Visible:=true;
+      chscalecolor.Visible:=true;
+      chshownumber.Visible:=true;
+      chshowscale.Visible:=true;
+    end else
+    begin
+      Label38.Caption:='Шкала релевантности';
+      Label31.Visible:=false;
+      label33.Visible:=false;
+      label34.Visible:=false;
+      chscalecolor.Visible:=false;
+      chshownumber.Visible:=false;
+      chshowscale.Visible:=false;
+    end;
+    Grid.Repaint;
+end;
+
 procedure TForm1.Action5Execute(Sender: TObject);
 begin
   if DM2.Dict.CanModify then
@@ -1641,7 +1667,7 @@ if gdselected in state then
       DrawFrameControl(TDBGrid(Sender).Canvas.Handle,Rect1, DFC_BUTTON, style);
     end;
   //-------------RATES-------------//
-  if column.FieldName='Score' then
+  if (column.FieldName='Score') or (column.FieldName='Relevation') then
     begin
       TDBGrid(sender).Canvas.pen.Color:=TDBGrid(sender).Canvas.Brush.Color;
       TDBGrid(sender).Canvas.Rectangle(rect2);
@@ -1654,7 +1680,7 @@ if gdselected in state then
       //rect1:=rect(rect2.Left,rect2.Top,rr,rect2.Bottom);
           TDBGrid(sender).Canvas.Rectangle(rect2.Left,rect2.Top,rr,rect2.Bottom);
         end;
-      if N6.Checked then
+      if N6.Checked or N11.Checked then
         begin
            TDBGrid(sender).Canvas.Brush.Style:=bsClear;
            TDBGrid(sender).Canvas.TextOut(rect2.Left+20,rect2.Top+3,column.Field.AsString);
@@ -1695,7 +1721,8 @@ end;
 procedure TForm1.N11Click(Sender: TObject);
 begin
     grid.Columns[3].Title.Caption:='Релев.';
-    grid.Columns[3].FieldName:='seeked';
+    grid.Columns[3].FieldName:='Relevation';
+    Grid.Repaint;
 end;
 
 procedure TForm1.N12Click(Sender: TObject);
@@ -1705,11 +1732,7 @@ begin
   fill4Status;
 end;
 
-procedure TForm1.N13Click(Sender: TObject);
-begin
-    grid.Columns[3].Title.Caption:='оценка';
-    grid.Columns[3].FieldName:='score';
-end;
+
 
 procedure TForm1.N1Click(Sender: TObject);
 var quest:PWideChar; param:string;
@@ -1739,7 +1762,7 @@ begin
   if ColorDialog1.Execute then
   begin
     color_scale:=colorDialog1.color;
-    ShScaleColor.brush.color:=colorDialog1.color;
+    ChScaleColor.brush.color:=colorDialog1.color;
     Grid.Repaint;
   end;
 end;
@@ -1747,6 +1770,13 @@ end;
 procedure TForm1.N5Click(Sender: TObject);
 begin
   ChShowScale.Checked:=n5.Checked;
+
+  if n13.Checked=false then
+  begin
+    n13.Checked:=true;
+    grid.Columns[3].Title.Caption:='оценка';
+    grid.Columns[3].FieldName:='score';
+  end;
   Grid.Repaint;
 end;
 
@@ -1756,13 +1786,13 @@ with DM2.Dict do
 begin
   if n13.Checked then
     begin
-      if Sort='Score ASC' then IndexName:='Score DESC'
-      else IndexName:='Score ASC';
+      if Sort='Score ASC' then Sort:='Score DESC'
+      else Sort:='Score ASC';
     end
   else
   begin
-     if IndexName='Relevation ASC' then IndexName:='Relevation DESC'
-      else IndexName:='Relevation ASC';
+     if Sort='Relevation ASC' then Sort:='Relevation DESC'
+      else Sort:='Relevation ASC';
   end;
   First;
 end;
@@ -1792,6 +1822,14 @@ end;
 procedure TForm1.N6Click(Sender: TObject);
 begin
   ChShowNumber.Checked:=n6.Checked;
+
+  if n13.Checked=false then
+  if n13.Checked=false then
+  begin
+    n13.Checked:=true;
+    grid.Columns[3].Title.Caption:='оценка';
+    grid.Columns[3].FieldName:='score';
+  end;
   Grid.Repaint;
 end;
 end.
