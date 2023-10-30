@@ -35,7 +35,7 @@ begin
       TableGreedRow.RowBrushColor2:=f.ReadInteger('Table','Row2Color',-16777208);
       Frame31.Shape2.Brush.Color:=TableGreedRow.RowBrushColor2;
 
-      color_scale:=f.ReadInteger('Scale','ColorScale',0);
+      color_scale:=f.ReadInteger('Scale','color_scale',0);
       ChScaleColor.Brush.Color:=color_scale;
       n5.Checked:=f.ReadBool('Scale','ShowDigit',false);
       ChShowScale.Checked:=n5.Checked;
