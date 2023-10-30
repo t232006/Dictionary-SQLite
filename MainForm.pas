@@ -321,6 +321,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure Ins;
     procedure FrameGeneralization(Sender: TObject; bool:boolean);
     procedure DragDrop(sender, source: TObject; mm7: boolean);
+    procedure N13active;
   public
     color_scale:TColor;
     TableGreedRow:record
@@ -1388,6 +1389,7 @@ begin
       chscalecolor.Visible:=true;
       chshownumber.Visible:=true;
       chshowscale.Visible:=true;
+      n13active;
     end else
     begin
       Label38.Caption:='Шкала релевантности';
@@ -1397,6 +1399,7 @@ begin
       chscalecolor.Visible:=false;
       chshownumber.Visible:=false;
       chshowscale.Visible:=false;
+      n11.Click;
     end;
     Grid.Repaint;
 end;
@@ -1771,12 +1774,7 @@ procedure TForm1.N5Click(Sender: TObject);
 begin
   ChShowScale.Checked:=n5.Checked;
 
-  if n13.Checked=false then
-  begin
-    n13.Checked:=true;
-    grid.Columns[3].Title.Caption:='оценка';
-    grid.Columns[3].FieldName:='score';
-  end;
+  n13active;
   Grid.Repaint;
 end;
 
@@ -1822,14 +1820,19 @@ end;
 procedure TForm1.N6Click(Sender: TObject);
 begin
   ChShowNumber.Checked:=n6.Checked;
+  n13active;
+  
+  Grid.Repaint;
+end;
 
-  if n13.Checked=false then
-  if n13.Checked=false then
+procedure tform1.N13active;
+begin
+    if n13.Checked=false then
   begin
     n13.Checked:=true;
     grid.Columns[3].Title.Caption:='оценка';
     grid.Columns[3].FieldName:='score';
   end;
-  Grid.Repaint;
 end;
+
 end.
