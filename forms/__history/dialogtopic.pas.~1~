@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, database, Buttons, Grids, DBGrids, StdCtrls, DB, DBCtrls, basemanipulation;
+  Dialogs, database, Buttons, Grids, DBGrids, StdCtrls, DB, DBCtrls;
 
 type
   Ttopicform = class(TForm)
@@ -91,8 +91,7 @@ begin
 
         DBGrid1.DataSource.DataSet.enablecontrols;
       end;
-      //DM2.Dict.Refresh;
-      baserefresh;
+      DM2.Dict.Refresh;
       DM2.top.Refresh;
 
 end;

@@ -262,9 +262,6 @@ Coordinates=1422,1288,40,36
 [Frame26.Panel]
 Coordinates=1104,10,102,58
 
-[ComboBox1]
-Coordinates=149,10,101,124
-
 [Frame26.panel1]
 Coordinates=934,298,108,58
 
@@ -451,4 +448,7 @@ Coordinates=997,1295,141,58
 
 [Grid]
 Coordinates=169,706,64,36
+
+[SelOper]
+Coordinates=149,10,101,124
 

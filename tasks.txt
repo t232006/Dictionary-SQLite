@@ -1,0 +1,9 @@
++ remove
+make selecting
+select entire row
+low bar to remove
+make memo with lower font size
+недостаточно сведений из базовой таблицы для обновления???
+color replacement on comparision
+make time change in setting
+refrash problems

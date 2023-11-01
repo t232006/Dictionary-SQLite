@@ -73,7 +73,7 @@ begin
             Application.ProcessMessages;
             if synch.Fields[0].AsString='' then break;//additional condition - reason of mistakes
           end;
-          baserefresh;
+          baserefrash;
         end;
 
       with DBGrid2 do

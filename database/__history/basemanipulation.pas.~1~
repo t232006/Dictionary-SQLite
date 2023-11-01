@@ -28,7 +28,7 @@ type
   end;
   procedure Seeking(sNum: string);
   procedure edittable(op:boolean);
-  procedure baserefresh;
+  procedure baserefrash;
 implementation
 
 procedure edittable(op:boolean);
@@ -47,11 +47,10 @@ begin
    end;
 end;
 
-procedure baserefresh;
+procedure baserefrash;
 begin
-  {edittable(true);
-  edittable(false);}
-  dm2.Dict.Active:=false; dm2.Dict.Active:=true;
+  edittable(true);
+  edittable(false);
 end;
 
 procedure Seeking(sNum: string);
@@ -109,7 +108,6 @@ begin
     addball.ExecSQL;
     calcProgress;
   end;
-  baserefresh;
 end;
 
 

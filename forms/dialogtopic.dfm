@@ -3,8 +3,8 @@ object topicform: Ttopicform
   Top = 112
   BorderStyle = bsDialog
   Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100' '#1090#1077#1084#1099
-  ClientHeight = 444
-  ClientWidth = 597
+  ClientHeight = 443
+  ClientWidth = 593
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

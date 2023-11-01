@@ -28,7 +28,7 @@ type
     Grid: TDBGrid;
     DBNavigator1: TDBNavigator;
     Button3: TButton;
-    ComboBox1: TComboBox;
+    SelOper: TComboBox;
     DBMemo1: TDBMemo;
     DBMemo2: TDBMemo;
     TabSheet2: TTabSheet;
@@ -163,8 +163,6 @@ type
     N11: TMenuItem;
     N13: TMenuItem;
     Label23: TLabel;
-    Label24: TLabel;
-    Label25: TLabel;
     st2: TLabel;
     st1: TLabel;
     Label28: TLabel;
@@ -203,6 +201,9 @@ type
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
     ChShowScore: TCheckBox;
+    Panel2: TPanel;
+    Label24: TLabel;
+    Label25: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -217,7 +218,7 @@ type
     procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure searchKeyPress(Sender: TObject; var Key: Char);
-    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure SelOperCloseUp(Sender: TObject);
     procedure GridCellClick(Column: TColumn);
     procedure caneditClick(Sender: TObject);
     procedure stringselect(po:boolean);
@@ -240,7 +241,7 @@ type
     procedure Action3Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
-    procedure ComboBox1DropDown(Sender: TObject);
+    procedure SelOperDropDown(Sender: TObject);
     procedure ChangeColrigth(p:boolean);
     procedure Action4Execute(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
@@ -819,14 +820,14 @@ begin
     DM2.Dict.Locate('Word',Search.Text+key,[loPartialKey, loCaseInsensitive])
 end;
 
-procedure TForm1.ComboBox1CloseUp(Sender: TObject);
+procedure TForm1.SelOperCloseUp(Sender: TObject);
 begin
 with DM2.topicquery do
 begin
   if SQL.Text<>'update Dict set usersel=true where'#$D#$A
   then if selspot.Checked then SQL.Add('and')//для добавления сложных условий
   else SQL.Add('or');
-  case combobox1.ItemIndex of
+  case SelOper.ItemIndex of
     0: SQL.Add('score<6');
     1: SQL.Add('score>0');
     2: dateformm.showmodal;
@@ -854,10 +855,14 @@ begin
   end;
 end;
 //DM2.Dict.Refresh;
-DM2.Dict.active:=false; DM2.Dict.Active:=true;
+//DM2.Dict.active:=false; DM2.Dict.Active:=true;
+baserefresh;
 Action3Execute(sender);
 DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
+if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
+selspot.Checked:=false;
+
 
 end;
 
@@ -1131,6 +1136,7 @@ begin
   SeAndCor:=Tgrademanipulation.Create(DM2);
   loadForm;
   //-------------------------------
+  //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
@@ -1158,7 +1164,7 @@ begin
     if j-round(0.08*order)*6<>strtoint(key) then
     begin
       tecomp:=(FindComponent('m'+inttostr(j)) as tmemo);
-      rectt(color, tecomp);
+      rectt(pb.color, tecomp);
     end;
   end;
 end;
@@ -1197,7 +1203,7 @@ try
           end;
         end  else
         begin
-          rectt(color, mem);
+          rectt(pb.color, mem);
           with conteiner do
           begin
             if left1.Visible then leftnum:=0 else rightnum:=0;
@@ -1253,12 +1259,12 @@ end;
 
 procedure TForm1.ComboBox1KeyPress(Sender: TObject; var Key: Char);
 begin
- combobox1.itemindex:=-1;
+ SelOper.itemindex:=-1;
 end;
 
-procedure TForm1.ComboBox1DropDown(Sender: TObject);
+procedure TForm1.SelOperDropDown(Sender: TObject);
 begin
-ComboBox1.ItemIndex:=-1; //чтобы можно было закрыть без выбора
+SelOper.ItemIndex:=-1; //чтобы можно было закрыть без выбора
 selspotClick(sender);
 end;
 
@@ -1321,7 +1327,7 @@ var a:string;
 begin
   a:=Grid.DataSource.DataSet.FieldByName('Number').AsString;
   Seeking(a);
-  baserefrash;
+  baserefresh;
 end;
 
 procedure TForm1.TB1Click(Sender: TObject);
@@ -1741,22 +1747,22 @@ procedure TForm1.N1Click(Sender: TObject);
 var quest:PWideChar; param:string;
 begin
 if n13.Checked then
-begin
-   quest:='Вы действительно хотите обнулить все оценки?';
-   param:='score';
-end
-
+  begin
+     quest:='Вы действительно хотите обнулить все оценки?';
+     param:='score';
+  end
 else
-begin
-   quest:='Вы действительно хотите обнулить релевантность?' ;
-   param:='seeked';
-end;
+  begin
+     quest:='Вы действительно хотите обнулить релевантность?' ;
+     param:='relevation';
+  end;
 DM2.droprate.CommandText:='UPDATE Dict SET '+param+'=0 WHERE usersel=true';
 
 if Application.MessageBox(quest,'Внимание',MB_YESNO+MB_ICONEXCLAMATION+MB_TASKMODAL)=IDYES then
      begin
       DM2.droprate.Execute;
-      DM2.Dict.Refresh;
+      //DM2.Dict.Refresh;
+      baserefresh;
      end;
 end;
 
