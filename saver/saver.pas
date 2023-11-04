@@ -41,6 +41,8 @@ begin
       ChShowScale.Checked:=n5.Checked;
       n6.Checked:=f.ReadBool('Scale','ShowScale',false);
       ChShowNumber.Checked:=n6.Checked;
+      n11.Checked:=f.ReadBool('Scale','Relevation?', false);
+      ChShowScore.Checked:=not(n11.Checked);
 
       ShCardColor.Brush.Color:=f.ReadInteger('Scale','CardColor',-16777206);
       LaUpperCard.Font.Color:=f.ReadInteger('Card','FontColor1',65280);
@@ -88,6 +90,7 @@ begin
       f.WriteInteger('Scale','ColorScale',color_scale);
       f.WriteBool('Scale','ShowDigit',n5.Checked);
       f.WriteBool('Scale','ShowScale',n6.Checked);
+      f.WriteBool('Scale','Relevation?', n11.Checked);
 
       f.WriteInteger('Card','CardColor',Frame21.Panel1.Color);
       f.WriteInteger('Card','FontColor1',Frame21.panel1.Font.Color);
