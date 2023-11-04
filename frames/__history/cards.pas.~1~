@@ -5,15 +5,15 @@ uses lessons;
 type TCards = class(TGeneral)
 public
     o1,o2:array [1..12] of SlPerSl;
-   procedure Init(cou: byte);
+   constructor Create(cou:byte);
 end;
 
 implementation
-procedure TCards.Init(cou: byte);   //fill cards by words
+constructor TCards.Create(cou:byte);   //fill cards by words
 var l:integer;
     i:byte; oo:set of byte;
 begin
-//inherited create(cou);
+inherited create(cou);
 randomize;
 oo:=[];
 for i:=1 to cou do

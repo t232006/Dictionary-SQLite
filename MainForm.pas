@@ -354,7 +354,7 @@ var
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
-
+  recreate:boolean;
 
 
 
@@ -508,8 +508,7 @@ end;
 procedure Tform1.InitSlovoPer;
 //var k:byte;
 begin
-  test.Free;
-  test:=TTest.create(6);
+
   test.slovoper(o,pravotv);
   st1.Caption:=o[0].slovo;
   Rg1.ItemIndex:=-1;
@@ -521,8 +520,7 @@ end;// end;
 
 procedure Tform1.InitPerevodSlo;
 begin
-  test.Free;
-  test:=TTest.create(6);
+
   test.PerevodSlo(o,pravotv);
   st2.Caption:=o[0].perevod;
   Rg2.ItemIndex:=-1;
@@ -536,8 +534,7 @@ end; //end;
 procedure TForm1.InitPobukvam;
 var ii, jj: integer;
 begin
-  poBukv.Free;
-  poBukv:=TPoBukvam.create;
+
   for ii := 0 to 4 do
   for jj := 0 to 4 do
     sg.Cells[ii,jj] :=poBukv.table[ii,jj];
@@ -583,34 +580,57 @@ begin
   //rg1.ItemIndex:=-1;
 
 end;
-
+ //region bookmark PageControl
 procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
+
 begin
 
   case  PageControl1.ActivePageIndex of
   0:
   begin
-    //baserefrash;
+      test.recreate:=true;
+      poBukv.recreate:=true;
+      complience.recreate:=true;
+      YesNo.recreate:=true;
+      cards.recreate:=true;
   end;
   1:
   begin
       //test:=TTest.create(6);
+      if test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitSlovoPer;
   end;
   2:
   begin
-      //test:=TTest.create(6);
+      if test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitPerevodSlo;
   end;
   3:
   begin
+    if poBukv.recreate then
+    begin
+      poBukv.Free;
+      poBukv:=TPoBukvam.create;
+    end;
     InitPobukvam;
   end;
   4:
   begin
-    complience.Free;
-    complience:= Tcomplience.Create;
+    if complience.recreate then
+    begin
+      complience.Free;
+      complience:= Tcomplience.Create(6);
+    end;
+      complience.Init;
     for t:=1 to 6 do
     begin
         TMemo(FindComponent('m'+IntToStr(t))).lines.text:=complience.o1[t].slovo;
@@ -624,8 +644,12 @@ begin
   end;
   5:
   begin
-     yesNo.Free;
-     YesNo:=TYesNo.Create(1);
+  if yesNo.recreate then
+    begin
+       yesNo.Free;
+       YesNo:=TYesNo.Create(1);
+    end;
+    yesNo.Init;
   end;
   6:
   begin
@@ -643,8 +667,12 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-    cards.Free;
-    cards:=Tcards.create(t1);
+    if cards.recreate then
+    begin
+      cards.Free;
+      cards:=Tcards.create(t1);
+    end;
+      cards.Init(t1);
     for t:=1 to t1 do
     begin
         if rg3.ItemIndex=0 then
@@ -816,6 +844,11 @@ top.Close;
 topicquery.SQL.Clear;
 end;
 saveForm;
+test.Destroy;
+  poBukv.Destroy;
+  complience.Destroy;
+  YesNo.Destroy;
+  cards.Destroy;
 end;
 
 procedure TForm1.searchChange(Sender: TObject);
@@ -1151,6 +1184,12 @@ begin
   Dpot.Parent:=StBar;
   SeAndCor:=Tgrademanipulation.Create(DM2);
   loadForm;
+
+  test:=TTest.create(6);
+  poBukv:=TPoBukvam.create;
+  complience:= Tcomplience.Create(6);
+  YesNo:=TYesNo.Create(1);
+  cards:=Tcards.create(12);
   //-------------------------------
   //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);

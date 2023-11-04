@@ -21,7 +21,6 @@ type
 
  TGeneral=class
      v:array of SlPerSl;  //заполнение массива отдельной процедурой
-     recreate:boolean;
      constructor Create(countrec:byte);
  end;
 
@@ -37,16 +36,13 @@ type
     word2:string;
     IsItTrue:boolean;
     seAndCor:Tgrademanipulation;
-
-
  public
     property serial:byte read _serial;
     property prompt:string read _prompt;
     property GetString:string read _GetString;
-    procedure Reset;
-    procedure Init;
     procedure GiveAnswer(answer:boolean);
-
+    procedure Init;
+    procedure Reset;
  end;
  TTest=class(TGeneral)
     public
@@ -90,7 +86,6 @@ procedure TYesNo.Init;
 var giveTrue:byte;
     l,ll:integer;
 begin
-  recreate:=false;
   seAndCor:=Tgrademanipulation.Create(DM2);
   randomize;
   giveTrue:=random(2);

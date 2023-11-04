@@ -10,7 +10,7 @@ private
 
 public
     o1,o2:array [1..12] of slpersl; //массивы для задания для соответствий
-    Procedure Init;
+    constructor Create;
     function outword(_komp:byte; slovo:boolean): string;
     //procedure determ;
 //procedure apostr(var dest:string);
@@ -34,11 +34,11 @@ begin
 end;   }
 
 
-procedure Tcomplience.Init;
+constructor Tcomplience.Create;
 var
   l:integer; jk,i:byte; oo1,oo2,oo:set of byte;
 begin
-  //inherited Create(6);
+  inherited Create(6);
   randomize;
   oo1:=[]; oo2:=[];oo:=[];
   for i:=1 to 6 do
