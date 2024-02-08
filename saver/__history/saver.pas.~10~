@@ -17,7 +17,7 @@ type
 
 
 implementation
-uses MainForm, reginstaller;
+uses MainForm;
 
 function GetSpecialPath(CSIDL: word): string;
 var s: PChar;
@@ -32,7 +32,6 @@ procedure loadForm;
   var //f:textfile;
     fk:byte;
     f:TIniFile;
-    r:TDBRegistry;
     IniPath: string;
 begin
     IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
@@ -83,10 +82,7 @@ begin
              2:Form1.N10Click(Form1);//n10.checked:=true;
              3:Form1.N12Click(Form1);//n12.checked:=true;
            end;
-       r:=TDBRegistry.Create;
-       basefolder.Caption:=r.GetPath;
-       r.Destroy;
-       //f.ReadString('database','database',ExtractFileDir(paramstr(0)+'\db\dictionary.db'));
+       basefolder.Caption:=f.ReadString('database','database',ExtractFileDir(paramstr(0)+'\db\dictionary.db'));
       end;
     finally
     f.Free;
@@ -94,7 +90,7 @@ begin
 end;
 
 procedure saveForm;
-var f:TIniFile; r:TDBRegistry;
+var f:TIniFile; //s:string;
     IniPath:string;
 begin
     IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
@@ -125,10 +121,7 @@ begin
       if n10.checked then f.WriteInteger('Bar','Radio',2) else
       if n12.checked then f.WriteInteger('Bar','Radio',3);
 
-      r.Create;
-      r.WritePath(baseFolder.Caption);
-      r.Destroy;
-      //f.WriteString('database','database',form1.baseFolder.Caption);
+      f.WriteString('database','database',form1.baseFolder.Caption);
     end;
     finally
 

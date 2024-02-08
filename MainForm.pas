@@ -441,11 +441,13 @@ begin
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
+var DBRegistry: TDBRegistry;
 begin
+    DBRegistry:=TDBRegistry.Create;
     if od1.Execute then
     try
       baseFolder.Caption:=od1.FileName;
-      InstallReg(baseFolder.Caption);
+      DBRegistry.WritePath(baseFolder.Caption);
       DM2.ReloadConnection;
       if messagedlg('Смена базы данных требует перезагрузки приложения. Закрыть приложение?',mtConfirmation,[mbYes, mbNo],0)=mrYes then
         close;
@@ -453,6 +455,7 @@ begin
       on ERegistryException do
         ShowMessage('Необходимы права администратора для данного действия');
     end;
+    DBRegistry.Destroy;
 
 end;
 
@@ -909,8 +912,8 @@ baserefresh;
 Action3Execute(sender);
 DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
-if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
-selspot.Checked:=false;
+{if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
+selspot.Checked:=false;}
 
 
 end;

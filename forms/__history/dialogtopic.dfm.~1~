@@ -166,7 +166,7 @@ object topicform: Ttopicform
     Height = 89
     TabStop = False
     DataField = 'Name'
-    DataSource = DataModule2.dstopic
+    DataSource = DataModule2.dstop
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -19

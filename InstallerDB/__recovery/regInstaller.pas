@@ -9,14 +9,29 @@ uses
 Type TDBRegistry=class
   reg:TRegistry;
   key1:string;
+  private function IsWow64: bool;
   public
-  procedure WritePath(filename:string);
-  function GetPath: string;
-  constructor Create;
-  destructor Destroy;
+    procedure WritePath(filename:string);
+    function GetPath: string;
+    constructor Create;
+    destructor Destroy;
 end;
 
 implementation
+
+function TDBRegistry.IsWow64: bool;
+type
+  TIsWow64Process = function(hProcess: THandle;
+    var Wow64Process: BOOL): BOOL; stdcall;
+var
+  IsWow64Process: TIsWow64Process;
+begin
+  Result := False;
+  @IsWow64Process := GetProcAddress(GetModuleHandle(kernel32),
+    'IsWow64Process');
+  if Assigned(@IsWow64Process) then
+    IsWow64Process(GetCurrentProcess, Result);
+end;
 
 destructor TDBRegistry.Destroy;
 begin
@@ -27,12 +42,15 @@ Constructor TDBRegistry.Create;
 begin
     reg:=TRegistry.Create;
     reg.rootkey:= HKEY_LOCAL_MACHINE;
-    key1:='SOFTWARE\ODBC\ODBC.INI\dictionary';
+    if ISWow64 then
+      key1:='SOFTWARE\WOW6432Node\ODBC\ODBC.INI\dictionary'
+      else
+      key1:='SOFTWARE\ODBC\ODBC.INI\dictionary';
 end;
 
 function TDBRegistry.GetPath: string;
 begin
-    reg.OpenKey(key1, false);
+    if reg.OpenKey(key1, false) then
     result:=reg.ReadString('Database');
     reg.CloseKey;
 end;
@@ -47,6 +65,9 @@ begin
         openkey(key1,true);
         WriteString('Driver','C:\WINDOWS\system32\sqlite3odbc.dll');
         CloseKey;
+        if Iswow64 then
+        key2:='SOFTWARE\WOW6432Node\ODBC\ODBC.INI\ODBC Data Sources'
+        else
         key2:='SOFTWARE\ODBC\ODBC.INI\ODBC Data Sources';
         openKey(key2,true);
         WriteString('dictionary','SQLite3 ODBC Driver');
