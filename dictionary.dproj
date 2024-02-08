@@ -127,7 +127,6 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="database\deepSearch.pas"/>
-        <DCCReference Include="frames\cards.pas"/>
         <DCCReference Include="frames\coloredRowFrame.pas">
             <Form>ColoredRow</Form>
             <FormType>dfm</FormType>
@@ -165,6 +164,7 @@
         <DCCReference Include="exercises\lessons.pas"/>
         <DCCReference Include="exercises\PoBukvam.pas"/>
         <DCCReference Include="saver\saver.pas"/>
+        <DCCReference Include="frames\cardsUnit.pas"/>
         <None Include="init.ini"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

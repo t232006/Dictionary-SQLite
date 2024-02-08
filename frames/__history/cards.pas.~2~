@@ -1,4 +1,4 @@
-unit cardsUnit;
+unit cards;
 
 interface
 uses lessons;

@@ -65,8 +65,6 @@ object DataModule2: TDataModule2
     Top = 24
   end
   object Dict: TFDTable
-    AfterInsert = DictAfterInsert
-    AfterDelete = DictAfterDelete
     IndexFieldNames = 'Number'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]

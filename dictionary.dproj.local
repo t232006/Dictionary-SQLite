@@ -1,2 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject/>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2024.02.09 02:56:26.146,Z:\Программирование\repos\Dictionary-SQLite\frames\cardsUnit.pas=Z:\Программирование\repos\Dictionary-SQLite\frames\cards.pas</Transaction>
+  </Transactions>
+</BorlandProject>

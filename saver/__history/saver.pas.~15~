@@ -1,30 +1,68 @@
 unit saver;
 
 interface
-uses VCL.Graphics, Classes, Sysutils, System.IniFiles, Frame, ShellAPI, Windows ;
+uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
+  Frame, ShellAPI, Windows,  ShlObj;
 
 type
   Tcloud = class
     public
-      procedure saveToCloud;
+      procedure saveToCloud(whereFrom:string);
       procedure loadFromCloud(whereTo:string);
   end;
 
    procedure saveForm;
    procedure loadForm;
+   function GetSpecialPath(CSIDL: word): string;
+
+   procedure finishExercises;
+   procedure startExercises;
+
 
 implementation
-uses MainForm;
+uses MainForm, Database, basemanipulation, lesson4, lessons, PoBukvam, cards;
+
+procedure finishExercises;
+begin
+    test.Destroy;
+    poBukv.Destroy;
+    complience.Destroy;
+    YesNo.Destroy;
+    cards.Destroy;
+end;
+
+procedure startExercises;
+begin
+  test:=TTest.create(6);
+  poBukv:=TPoBukvam.create;
+  complience:= Tcomplience.Create(6);
+  YesNo:=TYesNo.Create(1);
+  cards:=Tcards.create(12);
+end;
+
+function GetSpecialPath(CSIDL: word): string;
+var s: PChar;
+begin
+s:=stralloc(max_path);
+if not SHGetSpecialFolderPath(0, s, CSIDL, true)
+then s := '';
+result := s;
+end;
 
 procedure loadForm;
   var //f:textfile;
     fk:byte;
     f:TIniFile;
+    IniPath: string;
 begin
-    f:=TIniFile.Create(IncludeTrailingPathDelimiter(ExtractFileDir(ParamStr(0))) + 'saver\init.ini');
+    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
+    f:=TIniFile.Create(IniPath+'\init.ini');
     try
     with form1 do
       begin
+      baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
+      DM2.loadDB(baseFolder.Caption);
+      SeAndCor:=Tgrademanipulation.Create(DM2);
 
       Grid.Font.Size:=f.ReadInteger('Table','GridFontSize',10);
       Frame42.Edit1.Text:=inttostr(Grid.Font.Size);
@@ -35,12 +73,14 @@ begin
       TableGreedRow.RowBrushColor2:=f.ReadInteger('Table','Row2Color',-16777208);
       Frame31.Shape2.Brush.Color:=TableGreedRow.RowBrushColor2;
 
-      color_scale:=f.ReadInteger('Scale','color_scale',0);
-      ShScaleColor.Brush.Color:=color_scale;
+      color_scale:=f.ReadInteger('Scale','ColorScale',0);
+      ChScaleColor.Brush.Color:=color_scale;
       n5.Checked:=f.ReadBool('Scale','ShowDigit',false);
       ChShowScale.Checked:=n5.Checked;
       n6.Checked:=f.ReadBool('Scale','ShowScale',false);
       ChShowNumber.Checked:=n6.Checked;
+       n11.Checked:=f.ReadBool('Scale','Relevation?', false);
+      ChShowScore.Checked:=not(n11.Checked);
 
       ShCardColor.Brush.Color:=f.ReadInteger('Scale','CardColor',-16777206);
       LaUpperCard.Font.Color:=f.ReadInteger('Card','FontColor1',65280);
@@ -66,7 +106,6 @@ begin
              2:Form1.N10Click(Form1);//n10.checked:=true;
              3:Form1.N12Click(Form1);//n12.checked:=true;
            end;
-       basefolder.Caption:=f.ReadString('database','database',ExtractFileDir(paramstr(0)+'\db\dictionary.db'));
       end;
     finally
     f.Free;
@@ -74,9 +113,11 @@ begin
 end;
 
 procedure saveForm;
-var f:TIniFile; //s:string;
+var f:TIniFile;
+    IniPath:string;
 begin
-    f:=TIniFile.Create(IncludeTrailingPathDelimiter(ExtractFileDir(ParamStr(0))) + 'saver\init.ini');
+    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
+    f:=TIniFile.Create(IniPath);
     try
     with form1 do
     begin
@@ -88,6 +129,7 @@ begin
       f.WriteInteger('Scale','ColorScale',color_scale);
       f.WriteBool('Scale','ShowDigit',n5.Checked);
       f.WriteBool('Scale','ShowScale',n6.Checked);
+      f.WriteBool('Scale','Relevation?', n11.Checked);
 
       f.WriteInteger('Card','CardColor',Frame21.Panel1.Color);
       f.WriteInteger('Card','FontColor1',Frame21.panel1.Font.Color);
@@ -113,16 +155,35 @@ end;
 { cloud }
 
 procedure Tcloud.loadFromCloud(whereTo: string);
-var command:string;
+var theprogr, command, fullname:string;
+    f:file;
+
+const DICT='\dictionary.db';
+      i:byte=1;
+      function FileNum(num:byte):string;
+      begin
+        result:=whereto+'\dictionary'+inttostr(num)+'.db';
+      end;
 begin
-    //command:=Format('saver\DownloadDB.exe "%s" "%s" "%s"',['saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    command:=Format('%s saver\HelloApp.exe %s %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0,'open', PChar(command), nil, nil, SW_SHOWNORMAL);
+    fullname:=whereto+DICT;
+    assignfile(f, fullname);
+    if FileExists(fullname) then
+    begin
+      while(FileExists(FileNum(i))) do
+        inc(i);
+      Rename(f, FileNum(i));
+    end;
+    theprogr:=Format('%s\saver\DownloadDB.exe ',[GetCurrentDir]);
+    command:= 'saver\client_secret_for_Delphi.json '+ Whereto + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
 end;
 
-procedure Tcloud.saveToCloud;
+procedure Tcloud.saveToCloud(whereFrom:string);
+var theprogr, command, fullname:string;
 begin
-
+    theprogr:=Format('%s\saver\UploadDB.exe ',[GetCurrentDir]);
+    command:= 'saver\client_secret_for_Delphi.json '+ Wherefrom + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
 end;
 
 end.
