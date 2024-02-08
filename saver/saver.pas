@@ -2,7 +2,7 @@ unit saver;
 
 interface
 uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
-  Frame, ShellAPI, Windows,  ShlObj;
+  Frame, ShellAPI, Windows,  ShlObj, reginstaller;
 
 type
   Tcloud = class
@@ -11,15 +11,36 @@ type
       procedure loadFromCloud(whereTo:string);
   end;
 
+  TSaver = class
    procedure saveForm;
    procedure loadForm;
-   function GetSpecialPath(CSIDL: word): string;
+   constructor Create;
+   destructor Destroy;
+   private
+    reg: TDBRegistry;
+    f: TiniFile;
+    function GetSpecialPath(CSIDL: word): string;
+  end;
 
 
 implementation
-uses MainForm, reginstaller;
+uses MainForm;
 
-function GetSpecialPath(CSIDL: word): string;
+constructor TSaver.Create;
+var    IniPath: string;
+begin
+    reg:=TDBRegistry.Create;
+    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
+    f:=TIniFile.Create(IniPath);
+end;
+
+destructor TSaver.Destroy;
+begin
+  reg.Destroy;
+  f.Free;
+end;
+
+function TSaver.GetSpecialPath(CSIDL: word): string;
 var s: PChar;
 begin
 s:=stralloc(max_path);
@@ -28,15 +49,10 @@ then s := '';
 result := s;
 end;
 
-procedure loadForm;
+procedure TSaver.loadForm;
   var //f:textfile;
     fk:byte;
-    f:TIniFile;
-    r:TDBRegistry;
-    IniPath: string;
 begin
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
-    f:=TIniFile.Create(IniPath);
     try
     with form1 do
       begin
@@ -83,22 +99,18 @@ begin
              2:Form1.N10Click(Form1);//n10.checked:=true;
              3:Form1.N12Click(Form1);//n12.checked:=true;
            end;
-       r:=TDBRegistry.Create;
-       basefolder.Caption:=r.GetPath;
-       r.Destroy;
+       basefolder.Caption:=reg.GetPath;
+//       if basefolder.Caption='' //then basefolder.Caption:='some text';
+
        //f.ReadString('database','database',ExtractFileDir(paramstr(0)+'\db\dictionary.db'));
       end;
     finally
-    f.Free;
+
     end;
 end;
 
-procedure saveForm;
-var f:TIniFile; r:TDBRegistry;
-    IniPath:string;
+procedure TSaver.saveForm;
 begin
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
-    f:=TIniFile.Create(IniPath);
     try
     with form1 do
     begin
@@ -125,30 +137,25 @@ begin
       if n10.checked then f.WriteInteger('Bar','Radio',2) else
       if n12.checked then f.WriteInteger('Bar','Radio',3);
 
-      r.Create;
-      r.WritePath(baseFolder.Caption);
-      r.Destroy;
+      reg.WritePath(baseFolder.Caption);
       //f.WriteString('database','database',form1.baseFolder.Caption);
     end;
     finally
-
     end;
-    //f.UpdateFile;
-    f.Free;
 end;
 { cloud }
 
 procedure Tcloud.loadFromCloud(whereTo: string);
 var theprogr, command, fullname:string;
-    f:file;
+    f:file; i:byte;
 
 const DICT='\dictionary.db';
-      i:byte=1;
       function FileNum(num:byte):string;
       begin
         result:=whereto+'\dictionary'+inttostr(num)+'.db';
       end;
 begin
+    i:=1;
     fullname:=whereto+DICT;
     assignfile(f, fullname);
     if FileExists(fullname) then

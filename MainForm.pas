@@ -355,7 +355,7 @@ var
   seAndCor:Tgrademanipulation;
   cards:Tcards;
   recreate:boolean;
-
+  saver: TSaver;
 
 
   conteiner:record
@@ -376,9 +376,10 @@ end;
 
 procedure TForm1.Keynottab (var msg:TCMDialogKey);
 //label lab;
-const activpos:shortint=0;
 var keypressed:char;
+    activpos:shortint;
 begin
+  activpos:=0;
   if msg.Charcode<>VK_TAB then inherited;
 
   if (msg.CharCode=VK_TAB) and (getKeyState(VK_CONTROL)<0) and (getKeyState(VK_SHIFT)<0) then
@@ -846,12 +847,13 @@ Dict.Close;
 top.Close;
 topicquery.SQL.Clear;
 end;
-saveForm;
+Saver.saveForm;
 test.Destroy;
   poBukv.Destroy;
   complience.Destroy;
   YesNo.Destroy;
   cards.Destroy;
+  saver.Destroy;
 end;
 
 procedure TForm1.searchChange(Sender: TObject);
@@ -1186,7 +1188,8 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   Dpot.Parent:=StBar;
   SeAndCor:=Tgrademanipulation.Create(DM2);
-  loadForm;
+  saver:=TSaver.Create;
+  saver.loadForm;
 
   test:=TTest.create(6);
   poBukv:=TPoBukvam.create;
@@ -1541,7 +1544,7 @@ if od1.Execute then
   begin
     dirbase:=od1.FileName;  //открываем
       //Close;
-      Dm2.synchConn.connectionString:='Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DSN=dictionarySource;Database='+dirbase+';"';
+      Dm2.synchConn.Params.Database:=dirbase;
     try
       dm2.synch.Open;
       StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
@@ -1661,8 +1664,9 @@ end;
 procedure TForm1.DBGrid2MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
   var posgridnew, j:word;
-  const posgrid:word=0;
+  posgrid:word;
 begin
+   posgrid:=0;
    with dbgrid2 do
    begin
    if SelectedRows.CurrentRowSelected then

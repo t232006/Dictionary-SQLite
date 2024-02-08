@@ -1,20 +1,20 @@
 object DataModule2: TDataModule2
-  Height = 455
-  Width = 637
+  Height = 374
+  Width = 509
   object dspotential: TDataSource
     DataSet = potential
-    Left = 360
-    Top = 24
+    Left = 240
+    Top = 32
   end
   object dsselectsel: TDataSource
     DataSet = selectsel
-    Left = 440
-    Top = 344
+    Left = 240
+    Top = 256
   end
   object dstopic: TDataSource
     DataSet = topic
-    Left = 456
-    Top = 128
+    Left = 360
+    Top = 120
   end
   object ADOConnection: TADOConnection
     Connected = True
@@ -22,8 +22,8 @@ object DataModule2: TDataModule2
       'Provider=MSDASQL.1;Persist Security Info=False;Data Source=dicti' +
       'onary'
     LoginPrompt = False
-    Left = 528
-    Top = 24
+    Left = 432
+    Top = 16
   end
   object top: TADOTable
     Active = True
@@ -31,8 +31,8 @@ object DataModule2: TDataModule2
     CursorType = ctStatic
     LockType = ltReadOnly
     TableName = 'Topic'
-    Left = 504
-    Top = 152
+    Left = 408
+    Top = 144
     object topid: TIntegerField
       FieldName = 'id'
     end
@@ -50,8 +50,8 @@ object DataModule2: TDataModule2
     AfterInsert = vokabAfterRefresh
     AfterDelete = vokabAfterRefresh
     TableName = 'Dict'
-    Left = 552
-    Top = 152
+    Left = 456
+    Top = 144
     object DictNumber: TAutoIncField
       FieldName = 'Number'
       ReadOnly = True
@@ -100,8 +100,8 @@ object DataModule2: TDataModule2
   end
   object dsdict: TDataSource
     DataSet = Dict
-    Left = 552
-    Top = 96
+    Left = 456
+    Top = 88
   end
   object topic: TADOQuery
     Connection = ADOConnection
@@ -112,8 +112,8 @@ object DataModule2: TDataModule2
       'from topic left join dict'
       'on dict.topic=topic.id'
       'group by id, name')
-    Left = 456
-    Top = 184
+    Left = 360
+    Top = 176
     object topicid: TIntegerField
       FieldName = 'id'
     end
@@ -130,15 +130,15 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'update Dict set usersel=true where')
-    Left = 400
-    Top = 168
+    Left = 304
+    Top = 160
   end
   object dropch: TADOCommand
     CommandText = 'UPDATE Dict'#13#10'SET usersel=false'#13#10#13#10
     Connection = ADOConnection
     Parameters = <>
-    Left = 216
-    Top = 368
+    Left = 80
+    Top = 304
   end
   object selectsel: TADOQuery
     Connection = ADOConnection
@@ -146,62 +146,54 @@ object DataModule2: TDataModule2
     Parameters = <>
     SQL.Strings = (
       'select * from Dict where usersel=true')
-    Left = 440
-    Top = 392
+    Left = 240
+    Top = 304
   end
   object potential: TADODataSet
     Connection = ADOConnection
     CursorType = ctStatic
     CommandText = 'select sum(Score) as sumScore from Dict where usersel=true'
     Parameters = <>
-    Left = 360
-    Top = 88
+    Left = 240
+    Top = 96
   end
   object addball: TADOQuery
     Connection = ADOConnection
     Parameters = <>
-    Left = 496
-    Top = 344
+    Left = 296
+    Top = 256
   end
   object droprate: TADOCommand
     Connection = ADOConnection
     Parameters = <>
-    Left = 264
-    Top = 368
+    Left = 128
+    Top = 304
   end
   object dropspot: TADOQuery
     Connection = ADOConnection
     Parameters = <>
     SQL.Strings = (
       'update Dict set spot=false')
-    Left = 392
-    Top = 272
+    Left = 192
+    Top = 184
   end
   object dssynch: TDataSource
     DataSet = synch
     Left = 99
-    Top = 172
+    Top = 116
   end
   object deepsearch: TADOCommand
     Connection = ADOConnection
     Parameters = <>
-    Left = 240
-    Top = 288
+    Left = 104
+    Top = 224
   end
-  object synchConn: TFDConnection
-    Params.Strings = (
-      'DriverID=SQLite')
-    FormatOptions.AssignedValues = [fvADOCompatibility]
-    FormatOptions.ADOCompatibility = True
-    LoginPrompt = False
-    Left = 40
-    Top = 24
-  end
-  object synch: TFDQuery
-    BeforeOpen = synchBeforeOpen
-    AfterOpen = synchAfterOpen
-    BeforeClose = synchBeforeClose
+  object synch: TADOQuery
     Connection = synchConn
+    CursorType = ctStatic
+    BeforeOpen = synchBeforeOpen
+    BeforeClose = synchBeforeClose
+    Parameters = <>
     SQL.Strings = (
       
         'select a.Word,a.Translation,b.Name,a.DateRec, a.relevation from ' +
@@ -209,14 +201,19 @@ object DataModule2: TDataModule2
       'on a.topic=b.id'
       
         'where a.Word not in (select Word from TempDB.Dict) and a.Transla' +
-        'tion not in (select Translation from TempDB.Dict)'
-      '')
-    Left = 40
+        'tion not in (select Translation from TempDB.Dict)')
+    Left = 48
     Top = 112
   end
-  object synchAttachDetach: TFDCommand
+  object synchAttachDetach: TADOCommand
     Connection = synchConn
-    Left = 56
-    Top = 264
+    Parameters = <>
+    Left = 48
+    Top = 168
+  end
+  object synchConn: TADOConnection
+    LoginPrompt = False
+    Left = 88
+    Top = 48
   end
 end

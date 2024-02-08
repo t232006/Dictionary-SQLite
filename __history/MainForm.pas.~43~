@@ -163,8 +163,6 @@ type
     N11: TMenuItem;
     N13: TMenuItem;
     Label23: TLabel;
-    Label24: TLabel;
-    Label25: TLabel;
     st2: TLabel;
     st1: TLabel;
     Label28: TLabel;
@@ -203,6 +201,9 @@ type
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
     ChShowScore: TCheckBox;
+    Panel2: TPanel;
+    Label24: TLabel;
+    Label25: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -216,7 +217,6 @@ type
     procedure m1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure searchKeyPress(Sender: TObject; var Key: Char);
     procedure SelOperCloseUp(Sender: TObject);
     procedure GridCellClick(Column: TColumn);
     procedure caneditClick(Sender: TObject);
@@ -312,6 +312,8 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LFromClButClick(Sender: TObject);
     procedure UToClButClick(Sender: TObject);
     procedure ChShowScoreClick(Sender: TObject);
+    procedure searchChange(Sender: TObject);
+    procedure DBMemo1Change(Sender: TObject);
     
   private
     { Private declarations }
@@ -352,7 +354,7 @@ var
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
-
+  recreate:boolean;
 
 
 
@@ -439,11 +441,13 @@ begin
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
+var DBRegistry: TDBRegistry;
 begin
+    DBRegistry:=TDBRegistry.Create;
     if od1.Execute then
     try
       baseFolder.Caption:=od1.FileName;
-      InstallReg(baseFolder.Caption);
+      DBRegistry.WritePath(baseFolder.Caption);
       DM2.ReloadConnection;
       if messagedlg('Смена базы данных требует перезагрузки приложения. Закрыть приложение?',mtConfirmation,[mbYes, mbNo],0)=mrYes then
         close;
@@ -451,6 +455,7 @@ begin
       on ERegistryException do
         ShowMessage('Необходимы права администратора для данного действия');
     end;
+    DBRegistry.Destroy;
 
 end;
 
@@ -518,7 +523,7 @@ end;// end;
 
 procedure Tform1.InitPerevodSlo;
 begin
-  test:=TTest.create(6);
+
   test.PerevodSlo(o,pravotv);
   st2.Caption:=o[0].perevod;
   Rg2.ItemIndex:=-1;
@@ -532,8 +537,7 @@ end; //end;
 procedure TForm1.InitPobukvam;
 var ii, jj: integer;
 begin
-  poBukv.Free;
-  poBukv:=TPoBukvam.create;
+
   for ii := 0 to 4 do
   for jj := 0 to 4 do
     sg.Cells[ii,jj] :=poBukv.table[ii,jj];
@@ -579,33 +583,57 @@ begin
   //rg1.ItemIndex:=-1;
 
 end;
-
+ //region bookmark PageControl
 procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
+
 begin
 
   case  PageControl1.ActivePageIndex of
   0:
   begin
-    //baserefrash;
+      test.recreate:=true;
+      poBukv.recreate:=true;
+      complience.recreate:=true;
+      YesNo.recreate:=true;
+      cards.recreate:=true;
   end;
   1:
   begin
-      test:=TTest.create(6);
+      //test:=TTest.create(6);
+      if test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitSlovoPer;
   end;
   2:
   begin
-      test:=TTest.create(6);
+      if test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitPerevodSlo;
   end;
   3:
   begin
+    if poBukv.recreate then
+    begin
+      poBukv.Free;
+      poBukv:=TPoBukvam.create;
+    end;
     InitPobukvam;
   end;
   4:
   begin
-    complience:= Tcomplience.Create;
+    if complience.recreate then
+    begin
+      complience.Free;
+      complience:= Tcomplience.Create(6);
+    end;
+      complience.Init;
     for t:=1 to 6 do
     begin
         TMemo(FindComponent('m'+IntToStr(t))).lines.text:=complience.o1[t].slovo;
@@ -619,7 +647,12 @@ begin
   end;
   5:
   begin
-     YesNo:=TYesNo.Create(1);
+  if yesNo.recreate then
+    begin
+       yesNo.Free;
+       YesNo:=TYesNo.Create(1);
+    end;
+    yesNo.Init;
   end;
   6:
   begin
@@ -637,7 +670,12 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-    cards:=Tcards.create(t1);
+    if cards.recreate then
+    begin
+      cards.Free;
+      cards:=Tcards.create(t1);
+    end;
+      cards.Init(t1);
     for t:=1 to t1 do
     begin
         if rg3.ItemIndex=0 then
@@ -809,14 +847,29 @@ top.Close;
 topicquery.SQL.Clear;
 end;
 saveForm;
+test.Destroy;
+  poBukv.Destroy;
+  complience.Destroy;
+  YesNo.Destroy;
+  cards.Destroy;
 end;
 
-procedure TForm1.searchKeyPress(Sender: TObject; var Key: Char);
+procedure TForm1.searchChange(Sender: TObject);
+
+var s:string;
+    letter:char;    // last letter
 begin
-  if ord(key)<128 then
-    DM2.Dict.Locate('Translation',Search.Text+key,[loPartialKey, loCaseInsensitive])
+  s := search.Text;
+  if s <> '' then letter := s[length(s)];
+  if ord(letter) = 43 then
+    begin
+      delete(s,length(s),1);
+      search.Text:=s;
+    end else
+  if ord(letter)<128 then
+    DM2.Dict.Locate('Translation', s, [loPartialKey, loCaseInsensitive])
   else
-    DM2.Dict.Locate('Word',Search.Text+key,[loPartialKey, loCaseInsensitive])
+    DM2.Dict.Locate('Word', s, [loPartialKey, loCaseInsensitive]);
 end;
 
 procedure TForm1.SelOperCloseUp(Sender: TObject);
@@ -859,7 +912,8 @@ baserefresh;
 Action3Execute(sender);
 DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
-if SelOper.ItemIndex <> 4 then selspot.Checked:=true;
+{if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
+selspot.Checked:=false;}
 
 
 end;
@@ -1133,7 +1187,14 @@ begin
   Dpot.Parent:=StBar;
   SeAndCor:=Tgrademanipulation.Create(DM2);
   loadForm;
+
+  test:=TTest.create(6);
+  poBukv:=TPoBukvam.create;
+  complience:= Tcomplience.Create(6);
+  YesNo:=TYesNo.Create(1);
+  cards:=Tcards.create(12);
   //-------------------------------
+  //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
@@ -1161,7 +1222,7 @@ begin
     if j-round(0.08*order)*6<>strtoint(key) then
     begin
       tecomp:=(FindComponent('m'+inttostr(j)) as tmemo);
-      rectt(color, tecomp);
+      rectt(pb.color, tecomp);
     end;
   end;
 end;
@@ -1200,7 +1261,7 @@ try
           end;
         end  else
         begin
-          rectt(color, mem);
+          rectt(pb.color, mem);
           with conteiner do
           begin
             if left1.Visible then leftnum:=0 else rightnum:=0;
@@ -1627,6 +1688,15 @@ begin
    posgrid:=posgridnew;
    SpeedButton9.Enabled:=dbgrid2.SelectedIndex > -1;
    end;
+end;
+
+procedure TForm1.DBMemo1Change(Sender: TObject);
+var fontheight:byte;
+begin
+  fontHeight:=(Sender as TDBMemo).height div ((length((Sender as TDBMemo).Text) div 25)+1);
+  if fontheight<=25 then
+  (Sender as TDBMemo).font.Height:=fontheight else
+  (Sender as TDBMemo).Font.Height:=25;
 end;
 
 procedure TForm1.DBMemo1KeyPress(Sender: TObject; var Key: Char);
