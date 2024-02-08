@@ -33,17 +33,6 @@ type
     deepsearch: TFDCommand;
     dropch: TFDCommand;
     droprate: TFDCommand;
-    DictNumber: TFDAutoIncField;
-    DictWord: TWideStringField;
-    DictTranslation: TWideStringField;
-    DictDateRec: TDateField;
-    DictScore: TSmallintField;
-    DictUsersel: TBooleanField;
-    DictPhrase: TBooleanField;
-    DictRelevation: TIntegerField;
-    DictSpot: TBooleanField;
-    DictTopic: TIntegerField;
-    DictTopicName: TStringField;
     procedure vokabAfterRefresh(DataSet: TDataSet);
     procedure synchAfterOpen(DataSet: TDataSet);
     procedure ReloadConnection;
@@ -65,11 +54,10 @@ uses MainForm;
 
 
 {$R *.dfm}
-
 procedure TDataModule2.ReloadConnection;
 begin
-  FDConnection.Connected:=false;
-  FDConnection.Connected:=true;
+  ADOConnection.Connected:=false;
+  ADOConnection.Connected:=true;
   Dict.Active:=true;
   Top.Active:=true;
   Topic.Active:=true;

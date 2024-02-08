@@ -1518,18 +1518,21 @@ begin
    with DM2.Dict do
   begin
     case column.Index of
-      0: if Sort='Word ASC' then Sort:='Word DESC'
-      else Sort:='Word ASC';
-      1: if Sort='Translation ASC' then Sort:='Translation DESC'
-      else Sort:='Translation ASC';
-      2: if Sort='DateRec ASC' then Sort:='DateRec DESC'
-      else Sort:='DateRec ASC';
+      0: if IndexName='wordind' then IndexName:='WordIndD'
+      else IndexName:='wordind';
+      1: if IndexName='TranslationInd' then IndexName:='TranslationIndD'
+      else IndexName:='TranslationInd';
+      2: if IndexName='DateRecInd' then IndexName:='DateRecD'
+      else IndexName:='DateRecInd';
       3: begin
     //
           nil_menu.Popup(mouse.CursorPos.X, mouse.CursorPos.Y);
       end;
-      4: if Sort='Topic ASC' then Sort:='Topic DESC'
-      else Sort:='Topic ASC';
+      4: if IndexName='topicind' then IndexName:='TopicIndD'
+      else IndexName:='topicind';
+      5: if IndexName='UserselInd' then IndexName:='UserselIndD'
+      else IndexName:='UserselInd';
+
     end;
       First;
   end;
@@ -1827,7 +1830,7 @@ else
      quest:='Вы действительно хотите обнулить релевантность?' ;
      param:='relevation';
   end;
-DM2.droprate.CommandText:='UPDATE Dict SET '+param+'=0 WHERE usersel=true';
+DM2.droprate.CommandText.Add('UPDATE Dict SET '+param+'=0 WHERE usersel=true');
 
 if Application.MessageBox(quest,'Внимание',MB_YESNO+MB_ICONEXCLAMATION+MB_TASKMODAL)=IDYES then
      begin
@@ -1861,13 +1864,13 @@ with DM2.Dict do
 begin
   if n13.Checked then
     begin
-      if Sort='Score ASC' then Sort:='Score DESC'
-      else Sort:='Score ASC';
+      if IndexName='ScoreInd' then IndexName:='ScoreIndD'
+      else IndexName:='ScoreInd';
     end
   else
   begin
-     if Sort='Relevation ASC' then Sort:='Relevation DESC'
-      else Sort:='Relevation ASC';
+     if IndexName='RelInd' then IndexName:='RelIndD'
+      else IndexName:='RelInd';
   end;
   First;
 end;

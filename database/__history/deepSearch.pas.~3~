@@ -16,7 +16,7 @@ begin
         _to:='Translation'
       else
         _to:='Word';
-      deepsearch.commandtext.Add('UPDATE Dict set spot=true where '+_to+' like ''%'+needle+'%''');
+      deepsearch.commandtext:='UPDATE Dict set spot=true where '+_to+' like ''%'+needle+'%''';
       DeepSearch.Execute;
       baserefresh;
     end;
