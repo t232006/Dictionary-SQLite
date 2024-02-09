@@ -357,7 +357,7 @@ var
   seAndCor:Tgrademanipulation;
   cards:Tcards;
   recreate:boolean;
-
+  //isOdd:boolean;
 
   conteiner:record
     leftnum:byte;
@@ -910,8 +910,6 @@ DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
 {if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
 selspot.Checked:=false;}
-
-
 end;
 
 procedure TForm1.GridCellClick(Column: TColumn);
@@ -1723,10 +1721,12 @@ end;
 procedure TForm1.GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
   DataCol: Integer; Column: TColumn; State: TGridDrawState);
   var style,rl,rr,rt,rb:integer; rect1:TRect;
+  //IsOdd:boolean;
+
 begin
 //-------------STRIPES-------------//
 //if ((DataCol=0) and not(gdselected in state)) then TableGreedRow.drawTrueBack:=not(TableGreedRow.drawTrueBack);
-if odd(TDBGrid(sender).DataSource.DataSet.RecNo) then
+if odd((rect2.Top-21) div rect2.Height) then
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor1
 else
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor2;
