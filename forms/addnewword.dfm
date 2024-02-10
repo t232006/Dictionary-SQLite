@@ -3,8 +3,8 @@ object addneword: Taddneword
   Top = 174
   BorderStyle = bsDialog
   Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1085#1086#1074#1099#1077' '#1089#1083#1086#1074#1072
-  ClientHeight = 233
-  ClientWidth = 652
+  ClientHeight = 232
+  ClientWidth = 648
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -161,7 +161,7 @@ object addneword: Taddneword
     Font.Style = []
     KeyField = 'id'
     ListField = 'Name'
-    ListSource = DataModule2.dstop
+    ListSource = DataModule2.dsTop
     ParentFont = False
     TabOrder = 2
   end

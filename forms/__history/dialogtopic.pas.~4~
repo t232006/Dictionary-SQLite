@@ -38,8 +38,8 @@ procedure TopicRefresh;
 begin
   with DM2 do
   begin
-    //top.Active:=false;
-    //top.Active:=true;
+    top.Active:=false;
+    top.Active:=true;
     topic.Active:=false;
     topic.Active:=true;
   end;
@@ -106,9 +106,10 @@ begin
 //DBGrid1.Options:=DBGrid1.Options+[dgediting];
 if DelBut.Down then  DelBut.Caption:='точно удалить?'
 else
+with  DM2.top do
 begin
     DelBut.Caption:='удалить';
-    dm2.Topic.Delete;
+    Delete;
     TopicRefresh;
 end;
 end;
@@ -116,21 +117,20 @@ end;
 procedure Ttopicform.AddButClick(Sender: TObject);
 begin
   if AddBut.Down then
-  with DBMemo1 do
   begin
-    SetFocus;
-    ReadOnly:=false;
-    DataSource.DataSet.Insert;
+    DBMemo1.SetFocus;
+    DBMemo1.ReadOnly:=false;
+    DM2.top.Insert;
   end
   else
   begin
     if DBMemo1.Text='' then
       DM2.top.Cancel
     else
-      DM2.topic.Post;
-      DBMemo1.ReadOnly:=true;
-      TopicRefresh;
-      DBGrid1.SetFocus;
+      DM2.top.Post;
+    DBMemo1.ReadOnly:=true;
+    TopicRefresh;
+    DBGrid1.SetFocus;
   end;
 end;
 

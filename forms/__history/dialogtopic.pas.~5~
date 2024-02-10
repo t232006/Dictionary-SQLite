@@ -38,8 +38,8 @@ procedure TopicRefresh;
 begin
   with DM2 do
   begin
-    //top.Active:=false;
-    //top.Active:=true;
+    top.Active:=false;
+    top.Active:=true;
     topic.Active:=false;
     topic.Active:=true;
   end;

@@ -857,7 +857,7 @@ var s:string;
 begin
   s := search.Text;
   if s <> '' then letter := s[length(s)];
-  if ord(letter) = 43 then
+  if ord(letter) = 43 then  //'+'
     begin
       delete(s,length(s),1);
       search.Text:=s;
