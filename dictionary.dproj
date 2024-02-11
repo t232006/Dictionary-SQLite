@@ -165,6 +165,10 @@
         <DCCReference Include="exercises\PoBukvam.pas"/>
         <DCCReference Include="saver\saver.pas"/>
         <DCCReference Include="frames\cardsUnit.pas"/>
+        <DCCReference Include="forms\Logo.pas">
+            <Form>LogoForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="init.ini"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

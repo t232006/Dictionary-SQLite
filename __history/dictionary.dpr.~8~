@@ -25,25 +25,17 @@ uses
   lessons in 'exercises\lessons.pas',
   PoBukvam in 'exercises\PoBukvam.pas',
   saver in 'saver\saver.pas',
-  cardsUnit in 'frames\cardsUnit.pas',
-  Logo in 'forms\Logo.pas' {LogoForm};
+  cardsUnit in 'frames\cardsUnit.pas';
 
 {$R *.res}
- var
-  LogoForm: TLogoForm;
+
 begin
   Application.Initialize;
 
   Application.Title := 'Individual dictionary';
+
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);
-  //Application.CreateForm(TLogoForm, LogoForm);
-  Logoform :=TLogoForm.Create(Application);
-  Logoform.show;
-   while LogoForm.ProgressBar1.Tag<>1 do Application.ProcessMessages;
-   LogoForm.Free;
-
-  //Application.CreateForm(TLogoForm, LogoForm);
   Application.CreateForm(Taddneword, addneword);
   Application.CreateForm(Tdateformm, dateformm);
   Application.CreateForm(Ttopicform, topicform);

@@ -1,0 +1,42 @@
+unit Logo;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Imaging.pngimage, lesson4, lessons, PoBukvam, cardsUnit, MainForm;
+
+type
+  TLogoForm = class(TForm)
+    ProgressBar1: TProgressBar;
+    Image1: TImage;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+
+implementation
+
+{$R *.dfm}
+
+
+procedure TLogoForm.FormShow(Sender: TObject);
+begin
+  test:=TTest.create(6);
+  progressbar1.Position:=Progressbar1.position+10;
+  poBukv:=TPoBukvam.create;
+  progressbar1.Position:=Progressbar1.position+10;
+  complience:= Tcomplience.Create(6);
+  progressbar1.Position:=Progressbar1.position+10;
+  YesNo:=TYesNo.Create(1);
+  progressbar1.Position:=Progressbar1.position+10;
+  cards:=Tcards.create(12);
+  progressbar1.Position:=Progressbar1.position+10;
+end;
+
+end.

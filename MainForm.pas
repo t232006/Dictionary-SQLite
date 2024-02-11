@@ -356,7 +356,7 @@ var
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
-  recreate:boolean;
+  //recreate:boolean;
   //isOdd:boolean;
 
   conteiner:record
@@ -592,11 +592,15 @@ begin
   case  PageControl1.ActivePageIndex of
   0:
   begin
-      test.recreate:=true;
-      poBukv.recreate:=true;
-      complience.recreate:=true;
-      YesNo.recreate:=true;
-      cards.recreate:=true;
+      try
+        //test.recreate:=true;
+        //poBukv.recreate:=true;
+        //complience.recreate:=true;
+        //YesNo.recreate:=true;
+        //cards.recreate:=true;
+      finally
+
+      end;
   end;
   1:
   begin
@@ -1178,6 +1182,8 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 //var sf:string; fk:1..12;
 begin
+
+  //logoform.show;
   if loadForm=false then
   begin
     StBar.Panels[0].Text:='Ошибка в загрузке словаря';
@@ -1609,7 +1615,7 @@ end;
 
 procedure TForm1.FormPaint(Sender: TObject);
 begin
-
+   //logoform.Close;
    if PageControl1.ActivePageIndex=8 then
    begin
      try
@@ -1726,7 +1732,8 @@ procedure TForm1.GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
 begin
 //-------------STRIPES-------------//
 //if ((DataCol=0) and not(gdselected in state)) then TableGreedRow.drawTrueBack:=not(TableGreedRow.drawTrueBack);
-if odd((rect2.Top-21) div rect2.Height) then
+//if odd((rect2.Top-21) div rect2.Height) then
+if odd(TDBGrid(sender).DataSource.DataSet.RecNo) then
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor1
 else
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor2;
