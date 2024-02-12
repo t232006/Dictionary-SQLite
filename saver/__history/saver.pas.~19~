@@ -179,7 +179,7 @@ begin
 end;
 
 procedure Tcloud.saveToCloud(whereFrom:string);
-var theprogr, command:string;
+var theprogr, command, fullname:string;
 begin
     theprogr:=Format('%s\saver\UploadDB.exe ',[GetCurrentDir]);
     command:= 'saver\client_secret_for_Delphi.json '+ Wherefrom + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);

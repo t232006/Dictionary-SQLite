@@ -3,8 +3,8 @@ object dateformm: Tdateformm
   Top = 328
   BorderStyle = bsDialog
   Caption = #1044#1072#1090#1099
-  ClientHeight = 446
-  ClientWidth = 226
+  ClientHeight = 445
+  ClientWidth = 222
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
