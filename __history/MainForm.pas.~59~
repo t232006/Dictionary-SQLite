@@ -1,4 +1,4 @@
-unit MainForm;
+﻿unit MainForm;
 
 interface
 
@@ -590,18 +590,18 @@ var t,t1:byte; //parentcontrol:TWinControl;
 begin
 
   case  PageControl1.ActivePageIndex of
-  {0:
+  0:
   begin
       try
         {test.recreate:=true;
         poBukv.recreate:=true;
         complience.recreate:=true;
         YesNo.recreate:=true;
-        cards.recreate:=true;
+        cards.recreate:=true;}
       finally
 
       end;
-  end; }
+  end;
   1:
   begin
       //test:=TTest.create(6);
@@ -651,11 +651,11 @@ begin
   end;
   5:
   begin
-  //if yesNo.recreate then
-    //begin
+  if yesNo.recreate then
+    begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
-    //end;
+    end;
     yesNo.Init;
   end;
   6:

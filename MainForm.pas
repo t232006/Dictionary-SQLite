@@ -590,53 +590,28 @@ var t,t1:byte; //parentcontrol:TWinControl;
 begin
 
   case  PageControl1.ActivePageIndex of
-  0:
-  begin
-      try
-        {test.recreate:=true;
-        poBukv.recreate:=true;
-        complience.recreate:=true;
-        YesNo.recreate:=true;
-        cards.recreate:=true;}
-      finally
-
-      end;
-  end;
   1:
   begin
-      //test:=TTest.create(6);
-      //if test.recreate then
-      //begin
-        test.Free;
-        test:=TTest.create(6);
-      //end;
+      test.Free;
+      test:=TTest.create(6);
       InitSlovoPer;
   end;
   2:
   begin
-      //if test.recreate then
-      //begin
         test.Free;
         test:=TTest.create(6);
-      //end;
-      InitPerevodSlo;
+        InitPerevodSlo;
   end;
   3:
   begin
-    //if poBukv.recreate then
-    //begin
       poBukv.Free;
       poBukv:=TPoBukvam.create;
-    //end;
-    InitPobukvam;
+      InitPobukvam;
   end;
   4:
   begin
-    //if complience.recreate then
-    //begin
       complience.Free;
       complience:= Tcomplience.Create(6);
-    //end;
       complience.Init;
     for t:=1 to 6 do
     begin
@@ -651,12 +626,9 @@ begin
   end;
   5:
   begin
-  if yesNo.recreate then
-    begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
-    end;
-    yesNo.Init;
+        yesNo.Init;
   end;
   6:
   begin
@@ -674,11 +646,8 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-    //if cards.recreate then
-    //begin
       cards.Free;
       cards:=Tcards.create(t1);
-    //end;
       cards.Init(t1);
     for t:=1 to t1 do
     begin

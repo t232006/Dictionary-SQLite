@@ -5,14 +5,6 @@ interface
 uses       SysUtils,  Controls, database, Dialogs, Graphics, basemanipulation;
 
 type
-  {worded=record
-    ind:word;
-    slovo:string;
-    perevod:string; }
-    //topic:word;
-    //date:TDate;
-    //reit:byte;
-  //end;
   SlPerSl=record
     slovo:string;
     perevod:string;
@@ -21,7 +13,6 @@ type
 
  TGeneral=class
      v:array of SlPerSl;  //заполнение массива отдельной процедурой
-     recreate:boolean;
      constructor Create(countrec:byte);
  end;
 
@@ -90,7 +81,7 @@ procedure TYesNo.Init;
 var giveTrue:byte;
     l,ll:integer;
 begin
-  recreate:=false;
+  //recreate:=false;
   seAndCor:=Tgrademanipulation.Create(DM2);
   randomize;
   giveTrue:=random(2);
