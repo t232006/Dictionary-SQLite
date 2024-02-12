@@ -70,6 +70,8 @@ begin
                  3:Form1.N12Click(Form1);//n12.checked:=true;
                end;
         end;
+
+        StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
         Grid.Font.Size:=f.ReadInteger('Table','GridFontSize',10);
         Frame42.Edit1.Text:=inttostr(Grid.Font.Size);
         Grid.Font.Color:=f.ReadInteger('Table','GridFontColor',0);

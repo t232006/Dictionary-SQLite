@@ -72,7 +72,6 @@ procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
-  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
@@ -87,7 +86,7 @@ begin
     Topic.Active:=true;
     selectsel.Active:=true;
     if Dict.RecordCount<6 then form1.PagesBlock(true);
-    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
     result:=true;
    end
    else result:=false;

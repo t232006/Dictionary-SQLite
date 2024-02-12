@@ -17,11 +17,11 @@ type
     slovo:string;
     perevod:string;
   end;
- otv=array[0..6] of SlPerSl; //массив,отвечающий за ответы
+ otv=array[0..6] of SlPerSl; //РјР°СЃСЃРёРІ,РѕС‚РІРµС‡Р°СЋС‰РёР№ Р·Р° РѕС‚РІРµС‚С‹
 
  TGeneral=class
-     v:array of SlPerSl;  //заполнение массива отдельной процедурой
-     recreate:boolean;
+     v:array of SlPerSl;  //Р·Р°РїРѕР»РЅРµРЅРёРµ РјР°СЃСЃРёРІР° РѕС‚РґРµР»СЊРЅРѕР№ РїСЂРѕС†РµРґСѓСЂРѕР№
+     //recreate:boolean;
      constructor Create(countrec:byte);
  end;
 
@@ -50,12 +50,12 @@ type
  end;
  TTest=class(TGeneral)
     public
-    procedure slovoPer(var w:otv; var ind:byte); //ind-верный вариант
-    procedure PerevodSlo(var w:otv; var ind:byte); //ind-верный вариант
+    procedure slovoPer(var w:otv; var ind:byte); //ind-РІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚
+    procedure PerevodSlo(var w:otv; var ind:byte); //ind-РІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚
  end;
 //var
 
-//bmas: array of string; //массив букв или слов
+//bmas: array of string; //РјР°СЃСЃРёРІ Р±СѓРєРІ РёР»Рё СЃР»РѕРІ
 
 implementation
 
@@ -72,7 +72,7 @@ begin
   begin
     inc(_serial); //serial of true answers
     PromptColor:=clgreen;
-    _prompt:='вы правы';
+    _prompt:='РІС‹ РїСЂР°РІС‹';
     if IsItTrue=true then
     begin
       seAndCor.searchandcor(true,'word',word1);
@@ -82,7 +82,7 @@ begin
   begin
     reset;
     PromptColor:=clred;
-    _prompt:='вы неправы';
+    _prompt:='РІС‹ РЅРµРїСЂР°РІС‹';
   end;
 end;
 
@@ -90,7 +90,7 @@ procedure TYesNo.Init;
 var giveTrue:byte;
     l,ll:integer;
 begin
-  recreate:=false;
+  //recreate:=false;
   seAndCor:=Tgrademanipulation.Create(DM2);
   randomize;
   giveTrue:=random(2);
@@ -133,9 +133,9 @@ begin
     Open;
     if RecordCount<countrec then
     begin
-      DM2.topicquery.SQL.Text:='UPDATE Dict SET usersel=true';//если отмечено менее 6 записей, то выделить все записи
+      DM2.topicquery.SQL.Text:='UPDATE Dict SET usersel=true';//РµСЃР»Рё РѕС‚РјРµС‡РµРЅРѕ РјРµРЅРµРµ 6 Р·Р°РїРёСЃРµР№, С‚Рѕ РІС‹РґРµР»РёС‚СЊ РІСЃРµ Р·Р°РїРёСЃРё
       DM2.topicquery.ExecSQL;
-      showmessage('выделены все записи, поскольку должно быть не менее '+inttostr(countrec));
+      showmessage('РІС‹РґРµР»РµРЅС‹ РІСЃРµ Р·Р°РїРёСЃРё, РїРѕСЃРєРѕР»СЊРєСѓ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РјРµРЅРµРµ '+inttostr(countrec));
       Close; Open;
     end;
 
@@ -143,66 +143,66 @@ begin
     First;
     for i:=0 to RecordCount-1 do
     begin
-      zapmas (i); //заполнить нулевой
+      zapmas (i); //Р·Р°РїРѕР»РЅРёС‚СЊ РЅСѓР»РµРІРѕР№
       Next;
     end;
   end;
 end;
 
-procedure TTest.PerevodSlo(var w:otv; var ind:byte); //ind-верный вариант; w по сути string
+procedure TTest.PerevodSlo(var w:otv; var ind:byte); //ind-РІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚; w РїРѕ СЃСѓС‚Рё string
 var l:integer;
     i,g:byte;
-    j:set of byte; //распределение ответов
+    j:set of byte; //СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РѕС‚РІРµС‚РѕРІ
     jj:set of byte;
 begin
     randomize;
     j:=[]; jj:=j;
-    l:=random(length(v)); //загаданное слово (индекс)
-    w[0].perevod:=v[l].perevod; //загаданное слово
-    g:=random(6)+1;  //любому варианту
-    w[g].slovo:=v[l].slovo;  // даем верный ответ
+    l:=random(length(v)); //Р·Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ (РёРЅРґРµРєСЃ)
+    w[0].perevod:=v[l].perevod; //Р·Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ
+    g:=random(6)+1;  //Р»СЋР±РѕРјСѓ РІР°СЂРёР°РЅС‚Сѓ
+    w[g].slovo:=v[l].slovo;  // РґР°РµРј РІРµСЂРЅС‹Р№ РѕС‚РІРµС‚
     ind:=g;
     j:=j+[g];  jj:=jj+[l];
-    for i:=2 to 6 do  //остальным даем неверные
+    for i:=2 to 6 do  //РѕСЃС‚Р°Р»СЊРЅС‹Рј РґР°РµРј РЅРµРІРµСЂРЅС‹Рµ
     begin
       repeat
         g:=random(6)+1;
       until not(g in j);
       j:=j+[g];
       repeat
-        l:=random(length(v));//генерим любой вариант
+        l:=random(length(v));//РіРµРЅРµСЂРёРј Р»СЋР±РѕР№ РІР°СЂРёР°РЅС‚
       until not(l in jj);
-      jj:=jj+[l];      //чтобы не было повторов
-      w[g].slovo:=v[l].slovo; //кладем в неверный вариант
+      jj:=jj+[l];      //С‡С‚РѕР±С‹ РЅРµ Р±С‹Р»Рѕ РїРѕРІС‚РѕСЂРѕРІ
+      w[g].slovo:=v[l].slovo; //РєР»Р°РґРµРј РІ РЅРµРІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚
       w[g].perevod:=v[l].perevod;
     end;
 end;
 
-procedure TTest.slovoPer(var w:otv; var ind:byte); //ind-верный вариант;w record со словом-переводом
+procedure TTest.slovoPer(var w:otv; var ind:byte); //ind-РІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚;w record СЃРѕ СЃР»РѕРІРѕРј-РїРµСЂРµРІРѕРґРѕРј
 var l:integer;
     i,g:byte;
-    j:set of byte; //распределение ответов
+    j:set of byte; //СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РѕС‚РІРµС‚РѕРІ
     jj:set of byte;
 begin
     randomize;
     j:=[]; jj:=j;
-    l:=random(length(v)); //загаданное слово (индекс)
-    w[0].slovo:=v[l].slovo; //загаданное слово
-      g:=random(6)+1;  //любому варианту
-       w[g].perevod:=v[l].perevod;  // даем верный ответ
+    l:=random(length(v)); //Р·Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ (РёРЅРґРµРєСЃ)
+    w[0].slovo:=v[l].slovo; //Р·Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ
+      g:=random(6)+1;  //Р»СЋР±РѕРјСѓ РІР°СЂРёР°РЅС‚Сѓ
+       w[g].perevod:=v[l].perevod;  // РґР°РµРј РІРµСЂРЅС‹Р№ РѕС‚РІРµС‚
     ind:=g;
       j:=j+[g];  jj:=jj+[l];
-    for i:=2 to 6 do  //остальным даем неверные
+    for i:=2 to 6 do  //РѕСЃС‚Р°Р»СЊРЅС‹Рј РґР°РµРј РЅРµРІРµСЂРЅС‹Рµ
     begin
       repeat
         g:=random(6)+1;
       until not(g in j);
       j:=j+[g];
       repeat
-        l:=random(length(v));//генерим любой вариант
+        l:=random(length(v));//РіРµРЅРµСЂРёРј Р»СЋР±РѕР№ РІР°СЂРёР°РЅС‚
       until not(l in jj);
-      jj:=jj+[l];      //чтобы не было повторов
-      w[g].perevod:=v[l].perevod; //кладем в неверный вариант
+      jj:=jj+[l];      //С‡С‚РѕР±С‹ РЅРµ Р±С‹Р»Рѕ РїРѕРІС‚РѕСЂРѕРІ
+      w[g].perevod:=v[l].perevod; //РєР»Р°РґРµРј РІ РЅРµРІРµСЂРЅС‹Р№ РІР°СЂРёР°РЅС‚
       w[g].slovo:=v[l].slovo; //put wrong word
     end;
 end;

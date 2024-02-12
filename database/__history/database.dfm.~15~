@@ -61,7 +61,6 @@ object DataModule2: TDataModule2
   object FDConnection: TFDConnection
     Params.Strings = (
       'DriverID=SQLite')
-    Connected = True
     LoginPrompt = False
     Left = 536
     Top = 24
@@ -232,11 +231,7 @@ object DataModule2: TDataModule2
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
-    UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
-    UpdateOptions.EnableUpdate = False
-    UpdateOptions.CheckRequired = False
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
     UpdateOptions.AutoCommitUpdates = True
     SQL.Strings = (
       

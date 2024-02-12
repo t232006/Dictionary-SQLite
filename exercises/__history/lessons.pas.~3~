@@ -121,8 +121,12 @@ procedure zapmas (kl:word);
 begin
     with DM2.Dict do
   begin
+    //v[kl].ind:=kl;
     v[kl].slovo:=Fields[1].AsString;
     v[kl].perevod:=fields[2].AsString;
+    //v[kl].date:=fields[4].AsDateTime;
+    //v[kl].topic:=fields[3].AsInteger;
+    //v[kl].reit:=fields[5].AsInteger;
   end;
 end;
 begin

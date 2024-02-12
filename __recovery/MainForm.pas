@@ -1,4 +1,4 @@
-﻿unit MainForm;
+unit MainForm;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   ExtCtrls, lessons, PoBukvam, lesson4, database, DBCtrls, addnewword, dateform,
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
   OleCtrls, SHDocVw, Gauges, thread2, DdeMan, Menus, System.Actions,
-  basemanipulation, cards, RowColorsUnit, saver, deepSearch, ToExcelUnit,
+  basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
   registry;
 
@@ -314,6 +314,8 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure ChShowScoreClick(Sender: TObject);
     procedure searchChange(Sender: TObject);
     procedure DBMemo1Change(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure PagesBlock(block:boolean);
     
   private
     { Private declarations }
@@ -354,9 +356,8 @@ var
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
-  recreate:boolean;
-  saver: TSaver;
-
+  //recreate:boolean;
+  //isOdd:boolean;
 
   conteiner:record
     leftnum:byte;
@@ -368,6 +369,16 @@ implementation
 uses dialogtopic;
 
 {$R *.dfm}
+procedure TForm1.PagesBlock(block: boolean);
+var i:byte;
+begin
+if block then
+      for I := 1 to 6 do
+        PageControl1.Pages[i].Enabled:=false
+  else
+      for I := 1 to 6 do
+        PageControl1.Pages[i].Enabled:=true;
+end;
 
 function Tform1.memonumber (name:string):byte;
 begin
@@ -442,22 +453,10 @@ begin
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
-var DBRegistry: TDBRegistry;
 begin
-    DBRegistry:=TDBRegistry.Create;
     if od1.Execute then
-    try
-      baseFolder.Caption:=od1.FileName;
-      DBRegistry.WritePath(baseFolder.Caption);
-      DM2.ReloadConnection;
-      if messagedlg('Смена базы данных требует перезагрузки приложения. Закрыть приложение?',mtConfirmation,[mbYes, mbNo],0)=mrYes then
-        close;
-    except
-      on ERegistryException do
-        ShowMessage('Необходимы права администратора для данного действия');
-    end;
-    DBRegistry.Destroy;
-
+      DM2.loadDB(od1.FileName);
+    (sender as TLabel).Caption:=od1.FileName;
 end;
 
 procedure Tform1.ChangeColrigth(p:boolean);
@@ -591,49 +590,53 @@ var t,t1:byte; //parentcontrol:TWinControl;
 begin
 
   case  PageControl1.ActivePageIndex of
-  0:
+  {0:
   begin
-      test.recreate:=true;
-      poBukv.recreate:=true;
-      complience.recreate:=true;
-      YesNo.recreate:=true;
-      cards.recreate:=true;
-  end;
+      try
+        {test.recreate:=true;
+        poBukv.recreate:=true;
+        complience.recreate:=true;
+        YesNo.recreate:=true;
+        cards.recreate:=true;
+      finally
+
+      end;
+  end; }
   1:
   begin
       //test:=TTest.create(6);
-      if test.recreate then
-      begin
+      //if test.recreate then
+      //begin
         test.Free;
         test:=TTest.create(6);
-      end;
+      //end;
       InitSlovoPer;
   end;
   2:
   begin
-      if test.recreate then
-      begin
+      //if test.recreate then
+      //begin
         test.Free;
         test:=TTest.create(6);
-      end;
+      //end;
       InitPerevodSlo;
   end;
   3:
   begin
-    if poBukv.recreate then
-    begin
+    //if poBukv.recreate then
+    //begin
       poBukv.Free;
       poBukv:=TPoBukvam.create;
-    end;
+    //end;
     InitPobukvam;
   end;
   4:
   begin
-    if complience.recreate then
-    begin
+    //if complience.recreate then
+    //begin
       complience.Free;
       complience:= Tcomplience.Create(6);
-    end;
+    //end;
       complience.Init;
     for t:=1 to 6 do
     begin
@@ -648,11 +651,11 @@ begin
   end;
   5:
   begin
-  if yesNo.recreate then
-    begin
+  //if yesNo.recreate then
+    //begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
-    end;
+    //end;
     yesNo.Init;
   end;
   6:
@@ -671,11 +674,11 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-    if cards.recreate then
-    begin
+    //if cards.recreate then
+    //begin
       cards.Free;
       cards:=Tcards.create(t1);
-    end;
+    //end;
       cards.Init(t1);
     for t:=1 to t1 do
     begin
@@ -848,12 +851,7 @@ top.Close;
 topicquery.SQL.Clear;
 end;
 Saver.saveForm;
-test.Destroy;
-  poBukv.Destroy;
-  complience.Destroy;
-  YesNo.Destroy;
-  cards.Destroy;
-  saver.Destroy;
+finishexercises;
 end;
 
 procedure TForm1.searchChange(Sender: TObject);
@@ -863,7 +861,7 @@ var s:string;
 begin
   s := search.Text;
   if s <> '' then letter := s[length(s)];
-  if ord(letter) = 43 then
+  if ord(letter) = 43 then  //'+'
     begin
       delete(s,length(s),1);
       search.Text:=s;
@@ -916,8 +914,6 @@ DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
 {if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
 selspot.Checked:=false;}
-
-
 end;
 
 procedure TForm1.GridCellClick(Column: TColumn);
@@ -1186,23 +1182,24 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 //var sf:string; fk:1..12;
 begin
-  Dpot.Parent:=StBar;
-  SeAndCor:=Tgrademanipulation.Create(DM2);
-  saver:=TSaver.Create;
-  saver.loadForm;
 
-  test:=TTest.create(6);
-  poBukv:=TPoBukvam.create;
-  complience:= Tcomplience.Create(6);
-  YesNo:=TYesNo.Create(1);
-  cards:=Tcards.create(12);
+  //logoform.show;
+  if loadForm=false then
+  begin
+    StBar.Panels[0].Text:='Ошибка в загрузке словаря';
+    StBar.Tag:=1;   //error!!!
+    exit;
+  end;
+  stBar.Tag:=0; //no error
+  Dpot.Parent:=StBar;
+
+  //startexercises;
   //-------------------------------
   //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
 then form1.BorderStyle:=bsSizeable;
-StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
 end;
 
 procedure TForm1.FormKeyPress(Sender: TObject; var Key: Char);
@@ -1427,6 +1424,11 @@ begin
     card.Destroy;
 end;
 
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+  Dm2.FDConnection.Connected:=(Sender as Tcheckbox).Checked;
+end;
+
 procedure TForm1.CheckBox2Click(Sender: TObject);
 begin
 if CheckBox2.Checked then st3.Caption:='' else st3.Caption:=Pobukv.sl;
@@ -1518,8 +1520,8 @@ begin
    with DM2.Dict do
   begin
     case column.Index of
-      0: if IndexName='wordind' then IndexName:='WordIndD'
-      else IndexName:='wordind';
+      0:  if IndexName='WordInd' then IndexName:='WordIndD'
+      else IndexName:='WordInd';
       1: if IndexName='TranslationInd' then IndexName:='TranslationIndD'
       else IndexName:='TranslationInd';
       2: if IndexName='DateRecInd' then IndexName:='DateRecD'
@@ -1614,7 +1616,7 @@ end;
 
 procedure TForm1.FormPaint(Sender: TObject);
 begin
-
+   //logoform.Close;
    if PageControl1.ActivePageIndex=8 then
    begin
      try
@@ -1624,7 +1626,7 @@ begin
    end else
    begin
      StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
-     Fill4Status;
+     if stBar.Tag<>1 then Fill4Status;
    end;
 end;
 
@@ -1726,9 +1728,12 @@ end;
 procedure TForm1.GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
   DataCol: Integer; Column: TColumn; State: TGridDrawState);
   var style,rl,rr,rt,rb:integer; rect1:TRect;
+  //IsOdd:boolean;
+
 begin
 //-------------STRIPES-------------//
 //if ((DataCol=0) and not(gdselected in state)) then TableGreedRow.drawTrueBack:=not(TableGreedRow.drawTrueBack);
+//if odd((rect2.Top-21) div rect2.Height) then
 if odd(TDBGrid(sender).DataSource.DataSet.RecNo) then
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor1
 else
@@ -1744,10 +1749,11 @@ if gdselected in state then
     begin
       rr:=rect2.Right-3; rl:=rect2.Left+3; rb:=rect2.Bottom-3; rt:=Rect2.Top+3;
       rect1:=rect(rl,rt,rr,rb);
+
       if column.Field.AsBoolean=true then
         style:=dfcs_checked
         else style:=dfcs_buttoncheck;
-      DrawFrameControl(TDBGrid(Sender).Canvas.Handle,Rect1, DFC_BUTTON, style);
+      DrawFrameControl(TDBGrid(Sender).Canvas.Handle, Rect1, DFC_BUTTON, style);
     end;
   //-------------RATES-------------//
   if (column.FieldName='Score') or (column.FieldName='Relevation') then
