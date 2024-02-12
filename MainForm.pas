@@ -1748,10 +1748,11 @@ if gdselected in state then
     begin
       rr:=rect2.Right-3; rl:=rect2.Left+3; rb:=rect2.Bottom-3; rt:=Rect2.Top+3;
       rect1:=rect(rl,rt,rr,rb);
+
       if column.Field.AsBoolean=true then
         style:=dfcs_checked
         else style:=dfcs_buttoncheck;
-      DrawFrameControl(TDBGrid(Sender).Canvas.Handle,Rect1, DFC_BUTTON, style);
+      DrawFrameControl(TDBGrid(Sender).Canvas.Handle, Rect1, DFC_BUTTON, style);
     end;
   //-------------RATES-------------//
   if (column.FieldName='Score') or (column.FieldName='Relevation') then
