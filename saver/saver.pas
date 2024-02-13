@@ -2,7 +2,7 @@ unit saver;
 
 interface
 uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
-  Frame, ShellAPI, Windows,  ShlObj;
+  Frame, ShellAPI, Windows,  ShlObj, lesson4, lessons, PoBukvam, cardsUnit;
 
 type
   Tcloud = class
@@ -33,7 +33,11 @@ end;
 
 procedure startExercises;
 begin
-
+      test:=TTest.create(6);
+      poBukv:=TPoBukvam.create;
+      complience:= Tcomplience.Create(6);
+      YesNo:=TYesNo.Create(1);
+      cards:=Tcards.create(12);
 end;
 
 function GetSpecialPath(CSIDL: word): string;
@@ -58,6 +62,8 @@ begin
       begin
         result:=false;
         baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
+        if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
+
         if DM2.loadDB(baseFolder.Caption) then
         begin
           result:=true;
@@ -155,16 +161,16 @@ end;
 { cloud }
 
 procedure Tcloud.loadFromCloud(whereTo: string);
-var theprogr, command, fullname:string;
-    f:file;
-
-const DICT='\dictionary.db';
-      i:byte=1;
+var command, filename:string;
+ begin
+{const DICT='\dictionary.db';
       function FileNum(num:byte):string;
       begin
         result:=whereto+'\dictionary'+inttostr(num)+'.db';
       end;
+var i:byte;
 begin
+    i:=1;
     fullname:=whereto+DICT;
     assignfile(f, fullname);
     if FileExists(fullname) then
@@ -172,18 +178,21 @@ begin
       while(FileExists(FileNum(i))) do
         inc(i);
       Rename(f, FileNum(i));
-    end;
-    theprogr:=Format('%s\saver\DownloadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Whereto + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
+    end; }
+    filename:= ExtractFileName(WhereTo);
+    WhereTo:= ExtractFileDir(WhereTo);
+    command := Format('client_secret_for_Delphi.json %s %s', [WhereTo, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0, 'open', 'DownloadDB.exe', Pchar(command), nil, SW_HIDE);
 end;
 
 procedure Tcloud.saveToCloud(whereFrom:string);
-var theprogr, command:string;
+var  command, filename:string;
 begin
-    theprogr:=Format('%s\saver\UploadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Wherefrom + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
+    filename := ExtractFileName(WhereFrom);
+    WhereFrom := ExtractFileDir(WhereFrom);
+    command := Format('client_secret_for_Delphi.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
+    //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
 end;
 
 end.

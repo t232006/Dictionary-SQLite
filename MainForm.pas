@@ -204,6 +204,9 @@ type
     Panel2: TPanel;
     Label24: TLabel;
     Label25: TLabel;
+    SaveDlg: TSaveDialog;
+    cloudProgr: TProgressBar;
+    cloudTimer: TTimer;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -316,6 +319,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure DBMemo1Change(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure PagesBlock(block:boolean);
+    procedure cloudTimerTimer(Sender: TObject);
     
   private
     { Private declarations }
@@ -326,6 +330,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure FrameGeneralization(Sender: TObject; bool:boolean);
     procedure DragDrop(sender, source: TObject; mm7: boolean);
     procedure N13active;
+    procedure StartTimer;
   public
     color_scale:TColor;
     TableGreedRow:record
@@ -448,15 +453,27 @@ procedure TForm1.LFromClButClick(Sender: TObject);
 var Cloud: Tcloud;
 begin
     Cloud:=Tcloud.Create();
-    Cloud.loadFromCloud(GetCurrentDir+'\db');
+    if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
+    begin
+      if SaveDlg.Execute then Cloud.loadFromCloud(SaveDlg.FileName);
+    end else
+    begin
+      dm2.FDConnection.Connected:=false;
+      Cloud.loadFromCloud(basefolder.Caption);
+    end;
+
+
     Cloud.Free;
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
 begin
     if od1.Execute then
+    begin
       DM2.loadDB(od1.FileName);
-    (sender as TLabel).Caption:=od1.FileName;
+      Saver.startExercises;
+      (sender as TLabel).Caption:=od1.FileName;
+    end;
 end;
 
 procedure Tform1.ChangeColrigth(p:boolean);
@@ -500,11 +517,20 @@ begin
      end;
 end;
 
+procedure TForm1.StartTimer;
+begin
+  dm2.FDConnection.Connected:=false;
+  cloudProgr.Visible:=true;
+    cloudprogr.Position:=0;
+    cloudTimer.Enabled:=true;
+end;
+
 procedure TForm1.UToClButClick(Sender: TObject);
 var Cloud:Tcloud;
 begin
+    startTimer;
     Cloud:=Tcloud.Create();
-    Cloud.SaveToCloud(GetCurrentDir+'\db');
+    Cloud.SaveToCloud(baseFolder.Caption);
     Cloud.Free;
 end;
 
@@ -1442,6 +1468,25 @@ begin
     Grid.Repaint;
 end;
 
+procedure TForm1.cloudTimerTimer(Sender: TObject);
+begin
+  cloudProgr.StepIt;
+  if cloudProgr.Position=cloudProgr.Max then
+  begin
+    cloudTimer.Enabled:=false;
+    cloudProgr.Visible:=false;
+    with dm2 do
+    begin
+      FDConnection.Connected:=true;
+      Dict.active:=true;
+      Topic.Active:=true;
+    end;
+
+
+  end;
+
+end;
+
 procedure TForm1.Action5Execute(Sender: TObject);
 begin
   if DM2.Dict.CanModify then
@@ -1780,6 +1825,8 @@ procedure TForm1.N11Click(Sender: TObject);
 begin
     grid.Columns[3].Title.Caption:='Релев.';
     grid.Columns[3].FieldName:='Relevation';
+    if n5.Checked then n5.Click;
+    if n6.Checked=false then n6.Click;
     Grid.Repaint;
 end;
 

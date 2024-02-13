@@ -32,17 +32,18 @@ uses
  var
   LogoForm: TLogoForm;
 begin
-  Application.Initialize;
+   Application.Initialize;
 
+  TStyleManager.TrySetStyle('Luna');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
-  Application.CreateForm(TForm1, Form1);
-  //Application.CreateForm(TLogoForm, LogoForm);
+
+   Application.CreateForm(TForm1, Form1);
+
   Logoform :=TLogoForm.Create(Application);
   Logoform.show;
    while LogoForm.ProgressBar1.Tag<>1 do Application.ProcessMessages;
    LogoForm.Free;
-
   //Application.CreateForm(TLogoForm, LogoForm);
   Application.CreateForm(Taddneword, addneword);
   Application.CreateForm(Tdateformm, dateformm);

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.784,=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.dfm=Z:\Программирование\repos\Dictionary-SQLite\Unit2.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.146,Z:\Программирование\repos\Dictionary-SQLite\frames\cards.pas=Z:\Программирование\repos\Dictionary-SQLite\frames\cardsUnit.pas</Transaction>
   </Transactions>
