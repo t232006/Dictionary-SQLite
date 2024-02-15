@@ -322,6 +322,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PagesBlock(block:boolean);
     procedure cloudTimerTimer(Sender: TObject);
     procedure CloudProcButClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     
   private
     { Private declarations }
@@ -624,26 +625,39 @@ begin
   case  PageControl1.ActivePageIndex of
   1:
   begin
-      test.Free;
-      test:=TTest.create(6);
+      if Test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitSlovoPer;
   end;
   2:
   begin
+  if Test.recreate then
+      begin
         test.Free;
         test:=TTest.create(6);
+      end;
         InitPerevodSlo;
+
   end;
   3:
   begin
-      poBukv.Free;
-      poBukv:=TPoBukvam.create;
+  if Test.recreate then
+      begin
+        poBukv.Free;
+        poBukv:=TPoBukvam.create;
+      end;
       InitPobukvam;
   end;
   4:
   begin
-      complience.Free;
-      complience:= Tcomplience.Create(6);
+  if Test.recreate then
+      begin
+        complience.Free;
+        complience:= Tcomplience.Create(6);
+      end;
       complience.Init;
     for t:=1 to 6 do
     begin
@@ -658,8 +672,11 @@ begin
   end;
   5:
   begin
+  if Test.recreate then
+      begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
+      end;
         yesNo.Init;
   end;
   6:
@@ -953,7 +970,9 @@ begin
         SeAndCor.searchandcor(true,'word',sl);
         ChangeColrigth(true); //пишет в статусе
         //InitPobukvam;
+        test.recreate:=true;
         PageControl1Change(sender);
+        test.recreate:=false;
         Edit1.Text:='';
       end else
       begin
@@ -965,6 +984,13 @@ begin
       end;
   end;
     edit1.SetFocus;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  test.recreate:=true;
+  PageControl1Change(sender);
+  test.recreate:=false;
 end;
 
 procedure TForm1.Edit1KeyPress(Sender: TObject; var Key: Char);

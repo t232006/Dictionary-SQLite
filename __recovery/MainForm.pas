@@ -134,6 +134,8 @@ type
     ProgressBar: TProgressBar;
     YesB: TBitBtn;
     NoB: TBitBtn;
+    Memo4: TMemo;
+    Memo3: TMemo;
     Label5: TLabel;
     Label29: TLabel;
     TB: TBitBtn;
@@ -206,8 +208,6 @@ type
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
-    RespLabel: TLabel;
-    YesNoLabel: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -322,6 +322,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PagesBlock(block:boolean);
     procedure cloudTimerTimer(Sender: TObject);
     procedure CloudProcButClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     
   private
     { Private declarations }
@@ -624,26 +625,39 @@ begin
   case  PageControl1.ActivePageIndex of
   1:
   begin
-      test.Free;
-      test:=TTest.create(6);
+      if Test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitSlovoPer;
   end;
   2:
   begin
+  if Test.recreate then
+      begin
         test.Free;
         test:=TTest.create(6);
+      end;
         InitPerevodSlo;
+
   end;
   3:
   begin
-      poBukv.Free;
-      poBukv:=TPoBukvam.create;
+  if Test.recreate then
+      begin
+        poBukv.Free;
+        poBukv:=TPoBukvam.create;
+      end;
       InitPobukvam;
   end;
   4:
   begin
-      complience.Free;
-      complience:= Tcomplience.Create(6);
+  if Test.recreate then
+      begin
+        complience.Free;
+        complience:= Tcomplience.Create(6);
+      end;
       complience.Init;
     for t:=1 to 6 do
     begin
@@ -658,8 +672,11 @@ begin
   end;
   5:
   begin
+  if Test.recreate then
+      begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
+      end;
         yesNo.Init;
   end;
   6:
@@ -953,7 +970,9 @@ begin
         SeAndCor.searchandcor(true,'word',sl);
         ChangeColrigth(true); //пишет в статусе
         //InitPobukvam;
+        test.recreate:=true;
         PageControl1Change(sender);
+        test.recreate:=false;
         Edit1.Text:='';
       end else
       begin
@@ -965,6 +984,13 @@ begin
       end;
   end;
     edit1.SetFocus;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  test.recreate:=true;
+  PageControl1Change(sender);
+  test.recreate:=false;
 end;
 
 procedure TForm1.Edit1KeyPress(Sender: TObject; var Key: Char);
@@ -1399,8 +1425,7 @@ begin
  YesNo.Reset;
  StBar.Panels[2].Text:='серия '+inttostr(YesNo.serial);
  YesNo.Init;
- YesNoLabel.Caption:=YesNo.GetString;
- YesNoLabel.Left:=(width div 2) - (YesNoLabel.Width div 2);
+ Memo3.Text:=YesNo.GetString;
  ProgressBar.Position:=0;
 
 end;
@@ -1675,13 +1700,12 @@ procedure TForm1.YesNoContinue(b:boolean);
 begin
     YesNo.GiveAnswer(b);
     StBar.Panels[2].Text:='серия '+inttostr(YesNo.serial);
-    RespLabel.Font.Color:=YesNo.promptcolor;
-    RespLabel.Caption:=YesNo.prompt;
+    memo4.Font.Color:=YesNo.promptcolor;
+    memo4.Text:=YesNo.prompt;
     if YesNo.prompt='вы неправы' then ProgressBar.Position:=0;
 
     YesNo.Init;
-    YesNoLabel.Caption:=YesNo.GetString;
-    YesNoLabel.Left:=(width div 2) - (YesNoLabel.Width div 2);
+    Memo3.Text:=YesNo.GetString;
     ChangeColrigth(b);
 end;
 
