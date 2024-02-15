@@ -4,12 +4,7 @@ interface
 uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
   Frame, ShellAPI, Windows,  ShlObj, lesson4, lessons, PoBukvam, cardsUnit;
 
-type
-  Tcloud = class
-    public
-      procedure saveToCloud(whereFrom:string);
-      procedure loadFromCloud(whereTo:string);
-  end;
+
 
    procedure saveForm;
    function loadForm:boolean;
@@ -159,40 +154,5 @@ begin
     f.Free;
 end;
 { cloud }
-
-procedure Tcloud.loadFromCloud(whereTo: string);
-var command, filename:string;
- begin
-{const DICT='\dictionary.db';
-      function FileNum(num:byte):string;
-      begin
-        result:=whereto+'\dictionary'+inttostr(num)+'.db';
-      end;
-var i:byte;
-begin
-    i:=1;
-    fullname:=whereto+DICT;
-    assignfile(f, fullname);
-    if FileExists(fullname) then
-    begin
-      while(FileExists(FileNum(i))) do
-        inc(i);
-      Rename(f, FileNum(i));
-    end; }
-    filename:= ExtractFileName(WhereTo);
-    WhereTo:= ExtractFileDir(WhereTo);
-    command := Format('client_secret_for_Delphi.json %s %s', [WhereTo, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', 'DownloadDB.exe', Pchar(command), nil, SW_HIDE);
-end;
-
-procedure Tcloud.saveToCloud(whereFrom:string);
-var  command, filename:string;
-begin
-    filename := ExtractFileName(WhereFrom);
-    WhereFrom := ExtractFileDir(WhereFrom);
-    command := Format('client_secret_for_Delphi.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
-    //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
-end;
 
 end.

@@ -123,6 +123,7 @@ object dateformm: Tdateformm
     Top = 392
   end
   object dateq: TFDQuery
+    Connection = DataModule2.FDConnection
     SQL.Strings = (
       'select daterec, count(daterec) from Dict'
       'group by(daterec)')

@@ -61,7 +61,6 @@ object DataModule2: TDataModule2
   object FDConnection: TFDConnection
     Params.Strings = (
       'DriverID=SQLite')
-    Connected = True
     LoginPrompt = False
     Left = 536
     Top = 24
@@ -148,6 +147,7 @@ object DataModule2: TDataModule2
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
+    Filter = 'Phrase=true'
     Indexes = <
       item
         Active = True
@@ -226,6 +226,11 @@ object DataModule2: TDataModule2
         Name = 'RelIndD'
         Fields = 'Relevation'
         DescFields = 'Relevation'
+      end
+      item
+        Active = True
+        Name = 'PhraseInd'
+        Fields = 'Phrase'
       end>
     IndexName = 'WordInd'
     DetailFields = 
@@ -249,6 +254,7 @@ object DataModule2: TDataModule2
       FieldName = 'Number'
       Origin = 'Number'
       ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
     end
     object DictWord: TWideStringField
       FieldName = 'Word'

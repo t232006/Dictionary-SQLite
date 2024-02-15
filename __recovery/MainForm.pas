@@ -7,10 +7,10 @@ uses
   Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids,
   ExtCtrls, lessons, PoBukvam, lesson4, database, DBCtrls, addnewword, dateform,
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
-  OleCtrls, SHDocVw, Gauges, thread2, DdeMan, Menus, System.Actions,
+  OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
-  registry;
+  registry, CloudSaveThread, thread2;
 
 type
   TForm1 = class(TForm)
@@ -134,8 +134,6 @@ type
     ProgressBar: TProgressBar;
     YesB: TBitBtn;
     NoB: TBitBtn;
-    Memo4: TMemo;
-    Memo3: TMemo;
     Label5: TLabel;
     Label29: TLabel;
     TB: TBitBtn;
@@ -207,6 +205,9 @@ type
     SaveDlg: TSaveDialog;
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
+    CloudProcBut: TBitBtn;
+    RespLabel: TLabel;
+    YesNoLabel: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -320,6 +321,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure CheckBox1Click(Sender: TObject);
     procedure PagesBlock(block:boolean);
     procedure cloudTimerTimer(Sender: TObject);
+    procedure CloudProcButClick(Sender: TObject);
     
   private
     { Private declarations }
@@ -353,6 +355,7 @@ var
   f:textfile;
   kolright:word;
   synchtr:synchthread;
+  CloudThread:TSaveThread;
 
 
   YesNo:TYesNo;
@@ -450,9 +453,9 @@ begin
 end;
 
 procedure TForm1.LFromClButClick(Sender: TObject);
-var Cloud: Tcloud;
+//var Cloud: Tcloud;
 begin
-    Cloud:=Tcloud.Create();
+    {Cloud:=Tcloud.Create();
     if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
     begin
       if SaveDlg.Execute then Cloud.loadFromCloud(SaveDlg.FileName);
@@ -463,7 +466,7 @@ begin
     end;
 
 
-    Cloud.Free;
+    Cloud.Free;    }
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
@@ -523,15 +526,18 @@ begin
   cloudProgr.Visible:=true;
     cloudprogr.Position:=0;
     cloudTimer.Enabled:=true;
+    cloudProcBut.Visible:=true;
 end;
 
 procedure TForm1.UToClButClick(Sender: TObject);
-var Cloud:Tcloud;
 begin
     startTimer;
-    Cloud:=Tcloud.Create();
-    Cloud.SaveToCloud(baseFolder.Caption);
-    Cloud.Free;
+    CloudThread:=TSaveThread.Create(true);
+    CloudThread.DBDir:=baseFolder.Caption;
+    CloudThread.Priority:=tpHighest;
+    CloudThread.FreeOnTerminate:=true;
+    CloudThread.Start;
+
 end;
 
 procedure Tform1.InitSlovoPer;
@@ -843,7 +849,7 @@ with DM2 do
 begin
 Dict.Close;
 top.Close;
-topicquery.SQL.Clear;
+//topicquery.SQL.Clear;
 end;
 Saver.saveForm;
 finishexercises;
@@ -871,7 +877,7 @@ procedure TForm1.SelOperCloseUp(Sender: TObject);
 begin
 with DM2.topicquery do
 begin
-  if SQL.Text<>'update Dict set usersel=true where'#$D#$A
+  if SQL.Count > 1
   then if selspot.Checked then SQL.Add('and')//для добавления сложных условий
   else SQL.Add('or');
   case SelOper.ItemIndex of
@@ -890,7 +896,7 @@ begin
     1: SQL.Add('and phrase = true');
   end;
 
-  if SQL.Text<>'update Dict set usersel=true where'#$D#$A
+  if SQL.Count > 1
                      then
   try
      DM2.Dict.Filter:='';
@@ -946,7 +952,8 @@ begin
         Label1.Caption:='правильно';
         SeAndCor.searchandcor(true,'word',sl);
         ChangeColrigth(true); //пишет в статусе
-        InitPobukvam;
+        //InitPobukvam;
+        PageControl1Change(sender);
         Edit1.Text:='';
       end else
       begin
@@ -1392,7 +1399,8 @@ begin
  YesNo.Reset;
  StBar.Panels[2].Text:='серия '+inttostr(YesNo.serial);
  YesNo.Init;
- Memo3.Text:=YesNo.GetString;
+ YesNoLabel.Caption:=YesNo.GetString;
+ YesNoLabel.Left:=(width div 2) - (YesNoLabel.Width div 2);
  ProgressBar.Position:=0;
 
 end;
@@ -1468,22 +1476,28 @@ begin
     Grid.Repaint;
 end;
 
+procedure TForm1.CloudProcButClick(Sender: TObject);
+begin
+  cloudProgr.Position:=cloudProgr.Max;
+end;
+
 procedure TForm1.cloudTimerTimer(Sender: TObject);
 begin
-  cloudProgr.StepIt;
-  if cloudProgr.Position=cloudProgr.Max then
+
+  if cloudProgr.Position>=cloudProgr.Max then
   begin
     cloudTimer.Enabled:=false;
     cloudProgr.Visible:=false;
+    CloudThread.Terminate;
+    CloudProcBut.Visible:=false;
     with dm2 do
     begin
       FDConnection.Connected:=true;
       Dict.active:=true;
       Topic.Active:=true;
     end;
-
-
   end;
+  cloudProgr.StepIt;
 
 end;
 
@@ -1579,7 +1593,7 @@ begin
   synchtr.FreeOnTerminate:=true;
    DBGrid2.Tag:=0; //resume
   BitBtn1.Visible:=true;
-  synchtr.Resume;
+  synchtr.Start;
 end;
 
 procedure TForm1.StBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
@@ -1661,12 +1675,13 @@ procedure TForm1.YesNoContinue(b:boolean);
 begin
     YesNo.GiveAnswer(b);
     StBar.Panels[2].Text:='серия '+inttostr(YesNo.serial);
-    memo4.Font.Color:=YesNo.promptcolor;
-    memo4.Text:=YesNo.prompt;
+    RespLabel.Font.Color:=YesNo.promptcolor;
+    RespLabel.Caption:=YesNo.prompt;
     if YesNo.prompt='вы неправы' then ProgressBar.Position:=0;
 
     YesNo.Init;
-    Memo3.Text:=YesNo.GetString;
+    YesNoLabel.Caption:=YesNo.GetString;
+    YesNoLabel.Left:=(width div 2) - (YesNoLabel.Width div 2);
     ChangeColrigth(b);
 end;
 

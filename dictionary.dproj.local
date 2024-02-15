@@ -1,9 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.784,=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.570,=Z:\Программирование\repos\Dictionary-SQLite\Utils\ToExcelUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.943,=Z:\Программирование\repos\Dictionary-SQLite\Utils\Utilite.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.dfm=Z:\Программирование\repos\Dictionary-SQLite\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.138,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.784,=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.146,Z:\Программирование\repos\Dictionary-SQLite\frames\cards.pas=Z:\Программирование\repos\Dictionary-SQLite\frames\cardsUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.953,Z:\Программирование\repos\Dictionary-SQLite\CloudSaveThread.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.dfm=Z:\Программирование\repos\Dictionary-SQLite\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.371,Z:\Программирование\repos\Dictionary-SQLite\utilites\CloudSaveThread.pas=Z:\Программирование\repos\Dictionary-SQLite\CloudSaveThread.pas</Transaction>
   </Transactions>
 </BorlandProject>

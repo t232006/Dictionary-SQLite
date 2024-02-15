@@ -2,10 +2,9 @@ program dictionary;
 
 uses
   Forms,
-  thread2 in 'thread2.pas',
+  thread2 in 'Utils\thread2.pas',
   Vcl.Themes,
   Vcl.Styles,
-  ToExcelUnit in 'ToExcelUnit.pas',
   addnewword in 'forms\addnewword.pas' {addneword},
   dateform in 'forms\dateform.pas' {dateformm},
   dialogtopic in 'forms\dialogtopic.pas' {topicform},
@@ -26,7 +25,10 @@ uses
   PoBukvam in 'exercises\PoBukvam.pas',
   saver in 'saver\saver.pas',
   cardsUnit in 'frames\cardsUnit.pas',
-  Logo in 'forms\Logo.pas' {LogoForm};
+  Logo in 'forms\Logo.pas' {LogoForm},
+  CloudSaveThread in 'utils\CloudSaveThread.pas',
+  Utilite in 'Utils\Utilite.pas',
+  ToExcelUnit in 'Utils\ToExcelUnit.pas';
 
 {$R *.res}
  var
@@ -37,9 +39,7 @@ begin
   TStyleManager.TrySetStyle('Luna');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
-
-   Application.CreateForm(TForm1, Form1);
-
+  Application.CreateForm(TForm1, Form1);
   Logoform :=TLogoForm.Create(Application);
   Logoform.show;
    while LogoForm.ProgressBar1.Tag<>1 do Application.ProcessMessages;

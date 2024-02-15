@@ -102,8 +102,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="thread2.pas"/>
-        <DCCReference Include="ToExcelUnit.pas"/>
+        <DCCReference Include="Utils\thread2.pas"/>
         <DCCReference Include="forms\addnewword.pas">
             <Form>addneword</Form>
             <FormType>dfm</FormType>
@@ -169,6 +168,9 @@
             <Form>LogoForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="utils\CloudSaveThread.pas"/>
+        <DCCReference Include="Utils\Utilite.pas"/>
+        <DCCReference Include="Utils\ToExcelUnit.pas"/>
         <None Include="init.ini"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
