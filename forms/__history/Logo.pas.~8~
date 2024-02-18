@@ -39,7 +39,7 @@ end;
 procedure TLogoForm.onMyMessage(var msg: TMessage);
 begin
   pgb.Position:=pgb.Position+msg.LParam;
-  if pgb.Position>=100 then pgb.Tag:=1;
+  //if pgb.Position>=100 then close;
 
 end;
 

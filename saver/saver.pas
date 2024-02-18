@@ -14,7 +14,7 @@ uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
 
 
 implementation
-uses MainForm, Database, basemanipulation;
+uses MainForm, Database, basemanipulation, logo;
 
 procedure finishExercises;
 begin
@@ -26,12 +26,19 @@ begin
 end;
 
 procedure startExercises;
+var h:hwnd;
 begin
+      h:=GetForegroundWindow;
       test:=TTest.create(6);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
       poBukv:=TPoBukvam.create;
+      SendMessage(h, MSG_PROGRESS, 0, 20);
       complience:= Tcomplience.Create(6);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
       YesNo:=TYesNo.Create(1);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
       cards:=Tcards.create(12);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
 end;
 
 function loadForm: boolean;  //true - succsess

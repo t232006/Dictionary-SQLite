@@ -556,8 +556,8 @@ begin
     startTimer;
     CloudThread:=TSaveThread.Create(true);
     CloudThread.DBDir:=baseFolder.Caption;
-    CloudThread.Priority:=tpHighest;
-    CloudThread.FreeOnTerminate:=true;
+    CloudThread.Priority:=tpHigher;
+    CloudThread.FreeOnTerminate:=false;
     CloudThread.Start;
 
 end;
@@ -1241,7 +1241,7 @@ begin
   stBar.Tag:=0; //no error
   Dpot.Parent:=StBar;
 
-  //startexercises;
+  startexercises;
   //-------------------------------
   //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
@@ -1524,6 +1524,7 @@ end;
 procedure TForm1.CloudProcButClick(Sender: TObject);
 begin
   cloudProgr.Position:=cloudProgr.Max;
+  //cloudProgr.Max:=0;
 end;
 
 procedure TForm1.cloudTimerTimer(Sender: TObject);
