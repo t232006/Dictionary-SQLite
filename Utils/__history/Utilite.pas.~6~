@@ -38,10 +38,10 @@ begin
   while s<>'' do
   begin
     setlength(collection, length(collection)+1);
-    //s:=trim(s);
+    s:=trim(s);
     _pos:=AnsiPos(c,s);
     //if _pos=0 then _pos:=length(s);
-    collection[length(collection)-1]:=trim(AnsiLeftStr(s,_pos));
+    collection[length(collection)-1]:=AnsiLeftStr(s,_pos);
     delete(s,1,_pos);
   end;
 end;
@@ -51,20 +51,19 @@ var f:textfile;
     sArr:Tcollect;  i:word;
     filename:string;
 begin
-   filename:=Concat(GetSpecialPath(CSIDL_APPDATA),'\Individual dictionary\','fileslist.b');
+   filename:=Concat(GetSpecialPath(CSIDL_APPDATA),'\Individual dictionary\','fileslist.d');
    try
      assignfile(f, filename);
      reset(f);
-     readln(f,s);
+     writeln(f,s);
      closefile(f);
      sList:=TStringList.Create;
      split(s,' ',sArr);
      for i := Low(sArr) to High(sArr) do
       sList.Add(sArr[i]);
-     //DeleteFile(filename);
+     DeleteFile(filename);
    finally
    result:=sList;
-   end;
 end;
 
 constructor TCmd.Create(Programname, params, dir: string);

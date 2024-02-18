@@ -10,7 +10,7 @@ uses
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
-  registry, CloudSaveThread, thread2;
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite;
 
 type
   TForm1 = class(TForm)
@@ -454,10 +454,31 @@ begin
 end;
 
 procedure TForm1.LFromClButClick(Sender: TObject);
-//var Cloud: Tcloud;
+const command='client_secret_for_Delphi.json';
+var FilesList: TStringList;  FilesNames: TStringList;
+    i:word;
+    TempListBox: TListBox;
 begin
-    {Cloud:=Tcloud.Create();
-    if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
+    //shellexecute(0, 'open', 'fileListFromDrive.exe', Pchar(command), 'saver', SW_show);
+    FilesList:=TStringList.Create;
+    FilesNames:=TStringList.Create;
+    FilesList:=getFilesList;
+    for i := 0 to (FilesList.Count-1) div 2 do
+      FilesNames.Add(FilesList[i*2]);
+    TempListBox:=TListBox.Create(self);
+
+    with TempListBox do
+    begin
+      left:=Mouse.CursorPos.X;
+      Top:=Mouse.CursorPos.Y;
+         //visible:=true;
+      Parent:=form1;
+      Items:=FilesNames;
+      Font.Size:=13;
+    end;
+
+
+    {if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
     begin
       if SaveDlg.Execute then Cloud.loadFromCloud(SaveDlg.FileName);
     end else
@@ -640,7 +661,6 @@ begin
         test:=TTest.create(6);
       end;
         InitPerevodSlo;
-
   end;
   3:
   begin
@@ -838,7 +858,7 @@ begin
     end;
     ChangeColrigth(false);
   end;
-    pb.Canvas.FillRect(pb.Canvas.ClipRect);
+    //pb.Canvas.FillRect(pb.Canvas.ClipRect);
 End;
 
 procedure TForm1.m7DragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -1811,7 +1831,7 @@ if gdselected in state then
   //-------------RATES-------------//
   if (column.FieldName='Score') or (column.FieldName='Relevation') then
     begin
-      TDBGrid(sender).Canvas.pen.Color:=TDBGrid(sender).Canvas.Brush.Color;
+      //TDBGrid(sender).Canvas.pen.Color:=TDBGrid(sender).Canvas.Brush.Color;
       TDBGrid(sender).Canvas.Rectangle(rect2);
       if N5.Checked then
         begin

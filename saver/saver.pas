@@ -2,14 +2,13 @@ unit saver;
 
 interface
 uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
-  Frame, ShellAPI, Windows,  ShlObj, lesson4, lessons, PoBukvam, cardsUnit;
+  Frame, ShellAPI, Windows, ShlObj, lesson4, lessons,
+  PoBukvam, cardsUnit, Utilite;
 
 
 
    procedure saveForm;
    function loadForm:boolean;
-   function GetSpecialPath(CSIDL: word): string;
-
    procedure finishExercises;
    procedure startExercises;
 
@@ -33,15 +32,6 @@ begin
       complience:= Tcomplience.Create(6);
       YesNo:=TYesNo.Create(1);
       cards:=Tcards.create(12);
-end;
-
-function GetSpecialPath(CSIDL: word): string;
-var s: PChar;
-begin
-s:=stralloc(max_path);
-if not SHGetSpecialFolderPath(0, s, CSIDL, true)
-then s := '';
-result := s;
 end;
 
 function loadForm: boolean;  //true - succsess

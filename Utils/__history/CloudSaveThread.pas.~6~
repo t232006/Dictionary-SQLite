@@ -1,12 +1,12 @@
 unit CloudSaveThread;
 
 interface
-uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows;
+uses Utilite, SysUtils, Classes, Controls, Forms;
 type
   Tcloud = class
     public
       procedure saveToCloud(whereFrom:string);
-      procedure loadFromCloud(id, whereTo:string);
+      procedure loadFromCloud(whereTo:string);
   end;
 
 TSaveThread = class(TThread)
@@ -17,11 +17,6 @@ TSaveThread = class(TThread)
 end;
 
 TLoadThread = class(TThread)
-  private
-  _id:string;
-  public
-  DBDir: string;
-  property ID:string write _id;
   protected
   procedure Execute; override;
   procedure LoadProgress;
@@ -42,8 +37,8 @@ begin
     //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
 end;
 
-procedure Tcloud.loadFromCloud(id, whereTo: string);
-var command, filename:string;
+procedure Tcloud.loadFromCloud(whereTo: string);
+//var command, filename:string;
 begin
     filename:= ExtractFileName(WhereTo);
     WhereTo:= ExtractFileDir(WhereTo);
@@ -59,14 +54,14 @@ end;
 
 procedure TLoadThread.Execute;
 begin
-  synchronize(LoadProgress);
+  synchomize(LoadProcess);
 end;
 
 procedure TLoadThread.LoadProgress;
 var Cloud: TCloud;
 begin
    Cloud:=Tcloud.Create();
-   Cloud.LoadFromCloud(_id, DBDir);
+   Cloud.LoadFromCloud(DBDir);
    Cloud.Free;
 end;
 
