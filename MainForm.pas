@@ -717,8 +717,11 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-      cards.Free;
-      cards:=Tcards.create(t1);
+      if Test.recreate then
+      begin
+        cards.Free;
+        cards:=Tcards.create(t1);
+      end;
       cards.Init(t1);
     for t:=1 to t1 do
     begin
