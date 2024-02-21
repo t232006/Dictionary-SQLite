@@ -1,7 +1,7 @@
 unit LogoThread;
 
 interface
-uses Classes, saver;
+uses Classes, mainForm, Utilite;
 type
 TLogoThread=Class(TThread)
   procedure Execute; override;
@@ -9,7 +9,6 @@ TLogoThread=Class(TThread)
 End;
 
 implementation
-uses MainForm;
 
 { TLogoThread }
 

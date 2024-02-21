@@ -70,12 +70,11 @@ end;
 constructor TCmd.Create(Programname, params, dir: string);
 var WorkDir:string;
 begin
-     //self.params:=params;
+     self.params:=params;
      GetDir(0,WorkDir);
      self.ProgramName:=WorkDir+'\'+dir+'\'+ProgramName;
      //self.Programname:=Programname;
      self.dir:=dir;
-     self.params:=self.programName+' '+params;
 end;
 
 function TCmd.WinExecAndWait:cardinal;
@@ -87,7 +86,7 @@ function TCmd.WinExecAndWait:cardinal;
      StartupInfo.cb:= Sizeof(StartupInfo);
      StartupInfo.dwFlags:= STARTF_USESHOWWINDOW;
      StartupInfo.wShowWindow:= SW_SHOW;
-     if not CreateProcess(nil,
+     if not CreateProcess(PChar(ProgramName),
       PChar(params),
       nil,
       nil,
@@ -194,8 +193,8 @@ begin  // start
    StartupInfo.hStdInput:= hReadPipe;
    StartupInfo.dwFlags:= STARTF_USESTDHANDLES + STARTF_USESHOWWINDOW;
    StartupInfo.wShowWindow:= SW_HIDE;
-   params:=params+' '; // Р±СѓР±РµРЅ Р±РµР· РЅРµРіРѕ РЅРµ СЂР°Р±РѕС‚Р°РµС‚
-// СЃРјС‹СЃР» Р±СѓР±РЅР° РІ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕРј РЅР°Р»РёС‡РёРё Р»СЋР±С‹С… РёР·РјРµРЅРµРЅРёР№ РїРµСЂРµРјРјРµРЅРЅРѕР№ comand С‡С‚РѕР±С‹ РєРѕРјРїРёР»СЏС‚РѕСЂ РІРёРґРµР»
+   params:=params+' '; // бубен без него не работает
+// смысл бубна в обязательном наличии любых изменений перемменной comand чтобы компилятор видел
    if CreateProcess(PChar(Programname), PChar(params), @SecAttr, @SecAttr, false, NORMAL_PRIORITY_CLASS, nil, nil, StartupInfo, ProcessInfo) then
     begin
     WaitforSingleObject(ProcessInfo.hProcess, INFINITE);

@@ -70,11 +70,12 @@ end;
 constructor TCmd.Create(Programname, params, dir: string);
 var WorkDir:string;
 begin
-     self.params:=params;
+     //self.params:=params;
      GetDir(0,WorkDir);
      self.ProgramName:=WorkDir+'\'+dir+'\'+ProgramName;
      //self.Programname:=Programname;
      self.dir:=dir;
+     self.params:=self.programName+' '+params;
 end;
 
 function TCmd.WinExecAndWait:cardinal;
@@ -86,7 +87,7 @@ function TCmd.WinExecAndWait:cardinal;
      StartupInfo.cb:= Sizeof(StartupInfo);
      StartupInfo.dwFlags:= STARTF_USESHOWWINDOW;
      StartupInfo.wShowWindow:= SW_SHOW;
-     if not CreateProcess(PChar(ProgramName),
+     if not CreateProcess(nil,
       PChar(params),
       nil,
       nil,

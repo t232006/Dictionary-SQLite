@@ -28,7 +28,8 @@ uses
   Logo in 'forms\Logo.pas' {LogoForm},
   CloudSaveThread in 'utils\CloudSaveThread.pas',
   Utilite in 'Utils\Utilite.pas',
-  ToExcelUnit in 'Utils\ToExcelUnit.pas';
+  ToExcelUnit in 'Utils\ToExcelUnit.pas',
+  LogoThread in 'Utils\LogoThread.pas';
 
 {$R *.res}
  var
@@ -39,13 +40,13 @@ begin
   TStyleManager.TrySetStyle('Luna');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
-
-  Logoform :=TLogoForm.Create(Application);
+  Application.CreateForm(TForm1, Form1);
+  {Logoform :=TLogoForm.Create(Application);
   Logoform.show;
 
-  Application.CreateForm(TForm1, Form1);
+
   while LogoForm.Pgb.Tag<>1 do Application.ProcessMessages;
-   //LogoForm.Free;
+   LogoForm.Free; }
   //Application.CreateForm(TLogoForm, LogoForm);
   Application.CreateForm(Taddneword, addneword);
   Application.CreateForm(Tdateformm, dateformm);

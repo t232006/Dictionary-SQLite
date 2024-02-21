@@ -10,7 +10,7 @@ uses
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
-  registry, CloudSaveThread, thread2, ShellAPI, Utilite;
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread;
 
 type
   TForm1 = class(TForm)
@@ -326,6 +326,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     
   private
     { Private declarations }
+    constructor Create(AOwner: TComponent); override;
     procedure YesNoContinue(b:boolean);
     procedure Keynottab (var msg:TCMDialogKey); message CM_DialogKey;
     function memonumber (name:string):byte;
@@ -336,6 +337,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure StartTimer;
   public
     color_scale:TColor;
+    LogoForm: TLogoForm;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -1230,18 +1232,9 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 //var sf:string; fk:1..12;
 begin
-
-  //logoform.show;
-  if loadForm=false then
-  begin
-    StBar.Panels[0].Text:='Ошибка в загрузке словаря';
-    StBar.Tag:=1;   //error!!!
-    exit;
-  end;
-  stBar.Tag:=0; //no error
   Dpot.Parent:=StBar;
+  //logoform.show;
 
-  startexercises;
   //-------------------------------
   //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
@@ -1366,6 +1359,18 @@ end;
 procedure TForm1.ComboBox1KeyPress(Sender: TObject; var Key: Char);
 begin
  SelOper.itemindex:=-1;
+end;
+
+constructor TForm1.Create(AOwner: TComponent);
+var LThread:TlogoThread;
+begin
+  inherited;
+  LogoForm:=TLogoForm.Create(Application);
+  lThread:=TLogoThread.Create(false);
+  logoform.showmodal;
+  Lthread.terminate;
+
+
 end;
 
 procedure TForm1.SelOperDropDown(Sender: TObject);

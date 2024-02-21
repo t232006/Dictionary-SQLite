@@ -2,25 +2,19 @@ unit saver;
 
 interface
 uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
-  Frame, ShellAPI, Windows,  ShlObj;
+  Frame, ShellAPI, Windows, ShlObj, lesson4, lessons,
+  PoBukvam, cardsUnit, Utilite;
 
-type
-  Tcloud = class
-    public
-      procedure saveToCloud(whereFrom:string);
-      procedure loadFromCloud(whereTo:string);
-  end;
+
 
    procedure saveForm;
    function loadForm:boolean;
-   function GetSpecialPath(CSIDL: word): string;
-
    procedure finishExercises;
    procedure startExercises;
 
 
 implementation
-uses MainForm, Database, basemanipulation;
+uses MainForm, Database, basemanipulation, logo;
 
 procedure finishExercises;
 begin
@@ -32,17 +26,19 @@ begin
 end;
 
 procedure startExercises;
+var h:hwnd;
 begin
-
-end;
-
-function GetSpecialPath(CSIDL: word): string;
-var s: PChar;
-begin
-s:=stralloc(max_path);
-if not SHGetSpecialFolderPath(0, s, CSIDL, true)
-then s := '';
-result := s;
+      h:=GetForegroundWindow;
+      test:=TTest.create(6);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
+      poBukv:=TPoBukvam.create;
+      SendMessage(h, MSG_PROGRESS, 0, 20);
+      complience:= Tcomplience.Create(6);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
+      YesNo:=TYesNo.Create(1);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
+      cards:=Tcards.create(12);
+      SendMessage(h, MSG_PROGRESS, 0, 20);
 end;
 
 function loadForm: boolean;  //true - succsess
@@ -58,6 +54,8 @@ begin
       begin
         result:=false;
         baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
+        if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
+
         if DM2.loadDB(baseFolder.Caption) then
         begin
           result:=true;
@@ -70,8 +68,6 @@ begin
                  3:Form1.N12Click(Form1);//n12.checked:=true;
                end;
         end;
-
-        StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
         Grid.Font.Size:=f.ReadInteger('Table','GridFontSize',10);
         Frame42.Edit1.Text:=inttostr(Grid.Font.Size);
         Grid.Font.Color:=f.ReadInteger('Table','GridFontColor',0);
@@ -155,37 +151,5 @@ begin
     f.Free;
 end;
 { cloud }
-
-procedure Tcloud.loadFromCloud(whereTo: string);
-var theprogr, command, fullname:string;
-    f:file;
-
-const DICT='\dictionary.db';
-      i:byte=1;
-      function FileNum(num:byte):string;
-      begin
-        result:=whereto+'\dictionary'+inttostr(num)+'.db';
-      end;
-begin
-    fullname:=whereto+DICT;
-    assignfile(f, fullname);
-    if FileExists(fullname) then
-    begin
-      while(FileExists(FileNum(i))) do
-        inc(i);
-      Rename(f, FileNum(i));
-    end;
-    theprogr:=Format('%s\saver\DownloadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Whereto + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
-end;
-
-procedure Tcloud.saveToCloud(whereFrom:string);
-var theprogr, command, fullname:string;
-begin
-    theprogr:=Format('%s\saver\UploadDB.exe ',[GetCurrentDir]);
-    command:= 'saver\client_secret_for_Delphi.json '+ Wherefrom + ' dictionary.db';// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_HIDE);
-end;
 
 end.

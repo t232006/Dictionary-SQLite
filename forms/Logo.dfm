@@ -14,7 +14,6 @@ object LogoForm: TLogoForm
   GlassFrame.Enabled = True
   Position = poMainFormCenter
   StyleName = 'Windows'
-  OnPaint = FormPaint
   TextHeight = 15
   object Image1: TImage
     Left = 0

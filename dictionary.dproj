@@ -171,6 +171,7 @@
         <DCCReference Include="utils\CloudSaveThread.pas"/>
         <DCCReference Include="Utils\Utilite.pas"/>
         <DCCReference Include="Utils\ToExcelUnit.pas"/>
+        <DCCReference Include="Utils\LogoThread.pas"/>
         <None Include="init.ini"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
