@@ -36,7 +36,7 @@ begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
     command := Format(' client_secret_for_Delphi.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    cmd:=TCmd.Create('simulatorParams.exe', command);
+    cmd:=TCmd.Create('simulatorParams.exe', command, 'saver');
     cmd.WinExecAndWait;
     //shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
     //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);

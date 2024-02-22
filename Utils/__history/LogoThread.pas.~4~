@@ -15,10 +15,9 @@ uses MainForm;
 
 procedure TLogoThread.Execute;
 begin
-
+  Application.ProcessMessages;
   synchronize(Procedure
   begin
-    Application.ProcessMessages;
     with form1 do
     begin
       if loadForm=false then
