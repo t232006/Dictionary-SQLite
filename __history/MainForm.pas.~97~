@@ -362,8 +362,7 @@ var
   f:textfile;
   kolright:word;
   synchtr:synchthread;
-  CloudSave: TSaveThread;
-  CloudLoad: TLoadThread;
+  CloudSave:TSaveThread;
 
 
   YesNo:TYesNo;
@@ -461,7 +460,7 @@ begin
 end;
 
 procedure TForm1.LBClick(Sender: TObject);
-var s:string;
+var Id:string; CloudLoad: TLoadThread;
 procedure LoadFiles(disconnect:boolean; WhereTo:string) ;
 begin
       startTimer(disconnect);
@@ -477,14 +476,15 @@ begin
 
 if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
     begin
-      s:=getCurrentDir;
       if SaveDlg.Execute then   //to save into some dicrectory
       begin
-         ChDir(s);
-         LoadFiles(false, SaveDlg.FileName);
+        LoadFiles(false, SaveDlg.FileName);
+        //Cloud.loadFromCloud(SaveDlg.FileName);
       end;
     end else
-          LoadFiles(true, baseFolder.Caption);
+    begin
+      LoadFiles(true, baseFolder.Caption);
+    end;
 end;
 
 procedure TForm1.LBMouseLeave(Sender: TObject);
@@ -557,6 +557,7 @@ begin
           left:=Mouse.CursorPos.X-form1.left;
           Top:=Mouse.CursorPos.Y-form1.top;
      end;
+
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
@@ -1614,9 +1615,7 @@ begin
   begin
     cloudTimer.Enabled:=false;
     cloudProgr.Visible:=false;
-    if CloudSave<>nil then CloudSave.Terminate;
-    if CloudLoad<>nil then CloudLoad.Terminate;
-    
+    CloudSave.Terminate;
     CloudProcBut.Visible:=false;
     with dm2 do
     begin

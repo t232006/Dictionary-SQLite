@@ -461,30 +461,37 @@ begin
 end;
 
 procedure TForm1.LBClick(Sender: TObject);
-var s:string;
+var Id:string; Cloud: TCloud;  command: string;
 procedure LoadFiles(disconnect:boolean; WhereTo:string) ;
 begin
       startTimer(disconnect);
       cloudTimer.Enabled:=true;
       CloudLoad:=TLoadThread.Create(true);
       CloudLoad.DBDir:=WhereTo;
-      CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
+      //CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
+      CloudLoad.ID:= '1h2uQBbfOZ3mdlw_1B12yTQW63ujpOr6A';
       CloudLoad.Priority:=tpNormal;
       CloudLoad.FreeOnTerminate:=false;
       CloudLoad.Start;
 end;
 begin
 
-if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
+//if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
     begin
-      s:=getCurrentDir;
       if SaveDlg.Execute then   //to save into some dicrectory
       begin
-         ChDir(s);
-         LoadFiles(false, SaveDlg.FileName);
+         //LoadFiles(false, SaveDlg.FileName);
+         {Cloud:=Tcloud.Create();
+          Cloud.LoadFromCloud('1h2uQBbfOZ3mdlw_1B12yTQW63ujpOr6A', saveDlg.FileName);
+          Cloud.Free;        }
+          command := ' client_secret.json 1h2uQBbfOZ3mdlw_1B12yTQW63ujpOr6A dsfasdfsa';
+    shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
       end;
-    end else
-          LoadFiles(true, baseFolder.Caption);
+    end //else 
+    //SaveDlg.FileName);
+   // begin
+     // LoadFiles(true, baseFolder.Caption);
+   // end;
 end;
 
 procedure TForm1.LBMouseLeave(Sender: TObject);
@@ -511,7 +518,7 @@ var FilesNames, TempList: TStringList;
     s:string;
     i:byte;
 begin
-     if PopupListBox=nil then
+     {if PopupListBox=nil then
      begin
          cmd:=Tcmd.Create('fileListfromdrive.exe', command);
           try
@@ -556,7 +563,8 @@ begin
           Visible:=true;
           left:=Mouse.CursorPos.X-form1.left;
           Top:=Mouse.CursorPos.Y-form1.top;
-     end;
+     end;  }
+    lbclick(sender);
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);

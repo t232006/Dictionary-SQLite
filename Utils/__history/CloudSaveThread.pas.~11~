@@ -32,11 +32,11 @@ implementation
 //uses MainForm;
 procedure Tcloud.saveToCloud(whereFrom:string);
 var  command, filename:string;
-     cmd: TCmd;
+var cmd: TCmd;
 begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
-    command := Format(' client_secret.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    command := Format(' client_secret_for_Delphi.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
     cmd:=TCmd.Create('simulatorParams.exe', command);
     cmd.WinExecAndWait;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0, 0);
@@ -45,20 +45,18 @@ begin
 end;
 
 procedure Tcloud.loadFromCloud(id, whereTo: string);
-var command: string;
-    cmd: TCmd;
+var command, filename:string;
 begin
-    command := Format(' client_secret.json %s %s', [id, WhereTo]);
-    cmd:= TCmd.Create('downloadDB.exe', command);
-    cmd.WinExecAndWait;
-    SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
-    //shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
+    filename:= ExtractFileName(WhereTo);
+    WhereTo:= ExtractFileDir(WhereTo);
+    command := Format(' client_secret_for_Delphi.json %s %s', [WhereTo, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    shellexecute(0, 'open', 'DownloaderDB.exe', Pchar(command), nil, SW_HIDE);
 end;
 
 
 procedure TSaveThread.Execute;
 begin
-  SaveProcess;
+  synchronize(SaveProcess);
 end;
 
 procedure TLoadThread.Execute;

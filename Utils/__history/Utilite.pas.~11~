@@ -9,7 +9,6 @@ type arraydir = array[0..255] of char;
 TCmd = class
     private Programname, params, dir: string;
     StartupInfo:TStartupInfo;
-    saSecurity: TSecurityAttributes;
     public
     Constructor Create(Programname, params: String);
     function WinExecAndWait:cardinal;
@@ -23,11 +22,8 @@ TFilesList = class
     procedure split(s:string; c:char);
 
   published
-  function MaxLength: byte;
-    //property MaxLength:byte; read getMaxLength;
-   //function getfilesList(): TStringList; overload;
+   function getfilesList(): TStringList; overload;
    function getfilesList(source: string): TStringList; overload;
-
 end;
 
 
@@ -46,18 +42,6 @@ begin
     result:=sList;
 end;
 
-function TFilesList.MaxLength: byte;
-var k:byte;
-begin
-  k:=0; result:=0;
-  while k < length(collection) do
-  begin
-     if result<length(collection[k]) then result:=length(collection[k]);
-     inc(k,2);
-  end;
-
-end;
-
 procedure TFilesList.split(s: string; c: Char);
 var _pos:word;
 begin
@@ -70,7 +54,6 @@ begin
   end;
 end;
 
-
 function GetSpecialPath(CSIDL: word): string;
 var s: PChar;
 begin
@@ -81,7 +64,7 @@ result := s;
 end;
 
 
-{function TfilesList.getfilesList(): TStringList;
+function TfilesList.getfilesList(): TStringList;
 //type Tcollect=array of string;
 
 var f:textfile;
@@ -104,7 +87,7 @@ begin
    finally
    result:=sList;
    end;
-end;      }
+end;
 
 constructor TCmd.Create(Programname, params: string);
 begin
@@ -113,7 +96,8 @@ begin
 end;
 
 function TCmd.WinExecAndWait:cardinal;
-    var ProcessInfo:TProcessInformation;
+    var
+     ProcessInfo:TProcessInformation;
     begin
        FillChar(StartupInfo,Sizeof(StartupInfo),#0);
      StartupInfo.cb:= Sizeof(StartupInfo);
@@ -141,7 +125,7 @@ function TCmd.CmdScreen: string;
 const
   CReadBuffer = 2400;
 var
-
+ saSecurity: TSecurityAttributes;
  piProcess:  TProcessInformation;
  pBuffer:    array [0 .. CReadBuffer] of AnsiChar;
  dRead:      DWord;
@@ -157,7 +141,6 @@ begin
     StartupInfo.hStdError:=StartupInfo.hStdOutput;
     if CreateProcessW(PChar(Programname), PChar(params), @saSecurity, 0, True, 0, 0, 0, StartupInfo, piProcess) then
     begin
-      sleep(4000);
       dRead:=0;
       ReadFile(StartupInfo.hStdInput, pBuffer, CReadBuffer, dRead, 0);
       pBuffer[dRead]:=#0;

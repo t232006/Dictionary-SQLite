@@ -325,9 +325,9 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure Button2Click(Sender: TObject);
     procedure LBMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseLeave(Sender: TObject);
-    procedure LBClick(Sender: TObject);
+    
   private
-    PopupListBox: TListBox;
+    { Private declarations }
     constructor Create(AOwner: TComponent); override;
     procedure YesNoContinue(b:boolean);
     procedure Keynottab (var msg:TCMDialogKey); message CM_DialogKey;
@@ -336,7 +336,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure FrameGeneralization(Sender: TObject; bool:boolean);
     procedure DragDrop(sender, source: TObject; mm7: boolean);
     procedure N13active;
-    procedure StartTimer(disconnect:boolean);
+    procedure StartTimer;
     procedure CancelCloud(var msg:TMessage); message CANCEL_CLOUD;
   public
     color_scale:TColor;
@@ -351,7 +351,6 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 
 var
   Form1: TForm1;
-  FilesID :TStringList;   //contains IDs from google drive
   card:TCard;
   pravotv:byte;
   i:byte;   //ОСТОРОЖНО!
@@ -362,8 +361,7 @@ var
   f:textfile;
   kolright:word;
   synchtr:synchthread;
-  CloudSave: TSaveThread;
-  CloudLoad: TLoadThread;
+  CloudThread:TSaveThread;
 
 
   YesNo:TYesNo;
@@ -460,36 +458,9 @@ begin
   end;
 end;
 
-procedure TForm1.LBClick(Sender: TObject);
-var s:string;
-procedure LoadFiles(disconnect:boolean; WhereTo:string) ;
-begin
-      startTimer(disconnect);
-      cloudTimer.Enabled:=true;
-      CloudLoad:=TLoadThread.Create(true);
-      CloudLoad.DBDir:=WhereTo;
-      CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
-      CloudLoad.Priority:=tpNormal;
-      CloudLoad.FreeOnTerminate:=false;
-      CloudLoad.Start;
-end;
-begin
-
-if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
-    begin
-      s:=getCurrentDir;
-      if SaveDlg.Execute then   //to save into some dicrectory
-      begin
-         ChDir(s);
-         LoadFiles(false, SaveDlg.FileName);
-      end;
-    end else
-          LoadFiles(true, baseFolder.Caption);
-end;
-
 procedure TForm1.LBMouseLeave(Sender: TObject);
 begin
-  (Sender as TListBox).Visible:=false;
+  (Sender as TListBox).Destroy;
 end;
 
 procedure TForm1.LBMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -504,59 +475,54 @@ end;
 
 procedure TForm1.LFromClButClick(Sender: TObject);
 const command=' client_secret.json';
-var FilesNames, TempList: TStringList;
-
+var FilesID,FilesNames, TempList: TStringList;
+    TempListBox: TListBox;
     cmd:TCmd;
     FilesList:TFilesList;
     s:string;
-    i:byte;
 begin
-     if PopupListBox=nil then
-     begin
-         cmd:=Tcmd.Create('fileListfromdrive.exe', command);
-          try
-          s:= cmd.CmdScreen;
-          except exit;
+     cmd:=Tcmd.Create('fileListfromdrive.exe', command);
+      try
+      s:= cmd.CmdScreen;
+      except exit;
 
-          end;
-        FilesID:=TStringList.Create;
-        FilesNames:=TStringList.Create;
-        FilesList:=TFilesList.Create;
-        TempList:=TStringList.Create;
-        TempList:=FilesList.getFilesList(s);
-        //shellexecute(0, 'open', 'fileListFromDrive.exe', Pchar(command), 'saver', SW_show);
-        i:=0;
-        while i < (TempList.Count-1) do
-        begin
-          FilesNames.Add(TempList[i]); inc(i);
-          FilesID.Add(TempList[i]); inc(i);
-        end;
-        tempList.Destroy;
-        PopupListBox:=TListBox.Create(self);
+      end;
+    FilesID:=TStringList.Create;
+    FilesNames:=TStringList.Create;
+    FilesList:=TFilesList.Create;
+    TempList:=TStringList.Create;
+    TempList:=FilesList.getFilesList(s);
+    //shellexecute(0, 'open', 'fileListFromDrive.exe', Pchar(command), 'saver', SW_show);
 
-        with PopupListBox do
-        begin
-          left:=Mouse.CursorPos.X-form1.left;
-          Top:=Mouse.CursorPos.Y-form1.top;
-             //visible:=true;
-          Parent:=form1;
-          Items:=FilesNames;
-          Font.Size:=13;
-          PopupListBox.height:=2*PopupListBox.font.Size*count;
-          PopupListBox.width:=fileslist.MaxLength*PopupListBox.font.Size-30;
-          OnMouseLeave:=LBMouseLeave;
-          OnMouseMove:=LBMouseMove;
-          OnClick:=LBClick;
-        end;
-        FilesList.Destroy;
-        FilesNames.Destroy;
-     end else
-     with PopupListBox do
-     begin
-          Visible:=true;
-          left:=Mouse.CursorPos.X-form1.left;
-          Top:=Mouse.CursorPos.Y-form1.top;
-     end;
+    for var i:byte := 0 to (TempList.Count-1) div 2 do
+      FilesNames.Add(TempList[i*2]);
+    TempListBox:=TListBox.Create(self);
+
+    with TempListBox do
+    begin
+      left:=Mouse.CursorPos.X-form1.left-(sender as tspeedbutton).left;
+      Top:=Mouse.CursorPos.Y-form1.top-(sender as tspeedbutton).top;
+         //visible:=true;
+      Parent:=form1;
+      Items:=FilesNames;
+      Font.Size:=13;
+      height:=2*font.Size*count+count;
+      OnMouseLeave:=LBMouseLeave;
+      OnMouseMove:=LBMouseMove;
+    end;
+
+
+    {if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
+    begin
+      if SaveDlg.Execute then Cloud.loadFromCloud(SaveDlg.FileName);
+    end else
+    begin
+      dm2.FDConnection.Connected:=false;
+      Cloud.loadFromCloud(basefolder.Caption);
+    end;
+
+
+    Cloud.Free;    }
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
@@ -611,9 +577,9 @@ begin
 end;
 
 
-procedure TForm1.StartTimer(disconnect: boolean);
+procedure TForm1.StartTimer;
 begin
-  dm2.FDConnection.Connected:=not(disconnect);
+  dm2.FDConnection.Connected:=false;
   cloudProgr.Visible:=true;
     cloudprogr.Position:=0;
     cloudTimer.Enabled:=true;
@@ -622,13 +588,13 @@ end;
 
 procedure TForm1.UToClButClick(Sender: TObject);
 begin
-    startTimer(true);
+    startTimer;
     cloudTimer.Enabled:=true;
-    CloudSave:=TSaveThread.Create(true);
-    CloudSave.DBDir:=baseFolder.Caption;
-    CloudSave.Priority:=tpNormal;
-    CloudSave.FreeOnTerminate:=false;
-    CloudSave.Start;
+    CloudThread:=TSaveThread.Create(true);
+    CloudThread.DBDir:=baseFolder.Caption;
+    CloudThread.Priority:=tpNormal;
+    CloudThread.FreeOnTerminate:=false;
+    CloudThread.Start;
 
 end;
 
@@ -1614,9 +1580,7 @@ begin
   begin
     cloudTimer.Enabled:=false;
     cloudProgr.Visible:=false;
-    if CloudSave<>nil then CloudSave.Terminate;
-    if CloudLoad<>nil then CloudLoad.Terminate;
-    
+    CloudThread.Terminate;
     CloudProcBut.Visible:=false;
     with dm2 do
     begin

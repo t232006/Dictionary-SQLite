@@ -49,10 +49,10 @@ var command: string;
     cmd: TCmd;
 begin
     command := Format(' client_secret.json %s %s', [id, WhereTo]);
-    cmd:= TCmd.Create('downloadDB.exe', command);
-    cmd.WinExecAndWait;
-    SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
-    //shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
+    cmd:= TCmd.Create('simulatorParams.exe', command);
+    //cmd.WinExecAndWait;
+    //SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
+    shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
 end;
 
 

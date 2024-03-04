@@ -23,11 +23,8 @@ TFilesList = class
     procedure split(s:string; c:char);
 
   published
-  function MaxLength: byte;
-    //property MaxLength:byte; read getMaxLength;
    //function getfilesList(): TStringList; overload;
    function getfilesList(source: string): TStringList; overload;
-
 end;
 
 
@@ -46,18 +43,6 @@ begin
     result:=sList;
 end;
 
-function TFilesList.MaxLength: byte;
-var k:byte;
-begin
-  k:=0; result:=0;
-  while k < length(collection) do
-  begin
-     if result<length(collection[k]) then result:=length(collection[k]);
-     inc(k,2);
-  end;
-
-end;
-
 procedure TFilesList.split(s: string; c: Char);
 var _pos:word;
 begin
@@ -69,7 +54,6 @@ begin
     delete(s,1,_pos);
   end;
 end;
-
 
 function GetSpecialPath(CSIDL: word): string;
 var s: PChar;
