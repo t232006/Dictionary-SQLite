@@ -1,7 +1,8 @@
 unit CloudSaveThread;
 
 interface
-uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows;
+uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows, messages;
+const CANCEL_CLOUD = WM_USER+110;
 type
   Tcloud = class
     public
@@ -28,38 +29,41 @@ TLoadThread = class(TThread)
 end;
 
 implementation
-uses MainForm;
+//uses MainForm;
 procedure Tcloud.saveToCloud(whereFrom:string);
 var  command, filename:string;
-var cmd: TCmd;
+     cmd: TCmd;
 begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
-    command := Format(' client_secret_for_Delphi.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    cmd:=TCmd.Create('UploaderDB.exe', command, 'saver');
+    command := Format(' client_secret.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    cmd:=TCmd.Create('simulatorParams.exe', command);
     cmd.WinExecAndWait;
+    SendMessage(getforegroundWindow, CANCEL_CLOUD, 0, 0);
     //shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
     //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
 end;
 
 procedure Tcloud.loadFromCloud(id, whereTo: string);
-var command, filename:string;
+var command: string;
+    cmd: TCmd;
 begin
-    filename:= ExtractFileName(WhereTo);
-    WhereTo:= ExtractFileDir(WhereTo);
-    command := Format('client_secret_for_Delphi.json %s %s', [WhereTo, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    shellexecute(0, 'open', 'DownloadDB.exe', Pchar(command), nil, SW_HIDE);
+    command := Format(' client_secret.json %s %s', [id, WhereTo]);
+    cmd:= TCmd.Create('downloadDB.exe', command);
+    cmd.WinExecAndWait;
+    SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
+    //shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
 end;
 
 
 procedure TSaveThread.Execute;
 begin
-  synchronize(SaveProcess);
+  SaveProcess;
 end;
 
 procedure TLoadThread.Execute;
 begin
-  synchronize(LoadProgress);
+  LoadProgress;
 end;
 
 procedure TLoadThread.LoadProgress;

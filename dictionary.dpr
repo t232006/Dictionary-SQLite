@@ -8,7 +8,6 @@ uses
   addnewword in 'forms\addnewword.pas' {addneword},
   dateform in 'forms\dateform.pas' {dateformm},
   dialogtopic in 'forms\dialogtopic.pas' {topicform},
-  helpdict in 'forms\helpdict.pas' {Manual},
   basemanipulation in 'database\basemanipulation.pas',
   database in 'database\database.pas' {DataModule2: TDataModule},
   deepSearch in 'database\deepSearch.pas',
@@ -29,7 +28,8 @@ uses
   CloudSaveThread in 'utils\CloudSaveThread.pas',
   Utilite in 'Utils\Utilite.pas',
   ToExcelUnit in 'Utils\ToExcelUnit.pas',
-  LogoThread in 'Utils\LogoThread.pas';
+  LogoThread in 'Utils\LogoThread.pas',
+  helpdict in 'forms\helpdict.pas' {Manual};
 
 {$R *.res}
  var
@@ -41,6 +41,7 @@ begin
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TManual, Manual);
   {Logoform :=TLogoForm.Create(Application);
   Logoform.show;
 

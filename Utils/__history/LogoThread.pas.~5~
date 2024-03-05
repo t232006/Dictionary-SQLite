@@ -1,7 +1,7 @@
 unit LogoThread;
 
 interface
-uses Classes, saver, forms, Windows, Logo, dialogs;
+uses Classes, saver, forms;
 type
 TLogoThread=Class(TThread)
   procedure Execute; override;
@@ -23,10 +23,8 @@ begin
     begin
       if loadForm=false then
       begin
-        //StBar.Panels[0].Text:='Ошибка в загрузке словаря';
+        StBar.Panels[0].Text:='Ошибка в загрузке словаря';
         StBar.Tag:=1;   //error!!!
-        MessageDlg('Ошибка в загрузке словаря',MTError,[mbOK],0);
-        SendMessage(GetForegroundWindow, MSG_PROGRESS, 0, 100);
         exit;
       end;
       stBar.Tag:=0; //no error

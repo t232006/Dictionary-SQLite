@@ -123,8 +123,7 @@ begin
   end;
   tempList.Destroy;
   FilesList.Destroy;
-  SendMessage(getforegroundWindow, CONTINUE_CLOUD, 0,0); //create popup menu
-  SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);  //cancel loading process
+  SendMessage(getforegroundWindow, CONTINUE_CLOUD, 0,0);
 end;
 
 end.

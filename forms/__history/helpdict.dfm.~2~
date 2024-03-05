@@ -11,7 +11,7 @@ object Manual: TManual
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   TextHeight = 13
-  object WebBrowser: TWebBrowser
+  object WebBrowser1: TWebBrowser
     Left = 0
     Top = 0
     Width = 680

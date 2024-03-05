@@ -172,7 +172,7 @@ type
     Label33: TLabel;
     Label34: TLabel;
     Label35: TLabel;
-    Label36: TLabel;
+    HelpLbl: TLabel;
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
@@ -326,6 +326,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseLeave(Sender: TObject);
     procedure LBClick(Sender: TObject);
+    procedure HelpLblClick(Sender: TObject);
   private
     PopupListBox: TListBox;
     constructor Create(AOwner: TComponent); override;
@@ -338,6 +339,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure N13active;
     procedure StartTimer(disconnect:boolean);
     procedure CancelCloud(var msg:TMessage); message CANCEL_CLOUD;
+    procedure CreatePopupListBox(var msg:TMessage); message CONTINUE_CLOUD;
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
@@ -364,6 +366,7 @@ var
   synchtr:synchthread;
   CloudSave: TSaveThread;
   CloudLoad: TLoadThread;
+  CloudRead: TReadThread;
 
 
   YesNo:TYesNo;
@@ -460,6 +463,12 @@ begin
   end;
 end;
 
+procedure TForm1.HelpLblClick(Sender: TObject);
+begin
+  manual.WebBrowser.Navigate(ExtractFileDir(Application.ExeName)+ '\help.htm');
+  manual.Show;
+end;
+
 procedure TForm1.LBClick(Sender: TObject);
 var s:string;
 procedure LoadFiles(disconnect:boolean; WhereTo:string) ;
@@ -471,11 +480,14 @@ begin
       CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
       CloudLoad.Priority:=tpNormal;
       CloudLoad.FreeOnTerminate:=false;
+      {if disconnect and fileExists(WhereTo) then
+        deletefile(whereto);}
       CloudLoad.Start;
 end;
 begin
-
-if MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0)=mrNo then
+var mr: TModalResult;
+mr:= MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0);
+if mr=mrNo then
     begin
       s:=getCurrentDir;
       if SaveDlg.Execute then   //to save into some dicrectory
@@ -484,7 +496,12 @@ if MessageDlg('Текущий словарь будет заменен.',TMsgDlg
          LoadFiles(false, SaveDlg.FileName);
       end;
     end else
+if mr=mrYes then
+    begin
           LoadFiles(true, baseFolder.Caption);
+          StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+          Saver.startExercises;
+    end;
 end;
 
 procedure TForm1.LBMouseLeave(Sender: TObject);
@@ -503,53 +520,15 @@ begin
 end;
 
 procedure TForm1.LFromClButClick(Sender: TObject);
-const command=' client_secret.json';
-var FilesNames, TempList: TStringList;
-
-    cmd:TCmd;
-    FilesList:TFilesList;
-    s:string;
-    i:byte;
 begin
      if PopupListBox=nil then
      begin
-         cmd:=Tcmd.Create('fileListfromdrive.exe', command);
-          try
-          s:= cmd.CmdScreen;
-          except exit;
-
-          end;
-        FilesID:=TStringList.Create;
-        FilesNames:=TStringList.Create;
-        FilesList:=TFilesList.Create;
-        TempList:=TStringList.Create;
-        TempList:=FilesList.getFilesList(s);
-        //shellexecute(0, 'open', 'fileListFromDrive.exe', Pchar(command), 'saver', SW_show);
-        i:=0;
-        while i < (TempList.Count-1) do
-        begin
-          FilesNames.Add(TempList[i]); inc(i);
-          FilesID.Add(TempList[i]); inc(i);
-        end;
-        tempList.Destroy;
-        PopupListBox:=TListBox.Create(self);
-
-        with PopupListBox do
-        begin
-          left:=Mouse.CursorPos.X-form1.left;
-          Top:=Mouse.CursorPos.Y-form1.top;
-             //visible:=true;
-          Parent:=form1;
-          Items:=FilesNames;
-          Font.Size:=13;
-          PopupListBox.height:=2*PopupListBox.font.Size*count;
-          PopupListBox.width:=fileslist.MaxLength*PopupListBox.font.Size-30;
-          OnMouseLeave:=LBMouseLeave;
-          OnMouseMove:=LBMouseMove;
-          OnClick:=LBClick;
-        end;
-        FilesList.Destroy;
-        FilesNames.Destroy;
+        startTimer(false);
+        cloudTimer.Enabled:=true;
+        CloudRead:= TReadThread.Create(true);
+        CloudRead.Priority:=tpNormal;
+        CloudRead.FreeOnTerminate:=false;
+        CloudRead.Start;
      end else
      with PopupListBox do
      begin
@@ -557,6 +536,25 @@ begin
           left:=Mouse.CursorPos.X-form1.left;
           Top:=Mouse.CursorPos.Y-form1.top;
      end;
+end;
+
+procedure TForm1.CreatePopUpListBox(var msg: TMessage);
+begin
+      FilesID:=CloudRead.FileIDs;
+      PopupListBox:=TListBox.Create(self);
+        with PopupListBox do
+        begin
+          left:=Mouse.CursorPos.X-form1.left;
+          Top:=Mouse.CursorPos.Y-form1.top;
+          Parent:=form1;
+          Items:=CloudRead.FileNames;
+          Font.Size:=13;
+          PopupListBox.height:=2*PopupListBox.font.Size*count;
+          PopupListBox.width:=CloudRead.MaxLength*PopupListBox.font.Size-30;
+          OnMouseLeave:=LBMouseLeave;
+          OnMouseMove:=LBMouseMove;
+          OnClick:=LBClick;
+        end;
 end;
 
 procedure TForm1.baseFolderClick(Sender: TObject);
@@ -615,6 +613,7 @@ procedure TForm1.StartTimer(disconnect: boolean);
 begin
   dm2.FDConnection.Connected:=not(disconnect);
   cloudProgr.Visible:=true;
+  cloudProgr.Tag:=0;  //connectionError upon finish
     cloudprogr.Position:=0;
     cloudTimer.Enabled:=true;
     cloudProcBut.Visible:=true;
@@ -1437,6 +1436,8 @@ begin
  SelOper.itemindex:=-1;
 end;
 
+
+
 constructor TForm1.Create(AOwner: TComponent);
 var LThread:TlogoThread;
 begin
@@ -1605,6 +1606,7 @@ end;
 procedure TForm1.CloudProcButClick(Sender: TObject);
 begin
   cloudProgr.Position:=cloudProgr.Max;
+  cloudProgr.Tag:=1;  //normal finish
   //cloudProgr.Max:=0;
 end;
 
@@ -1616,7 +1618,8 @@ begin
     cloudProgr.Visible:=false;
     if CloudSave<>nil then CloudSave.Terminate;
     if CloudLoad<>nil then CloudLoad.Terminate;
-    
+    if CloudRead<>nil then CloudRead.Terminate;
+
     CloudProcBut.Visible:=false;
     with dm2 do
     begin
@@ -1624,6 +1627,8 @@ begin
       Dict.active:=true;
       Topic.Active:=true;
     end;
+    if cloudProgr.Tag=0 then
+    MessageDlg('Похоже, проблемы с интернет соединением.',MTError,[mbOK],0);
   end;
   cloudProgr.StepIt;
 
