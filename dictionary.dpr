@@ -18,7 +18,6 @@ uses
   UpDownHor in 'frames\UpDownHor.pas' {Frame4: TFrame},
   MainForm in 'MainForm.pas' {Form1},
   RemindCard in 'frames\RemindCard.pas' {Card},
-  regInstaller in 'InstallerDB\regInstaller.pas',
   lesson4 in 'exercises\lesson4.pas',
   lessons in 'exercises\lessons.pas',
   PoBukvam in 'exercises\PoBukvam.pas',
@@ -32,8 +31,6 @@ uses
   helpdict in 'forms\helpdict.pas' {Manual};
 
 {$R *.res}
- var
-  LogoForm: TLogoForm;
 begin
    Application.Initialize;
 

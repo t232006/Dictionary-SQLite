@@ -9,7 +9,7 @@ uses
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
-  squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
+  squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard,
   registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread;
 
 type
@@ -1054,6 +1054,9 @@ begin
   if canedit.Down then Grid.options := Grid.options +[dgediting] else
 Grid.options := Grid.options -[dgediting];
   edittable(canedit.Down);
+  Grid.DataSource.DataSet.Next;
+  Grid.DataSource.DataSet.Prior;
+  //Prior;
   Grid.SetFocus;
 end;
 

@@ -54,7 +54,10 @@ begin
       begin
         result:=false;
         baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
-        if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
+        if not(FileExists(baseFolder.Caption)) then
+          baseFolder.Caption:=IniPath+'\dictionary.db';
+
+        //if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
 
         if DM2.loadDB(baseFolder.Caption) then
         begin
