@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.SQLiteWrapper.Stat;
 
 type
-  TDataModule2 = class(TDataModule)
+  Tdatamodule2 = class(TDataModule)
     dspotential: TDataSource;
     dsselectsel: TDataSource;
     dstopic: TDataSource;
@@ -59,7 +59,7 @@ type
   //procedure edittable(op:boolean);
 
 var
-  DM2: TDataModule2;
+  DM2: Tdatamodule2;
 
 implementation
 

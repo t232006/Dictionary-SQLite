@@ -1,0 +1,101 @@
+object numFrame1: TnumFrame1
+  Left = 0
+  Top = 0
+  Width = 55
+  Height = 419
+  Anchors = [akTop]
+  TabOrder = 0
+  DesignSize = (
+    55
+    419)
+  object Label21: TLabel
+    Left = 21
+    Top = 389
+    Width = 10
+    Height = 28
+    Anchors = [akLeft]
+    Caption = '6'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 376
+  end
+  object Label22: TLabel
+    Left = 21
+    Top = 29
+    Width = 10
+    Height = 16
+    Anchors = [akLeft]
+    Caption = '1'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 27
+  end
+  object Label16: TLabel
+    Left = 21
+    Top = 105
+    Width = 10
+    Height = 16
+    Anchors = [akLeft]
+    Caption = '2'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 98
+  end
+  object Label18: TLabel
+    Left = 21
+    Top = 179
+    Width = 10
+    Height = 16
+    Anchors = [akLeft]
+    Caption = '3'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 168
+  end
+  object Label19: TLabel
+    Left = 21
+    Top = 255
+    Width = 10
+    Height = 16
+    Anchors = [akLeft]
+    Caption = '4'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 239
+  end
+  object Label20: TLabel
+    Left = 21
+    Top = 326
+    Width = 10
+    Height = 22
+    Anchors = [akLeft]
+    Caption = '5'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Lucida Console'
+    Font.Style = []
+    ParentFont = False
+    ExplicitTop = 315
+  end
+end
