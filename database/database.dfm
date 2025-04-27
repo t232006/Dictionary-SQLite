@@ -61,12 +61,17 @@ object datamodule2: Tdatamodule2
   end
   object FDConnection: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite')
+      'DriverID=SQLite'
+      
+        'Database=G:\some folder\indDictionary\Dictionary-SQLite\db\dicti' +
+        'onary.db')
+    Connected = True
     LoginPrompt = False
     Left = 804
     Top = 36
   end
   object Top: TFDTable
+    Active = True
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -145,6 +150,7 @@ object datamodule2: Tdatamodule2
     Top = 156
   end
   object Dict: TFDQuery
+    Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
