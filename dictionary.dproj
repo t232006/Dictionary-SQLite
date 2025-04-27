@@ -3,7 +3,7 @@
         <ProjectGuid>{B2AD8EFB-5592-4206-B48F-5E5B24DC51D8}</ProjectGuid>
         <MainSource>dictionary.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
@@ -106,14 +106,14 @@
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <VerInfo_MinorVer>0</VerInfo_MinorVer>
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileVersion=4.0.0.2;InternalName=;LegalCopyright=Prihodko Timofei;LegalTrademarks=;OriginalFilename=Individual dictionary;ProductVersion=4.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileVersion=4.0.0.3;InternalName=;LegalCopyright=Prihodko Timofei;LegalTrademarks=;OriginalFilename=Individual dictionary;ProductVersion=4.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
         <VerInfo_Release>0</VerInfo_Release>
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <BT_BuildType>Debug</BT_BuildType>
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Build>2</VerInfo_Build>
+        <VerInfo_Build>3</VerInfo_Build>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -133,11 +133,6 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="database\basemanipulation.pas"/>
-        <DCCReference Include="database\database.pas">
-            <Form>dm2</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="database\deepSearch.pas"/>
         <DCCReference Include="frames\coloredRowFrame.pas">
             <Form>ColoredRow</Form>
@@ -192,6 +187,11 @@
             <Form>numbers</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="database\database.pas">
+            <Form>datamodule2</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <None Include="init.ini"/>
         <BuildConfiguration Include="Base">

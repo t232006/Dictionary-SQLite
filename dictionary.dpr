@@ -9,7 +9,6 @@ uses
   dateform in 'forms\dateform.pas' {dateformm},
   dialogtopic in 'forms\dialogtopic.pas' {topicform},
   basemanipulation in 'database\basemanipulation.pas',
-  database in 'database\database.pas' {dm2: TDataModule},
   deepSearch in 'database\deepSearch.pas',
   coloredRowFrame in 'frames\coloredRowFrame.pas' {ColoredRow: TFrame},
   frame in 'frames\frame.pas' {Frame2: TFrame},
@@ -29,7 +28,8 @@ uses
   ToExcelUnit in 'Utils\ToExcelUnit.pas',
   LogoThread in 'Utils\LogoThread.pas',
   helpdict in 'forms\helpdict.pas' {Manual},
-  numFrame in 'frames\numFrame.pas' {numbers: TFrame};
+  numFrame in 'frames\numFrame.pas' {numbers: TFrame},
+  database in 'database\database.pas' {datamodule2: TDataModule};
 
 {$R *.res}
 begin
@@ -37,7 +37,7 @@ begin
 
   TStyleManager.TrySetStyle('Luna');
   Application.Title := 'Individual dictionary';
-  Application.CreateForm(Tdatamodule2, dm2);
+  Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);
   Application.CreateForm(TManual, Manual);
   {Logoform :=TLogoForm.Create(Application);
