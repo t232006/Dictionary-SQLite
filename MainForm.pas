@@ -10,7 +10,8 @@ uses
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard,
-  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread;
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread,
+  numFrame;
 
 type
   TForm1 = class(TForm)
@@ -100,19 +101,7 @@ type
     N5: TMenuItem;
     N6: TMenuItem;
     N7: TMenuItem;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
     sg: TStringGrid;
-    Label16: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
     pb: TPaintBox;
     left1: TLabel;
     left2: TLabel;
@@ -208,6 +197,8 @@ type
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
+    numbers1: Tnumbers;
+    numbers2: Tnumbers;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -1221,7 +1212,7 @@ end;
 
 procedure TForm1.FormActivate(Sender: TObject);
 begin
-     form1.WindowState:=wsMaximized;
+     //form1.WindowState:=wsMaximized;
 end;
 
 procedure TForm1.selspotClick(Sender: TObject);
@@ -1318,7 +1309,12 @@ begin
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
-then form1.BorderStyle:=bsSizeable;
+then
+begin
+   form1.BorderStyle:=bsSizeable;
+   width:=screen.Width; height:=screen.Height-50;
+   //height:=650;
+end;
 end;
 
 procedure TForm1.FormKeyPress(Sender: TObject; var Key: Char);
