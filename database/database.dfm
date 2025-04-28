@@ -64,14 +64,13 @@ object datamodule2: Tdatamodule2
       'DriverID=SQLite'
       
         'Database=G:\some folder\indDictionary\Dictionary-SQLite\db\dicti' +
-        'onary.db')
+        'onary1.db')
     Connected = True
     LoginPrompt = False
     Left = 804
     Top = 36
   end
   object Top: TFDTable
-    Active = True
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -122,6 +121,8 @@ object datamodule2: Tdatamodule2
   object selectsel: TFDQuery
     AfterOpen = selectselAfterOpen
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
     SQL.Strings = (
       'select * from Dict where usersel=true')
     Left = 672
@@ -151,7 +152,6 @@ object datamodule2: Tdatamodule2
     Top = 156
   end
   object Dict: TFDQuery
-    Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filter = 'usersel=true'
@@ -242,6 +242,8 @@ object datamodule2: Tdatamodule2
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -311,21 +313,6 @@ object datamodule2: Tdatamodule2
       KeyFields = 'Topic'
       Size = 60
       Lookup = True
-    end
-  end
-  object recordcount: TFDQuery
-    Active = True
-    Connection = FDConnection
-    SQL.Strings = (
-      'select count(*) from dict')
-    Left = 824
-    Top = 584
-    object recordcountcount: TLargeintField
-      AutoGenerateValue = arDefault
-      FieldName = 'count(*)'
-      Origin = '"count(*)"'
-      ProviderFlags = []
-      ReadOnly = True
     end
   end
 end

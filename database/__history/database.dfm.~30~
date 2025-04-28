@@ -1,4 +1,4 @@
-object DM2: TDM2
+object datamodule2: Tdatamodule2
   Height = 683
   Width = 956
   PixelsPerInch = 144
@@ -61,7 +61,11 @@ object DM2: TDM2
   end
   object FDConnection: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite')
+      'DriverID=SQLite'
+      
+        'Database=G:\some folder\indDictionary\Dictionary-SQLite\db\dicti' +
+        'onary1.db')
+    Connected = True
     LoginPrompt = False
     Left = 804
     Top = 36
@@ -115,6 +119,7 @@ object DM2: TDM2
     Top = 420
   end
   object selectsel: TFDQuery
+    AfterOpen = selectselAfterOpen
     Connection = FDConnection
     SQL.Strings = (
       'select * from Dict where usersel=true')
@@ -147,11 +152,10 @@ object DM2: TDM2
   object Dict: TFDQuery
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
-    Filtered = True
+    Filter = 'usersel=true'
     Indexes = <
       item
         Active = True
-        Selected = True
         Name = 'WordInd'
         Fields = 'Word'
       end
@@ -214,7 +218,7 @@ object DM2: TDM2
         Active = True
         Name = 'ScoreIndD'
         Fields = 'Score'
-        DescFields = 'DateRec'
+        DescFields = 'Score'
       end
       item
         Active = True
@@ -232,7 +236,6 @@ object DM2: TDM2
         Name = 'PhraseInd'
         Fields = 'Phrase'
       end>
-    IndexName = 'WordInd'
     DetailFields = 
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
@@ -306,6 +309,20 @@ object DM2: TDM2
       KeyFields = 'Topic'
       Size = 60
       Lookup = True
+    end
+  end
+  object recordcount: TFDQuery
+    Connection = FDConnection
+    SQL.Strings = (
+      'select count(*) from dict')
+    Left = 824
+    Top = 584
+    object recordcountcount: TLargeintField
+      AutoGenerateValue = arDefault
+      FieldName = 'count(*)'
+      Origin = '"count(*)"'
+      ProviderFlags = []
+      ReadOnly = True
     end
   end
 end

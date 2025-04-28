@@ -467,9 +467,6 @@ Coordinates=474,874,49,58
 [SaveDlg]
 Coordinates=73,666,63,36
 
-[numbers2.Label19]
-Coordinates=947,164,121,58
-
 [right2]
 Coordinates=0,816,49,58
 
@@ -536,9 +533,6 @@ Coordinates=651,164,64,58
 [TabSheet9]
 Coordinates=680,241,77,36
 
-[numbers2.Label20]
-Coordinates=458,1,121,58
-
 [LaUpperCard]
 Coordinates=297,232,91,58
 
@@ -562,9 +556,6 @@ Coordinates=521,155,121,58
 
 [progress_Menu]
 Coordinates=1453,980,104,36
-
-[numbers2.Label16]
-Coordinates=297,1,121,58
 
 [nexttack]
 Coordinates=620,970,63,36
@@ -704,9 +695,6 @@ Coordinates=388,598,55,58
 [left3]
 Coordinates=758,970,49,58
 
-[numbers2]
-Coordinates=1497,1035,71,36
-
 [Label25]
 Coordinates=689,970,60,58
 
@@ -767,9 +755,6 @@ Coordinates=947,87,112,58
 [datamodule2.Dict]
 Coordinates=14,121,115,300
 
-[numbers2.Label22]
-Coordinates=458,232,121,58
-
 [datamodule2.dsTop]
 Coordinates=481,734,128,36
 
@@ -806,17 +791,11 @@ Coordinates=1201,252,59,36
 [baseFolder]
 Coordinates=1131,884,79,58
 
-[numbers2.Label21]
-Coordinates=1280,884,121,58
-
 [ChShowNumber]
 Coordinates=1280,78,114,58
 
 [datamodule2.selectsel]
 Coordinates=1472,838,143,58
-
-[numbers2.Label18]
-Coordinates=1280,647,121,58
 
 [Label5]
 Coordinates=356,874,53,58

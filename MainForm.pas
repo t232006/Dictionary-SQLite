@@ -222,7 +222,6 @@ type
       State: TDragState; var Accept: Boolean);
     procedure Frame21BitBtn1Click(Sender: TObject);
     procedure rgClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure selspotClick(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
@@ -1207,11 +1206,6 @@ begin
   end;
 end;
 
-procedure TForm1.FormActivate(Sender: TObject);
-begin
-     //form1.WindowState:=wsMaximized;
-end;
-
 procedure TForm1.selspotClick(Sender: TObject);
 begin
   dm2.Dict.Filtered:=selspot.Checked;
@@ -1289,7 +1283,7 @@ PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
 then
 begin
-   form1.BorderStyle:=bsSizeable;
+   BorderStyle:=bsSizeable;
    width:=screen.Width; height:=screen.Height-50;
    //height:=650;
 end;

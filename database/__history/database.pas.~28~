@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.SQLiteWrapper.Stat;
 
 type
-  TDataModule2 = class(TDataModule)
+  Tdatamodule2 = class(TDataModule)
     dspotential: TDataSource;
     dsselectsel: TDataSource;
     dstopic: TDataSource;
@@ -51,6 +51,7 @@ type
     procedure synchBeforeOpen(DataSet: TDataSet);
     procedure synchBeforeClose(DataSet: TDataSet);
     procedure Dict1AfterInsert(DataSet: TDataSet);
+    procedure selectselAfterOpen(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -59,7 +60,7 @@ type
   //procedure edittable(op:boolean);
 
 var
-  DM2: TDataModule2;
+  DM2: Tdatamodule2;
 
 implementation
 
@@ -72,13 +73,19 @@ procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
-  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+
+   selectsel.Close; selectsel.Open;
+   dict.Close; dict.Filtered:=false; dict.Open;
+  form1.StBar.panels[1].Text:='Выделено слов: '+inttostr(selectsel.RecordCount);
+  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(dict.RecordCount);
+  dict.Filtered:=true;
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
 begin
    if FileExists(dbPath) then
    begin
+
     FDConnection.Params.Database:=dbPath;
     FDConnection.Connected:=false;
     FDConnection.Connected:=true;
@@ -87,12 +94,18 @@ begin
     Topic.Active:=true;
     selectsel.Active:=true;
     if Dict.RecordCount<6 then form1.PagesBlock(true);
-    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(dict.RecordCount);
     result:=true;
    end
    else result:=false;
 
 
+end;
+
+procedure Tdatamodule2.selectselAfterOpen(DataSet: TDataSet);
+begin
+     if form1.test<>nil then 
+     form1.test.recreate:=true;
 end;
 
 procedure TDataModule2.synchAfterOpen(DataSet: TDataSet);
@@ -120,16 +133,10 @@ end;
 procedure TDataModule2.vokabAfterRefresh(DataSet: TDataSet);
 //var R:Integer;
 begin
-  seAndCor.calcProgress;
+  {seAndCor.calcProgress;
   form1.StBar.Panels[4].Text:='Потенциал: '+seAndCor.potcount;
-  {if (DataSet.Filtered) then
-    begin
-      DataSet.Filtered:=false;
-      R:=DataSet.RecordCount;
-      form1.StBar.panels[0].Text:='Всего слов: '+inttostr(R);
-      DataSet.Filtered:=true;
-    end;  }
-  form1.StBar.panels[0].Text:='Всего слов: '+inttostr(DataSet.RecordCount);
+  //recordcount.Close; recordcount.Open;
+  form1.StBar.panels[0].Text:='Всего слов: '+inttostr(dict.RecordCount);  }
 end;
 
 

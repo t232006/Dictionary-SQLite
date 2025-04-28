@@ -10,7 +10,8 @@ uses
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard,
-  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread;
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread,
+  numFrame;
 
 type
   TForm1 = class(TForm)
@@ -100,19 +101,7 @@ type
     N5: TMenuItem;
     N6: TMenuItem;
     N7: TMenuItem;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
     sg: TStringGrid;
-    Label16: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
     pb: TPaintBox;
     left1: TLabel;
     left2: TLabel;
@@ -182,10 +171,6 @@ type
     cardActivate: TCheckBox;
     DBText1: TDBText;
     deepbut: TSpeedButton;
-    Image1: TImage;
-    Image2: TImage;
-    Label7: TLabel;
-    lb: TLabel;
     rg: TRadioGroup;
     search: TLabeledEdit;
     selspot: TCheckBox;
@@ -208,6 +193,8 @@ type
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
+    numbers1: Tnumbers;
+    numbers2: Tnumbers;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -235,7 +222,6 @@ type
       State: TDragState; var Accept: Boolean);
     procedure Frame21BitBtn1Click(Sender: TObject);
     procedure rgClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure selspotClick(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
@@ -343,6 +329,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
+    test:TTest;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -371,7 +358,7 @@ var
 
   YesNo:TYesNo;
   poBukv:TPoBukvam;
-  test:TTest;
+
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
@@ -1219,34 +1206,10 @@ begin
   end;
 end;
 
-procedure TForm1.FormActivate(Sender: TObject);
-begin
-     form1.WindowState:=wsMaximized;
-end;
-
 procedure TForm1.selspotClick(Sender: TObject);
 begin
-
-  if selspot.Checked then
-  begin
-    DM2.Dict.Filter:='usersel=true';
-    rgClick(sender);
-    lb.Visible:=true;
-    lb.Font.Color:=clblue;
-    lb.Caption:='операция И';
-    Image1.Visible:=true;
-    Image2.Visible:=false;
-  end else
-  begin
-    DM2.Dict.Filter:='';
-    rgClick(sender);
-    lb.Visible:=true;
-    lb.Font.Color:=clMaroon;
-    lb.Caption:='операция ИЛИ';
-    Image2.Visible:=true;
-    Image1.Visible:=false;
-
-  end;
+  dm2.Dict.Filtered:=selspot.Checked;
+  rgClick(sender);
   DM2.Dict.Filter:=filtr;
 end;
 
@@ -1318,7 +1281,13 @@ begin
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
-then form1.BorderStyle:=bsSizeable;
+then
+begin
+   BorderStyle:=bsSizeable;
+   top:=10;
+   width:=screen.Width; height:=screen.Height-50;
+   //height:=650;
+end;
 end;
 
 procedure TForm1.FormKeyPress(Sender: TObject; var Key: Char);

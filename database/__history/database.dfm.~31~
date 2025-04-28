@@ -1,4 +1,4 @@
-object DataModule2: TDataModule2
+object datamodule2: Tdatamodule2
   Height = 683
   Width = 956
   PixelsPerInch = 144
@@ -61,7 +61,11 @@ object DataModule2: TDataModule2
   end
   object FDConnection: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite')
+      'DriverID=SQLite'
+      
+        'Database=G:\some folder\indDictionary\Dictionary-SQLite\db\dicti' +
+        'onary1.db')
+    Connected = True
     LoginPrompt = False
     Left = 804
     Top = 36
@@ -115,7 +119,10 @@ object DataModule2: TDataModule2
     Top = 420
   end
   object selectsel: TFDQuery
+    AfterOpen = selectselAfterOpen
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
     SQL.Strings = (
       'select * from Dict where usersel=true')
     Left = 672
@@ -147,11 +154,10 @@ object DataModule2: TDataModule2
   object Dict: TFDQuery
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
-    Filtered = True
+    Filter = 'usersel=true'
     Indexes = <
       item
         Active = True
-        Selected = True
         Name = 'WordInd'
         Fields = 'Word'
       end
@@ -214,7 +220,7 @@ object DataModule2: TDataModule2
         Active = True
         Name = 'ScoreIndD'
         Fields = 'Score'
-        DescFields = 'DateRec'
+        DescFields = 'Score'
       end
       item
         Active = True
@@ -232,11 +238,12 @@ object DataModule2: TDataModule2
         Name = 'PhraseInd'
         Fields = 'Phrase'
       end>
-    IndexName = 'WordInd'
     DetailFields = 
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
