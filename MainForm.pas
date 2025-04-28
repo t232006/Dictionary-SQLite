@@ -1214,27 +1214,8 @@ end;
 
 procedure TForm1.selspotClick(Sender: TObject);
 begin
-
-  if selspot.Checked then
-  begin
-    DM2.Dict.Filter:='usersel=true';
-    rgClick(sender);
-    {lb.Visible:=true;
-    lb.Font.Color:=clblue;
-    lb.Caption:='операция И';
-    //Image1.Visible:=true;
-    //Image2.Visible:=false; }
-  end else
-  begin
-    DM2.Dict.Filter:='';
-    rgClick(sender);
-    {lb.Visible:=true;
-    lb.Font.Color:=clMaroon;
-    lb.Caption:='операция ИЛИ';
-    //Image2.Visible:=true;
-    //Image1.Visible:=false; }
-
-  end;
+  dm2.Dict.Filtered:=selspot.Checked;
+  rgClick(sender);
   DM2.Dict.Filter:=filtr;
 end;
 

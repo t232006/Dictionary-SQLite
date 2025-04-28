@@ -154,7 +154,7 @@ object datamodule2: Tdatamodule2
     Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
-    Filtered = True
+    Filter = 'usersel=true'
     Indexes = <
       item
         Active = True
@@ -311,6 +311,21 @@ object datamodule2: Tdatamodule2
       KeyFields = 'Topic'
       Size = 60
       Lookup = True
+    end
+  end
+  object recordcount: TFDQuery
+    Active = True
+    Connection = FDConnection
+    SQL.Strings = (
+      'select count(*) from dict')
+    Left = 824
+    Top = 584
+    object recordcountcount: TLargeintField
+      AutoGenerateValue = arDefault
+      FieldName = 'count(*)'
+      Origin = '"count(*)"'
+      ProviderFlags = []
+      ReadOnly = True
     end
   end
 end

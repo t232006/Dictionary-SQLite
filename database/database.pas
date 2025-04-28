@@ -45,6 +45,8 @@ type
     DictSpot: TBooleanField;
     DictPhrase: TBooleanField;
     DictTopicName: TWideStringField;
+    recordcount: TFDQuery;
+    recordcountcount: TLargeintField;
     procedure vokabAfterRefresh(DataSet: TDataSet);
     procedure synchAfterOpen(DataSet: TDataSet);
     function loadDB(dbPath:string):boolean;
@@ -73,13 +75,14 @@ procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
-  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(recordcount.fields[0].asinteger);
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
 begin
    if FileExists(dbPath) then
    begin
+
     FDConnection.Params.Database:=dbPath;
     FDConnection.Connected:=false;
     FDConnection.Connected:=true;
@@ -88,7 +91,8 @@ begin
     Topic.Active:=true;
     selectsel.Active:=true;
     if Dict.RecordCount<6 then form1.PagesBlock(true);
-    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+    recordcount.Open;
+    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(recordcount.fields[0].asinteger);
     result:=true;
    end
    else result:=false;
@@ -129,14 +133,7 @@ procedure TDataModule2.vokabAfterRefresh(DataSet: TDataSet);
 begin
   seAndCor.calcProgress;
   form1.StBar.Panels[4].Text:='Потенциал: '+seAndCor.potcount;
-  {if (DataSet.Filtered) then
-    begin
-      DataSet.Filtered:=false;
-      R:=DataSet.RecordCount;
-      form1.StBar.panels[0].Text:='Всего слов: '+inttostr(R);
-      DataSet.Filtered:=true;
-    end;  }
-  form1.StBar.panels[0].Text:='Всего слов: '+inttostr(DataSet.RecordCount);
+  form1.StBar.panels[0].Text:='Всего слов: '+inttostr(recordcount.fields[0].asinteger);
 end;
 
 

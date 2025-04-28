@@ -35,7 +35,6 @@ uses
 begin
    Application.Initialize;
 
-  TStyleManager.TrySetStyle('Luna');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);
