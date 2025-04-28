@@ -18,7 +18,7 @@ uses MainForm, Database, basemanipulation, logo;
 
 procedure finishExercises;
 begin
-    test.Destroy;
+    form1.test.Destroy;
     poBukv.Destroy;
     complience.Destroy;
     YesNo.Destroy;
@@ -29,7 +29,7 @@ procedure startExercises;
 var h:hwnd;
 begin
       h:=GetForegroundWindow;
-      test:=TTest.create(6);
+      form1.test:=TTest.create(6);
       SendMessage(h, MSG_PROGRESS, 0, 20);
       poBukv:=TPoBukvam.create;
       SendMessage(h, MSG_PROGRESS, 0, 20);

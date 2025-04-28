@@ -171,10 +171,6 @@ type
     cardActivate: TCheckBox;
     DBText1: TDBText;
     deepbut: TSpeedButton;
-    Image1: TImage;
-    Image2: TImage;
-    Label7: TLabel;
-    lb: TLabel;
     rg: TRadioGroup;
     search: TLabeledEdit;
     selspot: TCheckBox;
@@ -334,6 +330,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
+    test:TTest;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -362,7 +359,7 @@ var
 
   YesNo:TYesNo;
   poBukv:TPoBukvam;
-  test:TTest;
+
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
@@ -1222,20 +1219,20 @@ begin
   begin
     DM2.Dict.Filter:='usersel=true';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clblue;
     lb.Caption:='операция И';
-    Image1.Visible:=true;
-    Image2.Visible:=false;
+    //Image1.Visible:=true;
+    //Image2.Visible:=false; }
   end else
   begin
     DM2.Dict.Filter:='';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clMaroon;
     lb.Caption:='операция ИЛИ';
-    Image2.Visible:=true;
-    Image1.Visible:=false;
+    //Image2.Visible:=true;
+    //Image1.Visible:=false; }
 
   end;
   DM2.Dict.Filter:=filtr;

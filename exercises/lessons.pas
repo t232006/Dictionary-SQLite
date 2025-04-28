@@ -111,7 +111,7 @@ constructor TGeneral.Create(countrec:byte);
 var {f:text; ss:string;} i:word;
 procedure zapmas (kl:word);
 begin
-    with DM2.Dict do
+    with DM2.SelectSel do
   begin
     v[kl].slovo:=Fields[1].AsString;
     v[kl].perevod:=fields[2].AsString;
@@ -121,7 +121,7 @@ begin
 
     //---------------------------------------
   recreate:=false;
-  with DM2.Dict do
+  with DM2.SelectSel do
   begin
     Open;
     if RecordCount<countrec then
