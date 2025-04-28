@@ -120,6 +120,7 @@ object datamodule2: Tdatamodule2
     Top = 420
   end
   object selectsel: TFDQuery
+    AfterOpen = selectselAfterOpen
     Connection = FDConnection
     SQL.Strings = (
       'select * from Dict where usersel=true')
@@ -157,7 +158,6 @@ object datamodule2: Tdatamodule2
     Indexes = <
       item
         Active = True
-        Selected = True
         Name = 'WordInd'
         Fields = 'Word'
       end
@@ -220,7 +220,7 @@ object datamodule2: Tdatamodule2
         Active = True
         Name = 'ScoreIndD'
         Fields = 'Score'
-        DescFields = 'DateRec'
+        DescFields = 'Score'
       end
       item
         Active = True
@@ -238,7 +238,6 @@ object datamodule2: Tdatamodule2
         Name = 'PhraseInd'
         Fields = 'Phrase'
       end>
-    IndexName = 'WordInd'
     DetailFields = 
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
