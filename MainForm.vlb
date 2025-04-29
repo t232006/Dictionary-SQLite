@@ -124,9 +124,6 @@ Coordinates=497,502,102,58
 [TabSheet5]
 Coordinates=681,752,77,36
 
-[protv]
-Coordinates=1013,570,49,58
-
 [Frame24.panel2]
 Coordinates=375,298,108,58
 
@@ -438,7 +435,7 @@ Coordinates=1473,502,64,58
 Coordinates=131,502,53,58
 
 []
-Coordinates=297,386,49,58
+Coordinates=254,598,49,58
 
 [StBar]
 Coordinates=792,298,49,58
@@ -574,9 +571,6 @@ Coordinates=521,980,96,36
 
 [cloudTimer]
 Coordinates=1381,724,78,36
-
-[st3]
-Coordinates=254,598,49,58
 
 [Timer1]
 Coordinates=1201,87,55,36

@@ -38,7 +38,6 @@ type
     Label3: TLabel;
     rg2: TRadioGroup;
     TabSheet4: TTabSheet;
-    protv: TLabel;
     Label1: TLabel;
     Label4: TLabel;
     Edit1: TEdit;
@@ -128,7 +127,6 @@ type
     Label5: TLabel;
     Label29: TLabel;
     TB: TBitBtn;
-    st3: TLabel;
     progress_Menu: TPopupMenu;
     N8: TMenuItem;
     N9: TMenuItem;
@@ -195,6 +193,7 @@ type
     CloudProcBut: TBitBtn;
     numbers1: Tnumbers;
     numbers2: Tnumbers;
+    st3: TMemo;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -651,7 +650,7 @@ begin
   for ii := 0 to 4 do
   for jj := 0 to 4 do
     sg.Cells[ii,jj] :=poBukv.table[ii,jj];
-  if not(CheckBox2.Checked) then st3.Caption:=poBukv.sl;//писать, если не стоит галочка
+  if not(CheckBox2.Checked) then st3.text:=poBukv.sl;//писать, если не стоит галочка
   //if poBukv.phrase then sg.Tag:=1 else sg.Tag:=0;
 end;
 
@@ -1532,7 +1531,7 @@ end;
 
 procedure TForm1.CheckBox2Click(Sender: TObject);
 begin
-if CheckBox2.Checked then st3.Caption:='' else st3.Caption:=Pobukv.sl;
+if CheckBox2.Checked then st3.text:='' else st3.text:=Pobukv.sl;
 end;
 
 procedure TForm1.ChShowNumberClick(Sender: TObject);
