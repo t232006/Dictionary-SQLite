@@ -161,7 +161,7 @@ object addneword: Taddneword
     Font.Style = []
     KeyField = 'id'
     ListField = 'Name'
-    ListSource = DataModule2.dsTop
+    ListSource = datamodule2.dsTop
     ParentFont = False
     TabOrder = 2
   end

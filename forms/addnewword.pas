@@ -66,7 +66,7 @@ begin
     if (isItPhrase(labelededit2.Text) and isItPhrase(labelededit1.Text)) then
     FieldByName('Phrase').AsBoolean:=true else
     FieldByName('Phrase').AsBoolean:=false;
-    //FieldByName('DateRec').AsDateTime:=Date;
+    FieldByName('DateRec').AsDateTime:=Date;
     Post;
     LabeledEdit1.Text:='';
     LabeledEdit2.Text:='';
