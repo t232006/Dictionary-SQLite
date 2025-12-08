@@ -1,4 +1,4 @@
-object DataModule2: TDataModule2
+object datamodule2: Tdatamodule2
   Height = 455
   Width = 637
   object dspotential: TDataSource
@@ -60,12 +60,17 @@ object DataModule2: TDataModule2
   end
   object FDConnection: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite')
+      'DriverID=SQLite'
+      
+        'Database=G:\some folder\indDictionary\Dictionary-SQLite\db\dicti' +
+        'onary.db')
+    Connected = True
     LoginPrompt = False
     Left = 536
     Top = 24
   end
   object Top: TFDTable
+    Active = True
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -114,6 +119,7 @@ object DataModule2: TDataModule2
     Top = 280
   end
   object selectsel: TFDQuery
+    AfterOpen = selectselAfterOpen
     Connection = FDConnection
     SQL.Strings = (
       'select * from Dict where usersel=true')
@@ -144,13 +150,13 @@ object DataModule2: TDataModule2
     Top = 104
   end
   object Dict: TFDQuery
+    Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
     Indexes = <
       item
         Active = True
-        Selected = True
         Name = 'WordInd'
         Fields = 'Word'
       end
@@ -213,7 +219,7 @@ object DataModule2: TDataModule2
         Active = True
         Name = 'ScoreIndD'
         Fields = 'Score'
-        DescFields = 'DateRec'
+        DescFields = 'Score'
       end
       item
         Active = True
@@ -231,11 +237,12 @@ object DataModule2: TDataModule2
         Name = 'PhraseInd'
         Fields = 'Phrase'
       end>
-    IndexName = 'WordInd'
     DetailFields = 
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evRecordCountMode]
+    FetchOptions.RecordCountMode = cmTotal
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -253,7 +260,6 @@ object DataModule2: TDataModule2
       FieldName = 'Number'
       Origin = 'Number'
       ProviderFlags = [pfInWhere, pfInKey]
-      ReadOnly = True
     end
     object DictWord: TWideStringField
       FieldName = 'Word'
@@ -303,6 +309,7 @@ object DataModule2: TDataModule2
       LookupKeyFields = 'id'
       LookupResultField = 'Name'
       KeyFields = 'Topic'
+      Size = 60
       Lookup = True
     end
   end

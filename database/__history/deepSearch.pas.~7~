@@ -1,0 +1,27 @@
+unit deepSearch;
+interface
+uses database, strUtils, basemanipulation;
+procedure deepSeek(needle: string);
+
+implementation
+//uses MainForm;
+procedure deepSeek(needle: string); 
+var _to:string; s:string;
+
+begin
+    with DM2 do
+    begin
+      dropspot.ExecSQL;
+      if ord(needle[1])<128 then //latin
+        _to:='Translation'
+      else
+        _to:='Word';
+      deepsearch.Params[0].AsString:=_to;
+      deepsearch.Params[1].AsString:='%'+needle+'%';
+      s:=deepsearch.SQLText;
+      DeepSearch.Execute;
+      baserefresh;
+    end;
+end;
+
+end.

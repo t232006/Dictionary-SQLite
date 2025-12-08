@@ -128,6 +128,8 @@ object datamodule2: Tdatamodule2
   end
   object deepsearch: TFDCommand
     Connection = FDConnection
+    CommandText.Strings = (
+      '')
     Left = 216
     Top = 288
   end
@@ -150,7 +152,6 @@ object datamodule2: Tdatamodule2
     Top = 104
   end
   object Dict: TFDQuery
-    Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
@@ -312,5 +313,12 @@ object datamodule2: Tdatamodule2
       Size = 60
       Lookup = True
     end
+  end
+  object FDQuery1: TFDQuery
+    Connection = synchConn
+    SQL.Strings = (
+      'select * from Dict where spot=true')
+    Left = 216
+    Top = 160
   end
 end

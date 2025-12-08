@@ -3,7 +3,7 @@
         <ProjectGuid>{B2AD8EFB-5592-4206-B48F-5E5B24DC51D8}</ProjectGuid>
         <MainSource>dictionary.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>

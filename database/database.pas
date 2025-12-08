@@ -45,6 +45,7 @@ type
     DictSpot: TBooleanField;
     DictPhrase: TBooleanField;
     DictTopicName: TWideStringField;
+    FDQuery1: TFDQuery;
     procedure vokabAfterRefresh(DataSet: TDataSet);
     procedure synchAfterOpen(DataSet: TDataSet);
     function loadDB(dbPath:string):boolean;
