@@ -1,13 +1,17 @@
 unit CloudSaveThread;
 
 interface
-uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows, messages;
+uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows, messages,
+ShlObj;
 const CANCEL_CLOUD = WM_USER+110;
        CONTINUE_CLOUD = WM_USER+120;
 
 type
   Tcloud = class
+  private
+    spFolder: string;
     public
+      constructor create;
       procedure saveToCloud(whereFrom:string);
       procedure loadFromCloud(id, whereTo:string);
   end;
@@ -51,11 +55,16 @@ begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
     command := Format(' client_secret.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
-    cmd:=TCmd.Create('simulatorParams.exe', command);
+    cmd:=TCmd.Create(spfolder+'\UploaderDB.exe', command);
     cmd.WinExecAndWait;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0, 0);
     //shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
     //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
+end;
+
+constructor Tcloud.create;
+begin
+  spfolder:=GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
 end;
 
 procedure Tcloud.loadFromCloud(id, whereTo: string);
@@ -63,7 +72,7 @@ var command: string;
     cmd: TCmd;
 begin
     command := Format(' client_secret.json %s %s', [id, WhereTo]);
-    cmd:= TCmd.Create('downloadDB.exe', command);
+    cmd:= TCmd.Create(spfolder+'\downloadDB.exe', command);
     cmd.WinExecAndWait;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
     //shellexecute(0, 'open', 'simulatorParams.exe', Pchar(command), nil, SW_show);
@@ -105,10 +114,10 @@ var cmd: TCmd;
     FilesList: TFilesList;
     TempList: TStringList;
 begin
-  cmd:=Tcmd.Create('fileListfromdrive.exe', command);
+  cmd:=Tcmd.Create(GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\fileListfromdrive.exe', command);
   s:= cmd.CmdScreen;
 
-  _FileIDs:=TStringList.Create;
+    _FileIDs:=TStringList.Create;
   _FileNames:=TStringList.Create;
   FilesList:=TFilesList.Create;
   TempList:=TStringList.Create;

@@ -2,7 +2,7 @@ unit Utilite;
 
 interface
 uses WinAPI.Windows, System.SysUtils, VCL.forms,
-      shellAPI, Classes, strUtils, ShlObj;
+      shellAPI, Classes, strUtils, ShlObj, RegularExpressions;
 
 type arraydir = array[0..255] of char;
 
@@ -30,16 +30,33 @@ TFilesList = class
 
 end;
 
-
+Treg = class
+  private
+  class function M(const Match: Tmatch):string;
+  public
+  class function Start(source:string):string;
+end;
 
 function GetSpecialPath(CSIDL: word):string;
 
 
 implementation
+{ reg }
+
+class function Treg.M(const Match: Tmatch): string;
+begin
+   result:='#'+Copy(Match.Value,2,33)+'#';
+end;
+
+class function Treg.Start(source:string):string;
+begin
+  result:=tRegEx.Replace(source,' [\w-_]{33} ',M);
+end;
+
 function TFilesList.getfilesList(source: string): TStringList;
 var sList:TStringList;
 begin
-    split(source, ' ');
+    split(TReg.Start(source), '#');
     sList:=TStringList.Create;
     for var i:byte := Low(collection) to High(collection) do
       sList.Add(collection[i]);
@@ -65,7 +82,7 @@ begin
   begin
     setlength(collection, length(collection)+1);
     _pos:=AnsiPos(c,s);
-    collection[length(collection)-1]:=trim(AnsiLeftStr(s,_pos));
+    collection[length(collection)-1]:=trim(AnsiLeftStr(s,_pos-1));
     delete(s,1,_pos);
   end;
 end;

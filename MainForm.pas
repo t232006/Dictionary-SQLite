@@ -1,4 +1,4 @@
-﻿unit MainForm;
+unit MainForm;
 
 interface
 
@@ -464,12 +464,15 @@ begin
       startTimer(disconnect);
       cloudTimer.Enabled:=true;
       CloudLoad:=TLoadThread.Create(true);
-      CloudLoad.DBDir:=WhereTo;
+      CloudLoad.DBDir:='"'+WhereTo+'"';
       CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
       CloudLoad.Priority:=tpNormal;
       CloudLoad.FreeOnTerminate:=false;
-      {if disconnect and fileExists(WhereTo) then
-        deletefile(whereto);}
+      if disconnect and fileExists(WhereTo) then
+      begin
+        DM2.FDConnection.Connected:=false;
+        deletefile(whereto);
+      end;
       CloudLoad.Start;
 end;
 begin
@@ -612,7 +615,7 @@ begin
     startTimer(true);
     cloudTimer.Enabled:=true;
     CloudSave:=TSaveThread.Create(true);
-    CloudSave.DBDir:=baseFolder.Caption;
+    CloudSave.DBDir:='"'+baseFolder.Caption+'"';
     CloudSave.Priority:=tpNormal;
     CloudSave.FreeOnTerminate:=false;
     CloudSave.Start;
