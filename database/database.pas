@@ -84,13 +84,17 @@ begin
     FDConnection.Params.Database:=dbPath;
     FDConnection.Connected:=false;
     FDConnection.Connected:=true;
-    Dict.Active:=true;
-    Top.Active:=true;
-    Topic.Active:=true;
-    selectsel.Active:=true;
-    if Dict.RecordCount<6 then form1.PagesBlock(true);
-    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
-    result:=true;
+    try
+      Dict.Active:=true;
+      Top.Active:=true;
+      Topic.Active:=true;
+      selectsel.Active:=true;
+      if Dict.RecordCount<6 then form1.PagesBlock(true);
+      Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+      result:=true;
+    except
+       result:=false;
+    end;
    end
    else result:=false;
 

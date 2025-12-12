@@ -83,6 +83,7 @@ object datamodule2: Tdatamodule2
     Top = 160
   end
   object Topic: TFDQuery
+    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select topic.id, topic.name, count(dict.topic)'
@@ -152,6 +153,7 @@ object datamodule2: Tdatamodule2
     Top = 104
   end
   object Dict: TFDQuery
+    Active = True
     AfterInsert = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True

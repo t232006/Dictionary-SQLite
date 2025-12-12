@@ -54,7 +54,7 @@ var  command, filename:string;
 begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
-    command := Format(' client_secret.json %s %s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
+    command := Format(' "client_secret.json" %s" "%s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
     cmd:=TCmd.Create(spfolder+'\UploaderDB.exe', command);
     cmd.WinExecAndWait;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0, 0);
@@ -71,7 +71,8 @@ procedure Tcloud.loadFromCloud(id, whereTo: string);
 var command: string;
     cmd: TCmd;
 begin
-    command := Format(' client_secret.json %s %s', [id, WhereTo]);
+    //whereTo:= ExtractFileDir(whereTo);
+    command := Format(' "client_secret.json" "%s" %s', [id, WhereTo]);
     cmd:= TCmd.Create(spfolder+'\downloadDB.exe', command);
     cmd.WinExecAndWait;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0,0);
@@ -111,9 +112,11 @@ procedure TReadThread.Execute;
 const command=' client_secret.json';
 var cmd: TCmd;
     s:string;
+    //command: string;
     FilesList: TFilesList;
     TempList: TStringList;
 begin
+  SetCurrentDir(ExtractFilePath(ParamStr(0)));
   cmd:=Tcmd.Create(GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\fileListfromdrive.exe', command);
   s:= cmd.CmdScreen;
 

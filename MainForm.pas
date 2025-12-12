@@ -1,4 +1,4 @@
-unit MainForm;
+﻿unit MainForm;
 
 interface
 
@@ -490,8 +490,7 @@ if mr=mrNo then
 if mr=mrYes then
     begin
           LoadFiles(true, baseFolder.Caption);
-          StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
-          Saver.startExercises;
+          
     end;
 end;
 
@@ -1607,6 +1606,12 @@ begin
   cloudProgr.Position:=cloudProgr.Max;
   cloudProgr.Tag:=1;  //normal finish
   //cloudProgr.Max:=0;
+  try
+  StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+  Saver.startExercises;
+  finally
+
+  end;
 end;
 
 procedure TForm1.cloudTimerTimer(Sender: TObject);
