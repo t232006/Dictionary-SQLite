@@ -326,4 +326,18 @@ object datamodule2: Tdatamodule2
     Left = 216
     Top = 160
   end
+  object recordCount: TFDQuery
+    Connection = FDConnection
+    SQL.Strings = (
+      'select count(*) from Dict')
+    Left = 512
+    Top = 344
+  end
+  object SelectedCount: TFDQuery
+    Connection = synchConn
+    SQL.Strings = (
+      'select count(*) from dict where usersel=true')
+    Left = 568
+    Top = 376
+  end
 end
