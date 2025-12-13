@@ -1286,15 +1286,11 @@ end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
 begin
-  with DM2.selectsel do
-  begin
-    Open;// ExecSQL;
-    //Refresh;
-    active:=false; active:=true; //don't know why, but works
-    StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
+
+    StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
     seAndCor.calcprogress;
     Fill4Status;
-  end;
+
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -1607,7 +1603,8 @@ begin
   cloudProgr.Tag:=1;  //normal finish
   //cloudProgr.Max:=0;
   try
-  StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+
+  StBar.panels[0].Text:='Всего слов: '+Dm2.GetRecordCount;
   Saver.startExercises;
   finally
 
@@ -1787,13 +1784,13 @@ begin
      try
      StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
      except end;
-     StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
+     StBar.panels[1].Text:='Выделено слов: '+dm2.GetSelectedCount;
    end else
    begin
       try
-        StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+        StBar.panels[0].Text:='Всего слов: '+dm2.GetRecordCount;
       except end;
-     StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
+     StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
      if stBar.Tag<>1 then Fill4Status;
    end;
 end;
@@ -1960,7 +1957,7 @@ begin
         begin
           Style:=psOwnerDraw;
           Dpot.Visible:=true;
-          Dpot.Max:=DM2.selectsel.RecordCount * 6;
+          Dpot.Max:=DM2.selectedCount.fields[0].AsInteger * 6;
           Dpot.Position:=strtoint(seAndCor.potcount);
         end;
       end;

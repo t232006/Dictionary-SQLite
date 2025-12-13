@@ -122,7 +122,6 @@ object datamodule2: Tdatamodule2
   object selectsel: TFDQuery
     Connection = FDConnection
     FetchOptions.AssignedValues = [evMode, evRecordCountMode]
-    FetchOptions.Mode = fmAll
     FetchOptions.RecordCountMode = cmFetched
     SQL.Strings = (
       'select * from Dict where usersel=true')
@@ -248,7 +247,6 @@ object datamodule2: Tdatamodule2
       'Score;Spot;TopicName'
     Connection = FDConnection
     FetchOptions.AssignedValues = [evMode]
-    FetchOptions.Mode = fmAll
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -327,6 +325,7 @@ object datamodule2: Tdatamodule2
     Top = 160
   end
   object recordCount: TFDQuery
+    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select count(*) from Dict')
@@ -334,9 +333,10 @@ object datamodule2: Tdatamodule2
     Top = 344
   end
   object SelectedCount: TFDQuery
-    Connection = synchConn
+    Active = True
+    Connection = FDConnection
     SQL.Strings = (
-      'select count(*) from dict where usersel=true')
+      'select count(*) from Dict where usersel=true')
     Left = 568
     Top = 376
   end

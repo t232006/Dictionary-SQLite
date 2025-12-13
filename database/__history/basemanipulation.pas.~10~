@@ -37,7 +37,7 @@ begin
    begin
       if op=false then
         cancel;
-      UpdateOptions.ReadOnly :=not(op);//РµСЃР»Рё СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ, С‚Рѕ РЅРµ С‚РѕР»СЊРєРѕ С‡С‚РµРЅРёРµ
+      UpdateOptions.ReadOnly :=not(op);//если редактировать, то не только чтение
    end;
 end;
 
@@ -77,7 +77,7 @@ begin
       answerscount := DM.dspotential.DataSet.Fields[0].AsInteger;
     except answerscount:=0;
     end;
-    reccount := strtoint(DM.GetSelectedCount);
+    reccount := DM.selectsel.RecordCount;
     pc := reccount * 6 - answerscount;
     percentNum := trunc (pc / (reccount * 6) * 100);
     _potcount := IntToStr(pc);

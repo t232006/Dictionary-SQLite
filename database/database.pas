@@ -48,6 +48,8 @@ type
     FDQuery1: TFDQuery;
     recordCount: TFDQuery;
     SelectedCount: TFDQuery;
+    function GetRecordCount:string;
+    function GetSelectedCount:string;
     procedure vokabAfterRefresh(DataSet: TDataSet);
     procedure synchAfterOpen(DataSet: TDataSet);
     function loadDB(dbPath:string):boolean;
@@ -71,11 +73,26 @@ uses MainForm, saver;
 
 {$R *.dfm}
 
+function TDataModule2.GetRecordCount:string;
+begin
+    RecordCount.Close;
+    RecordCount.open;
+    result:=inttostr(RecordCount.fields[0].asInteger);
+end;
+
+function Tdatamodule2.GetSelectedCount: string;
+begin
+    SelectedCount.Close;
+    SelectedCount.open;
+    result:=inttostr(SelectedCount.fields[0].asInteger);
+end;
+
 procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
+  //FDConnection.Commit;
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
-  Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+  Form1.StBar.panels[0].Text:='Всего слов: '+ GetRecordCount;
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
@@ -91,7 +108,7 @@ begin
       Topic.Active:=true;
       selectsel.Active:=true;
       if Dict.RecordCount<6 then form1.PagesBlock(true);
-      Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+      Form1.StBar.panels[0].Text:='Всего слов: '+GetRecordCount;
       result:=true;
     except
        result:=false;
@@ -107,7 +124,7 @@ begin
 with form1 do
   begin
     SpeedButton9.Enabled:=true;
-    StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
+    StBar.panels[1].Text:='Выделено слов: '+GetSelectedCount;
     Fill4Status;
   end;
 end;
@@ -136,7 +153,7 @@ begin
       form1.StBar.panels[0].Text:='Всего слов: '+inttostr(R);
       DataSet.Filtered:=true;
     end;  }
-  form1.StBar.panels[0].Text:='Всего слов: '+inttostr(DataSet.RecordCount);
+  form1.StBar.panels[0].Text:='Всего слов: '+GetRecordCount;
 end;
 
 

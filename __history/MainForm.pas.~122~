@@ -10,7 +10,8 @@ uses
   OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
   basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
   squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard,
-  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread;
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread,
+  numFrame;
 
 type
   TForm1 = class(TForm)
@@ -100,19 +101,7 @@ type
     N5: TMenuItem;
     N6: TMenuItem;
     N7: TMenuItem;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
     sg: TStringGrid;
-    Label16: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
     pb: TPaintBox;
     left1: TLabel;
     left2: TLabel;
@@ -182,10 +171,6 @@ type
     cardActivate: TCheckBox;
     DBText1: TDBText;
     deepbut: TSpeedButton;
-    Image1: TImage;
-    Image2: TImage;
-    Label7: TLabel;
-    lb: TLabel;
     rg: TRadioGroup;
     search: TLabeledEdit;
     selspot: TCheckBox;
@@ -208,6 +193,8 @@ type
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
+    numbers1: Tnumbers;
+    numbers2: Tnumbers;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -343,6 +330,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
+    test:TTest;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -371,7 +359,7 @@ var
 
   YesNo:TYesNo;
   poBukv:TPoBukvam;
-  test:TTest;
+
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
@@ -476,12 +464,15 @@ begin
       startTimer(disconnect);
       cloudTimer.Enabled:=true;
       CloudLoad:=TLoadThread.Create(true);
-      CloudLoad.DBDir:=WhereTo;
+      CloudLoad.DBDir:='"'+WhereTo+'"';
       CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
       CloudLoad.Priority:=tpNormal;
       CloudLoad.FreeOnTerminate:=false;
-      {if disconnect and fileExists(WhereTo) then
-        deletefile(whereto);}
+      if disconnect and fileExists(WhereTo) then
+      begin
+        DM2.FDConnection.Connected:=false;
+        deletefile(whereto);
+      end;
       CloudLoad.Start;
 end;
 begin
@@ -499,8 +490,7 @@ if mr=mrNo then
 if mr=mrYes then
     begin
           LoadFiles(true, baseFolder.Caption);
-          StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
-          Saver.startExercises;
+          
     end;
 end;
 
@@ -624,7 +614,7 @@ begin
     startTimer(true);
     cloudTimer.Enabled:=true;
     CloudSave:=TSaveThread.Create(true);
-    CloudSave.DBDir:=baseFolder.Caption;
+    CloudSave.DBDir:='"'+baseFolder.Caption+'"';
     CloudSave.Priority:=tpNormal;
     CloudSave.FreeOnTerminate:=false;
     CloudSave.Start;
@@ -1231,20 +1221,20 @@ begin
   begin
     DM2.Dict.Filter:='usersel=true';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clblue;
     lb.Caption:='операция И';
-    Image1.Visible:=true;
-    Image2.Visible:=false;
+    //Image1.Visible:=true;
+    //Image2.Visible:=false; }
   end else
   begin
     DM2.Dict.Filter:='';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clMaroon;
     lb.Caption:='операция ИЛИ';
-    Image2.Visible:=true;
-    Image1.Visible:=false;
+    //Image2.Visible:=true;
+    //Image1.Visible:=false; }
 
   end;
   DM2.Dict.Filter:=filtr;
@@ -1320,7 +1310,7 @@ PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
 then
 begin
-   //form1.BorderStyle:=bsSizeable;
+   form1.BorderStyle:=bsSizeable;
    width:=screen.Width; height:=screen.Height-50;
    //height:=650;
 end;
@@ -1616,6 +1606,12 @@ begin
   cloudProgr.Position:=cloudProgr.Max;
   cloudProgr.Tag:=1;  //normal finish
   //cloudProgr.Max:=0;
+  try
+  StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+  Saver.startExercises;
+  finally
+
+  end;
 end;
 
 procedure TForm1.cloudTimerTimer(Sender: TObject);
@@ -1794,6 +1790,9 @@ begin
      StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
    end else
    begin
+      try
+        StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+      except end;
      StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
      if stBar.Tag<>1 then Fill4Status;
    end;

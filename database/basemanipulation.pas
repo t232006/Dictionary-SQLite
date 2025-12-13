@@ -77,7 +77,7 @@ begin
       answerscount := DM.dspotential.DataSet.Fields[0].AsInteger;
     except answerscount:=0;
     end;
-    reccount := DM.selectsel.RecordCount;
+    reccount := strtoint(DM.GetSelectedCount);
     pc := reccount * 6 - answerscount;
     percentNum := trunc (pc / (reccount * 6) * 100);
     _potcount := IntToStr(pc);
