@@ -74,10 +74,10 @@ object datamodule2: Tdatamodule2
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckReadOnly]
     UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
+    UpdateOptions.CheckReadOnly = False
     TableName = 'topic'
     Left = 512
     Top = 160
@@ -120,8 +120,10 @@ object datamodule2: Tdatamodule2
     Top = 280
   end
   object selectsel: TFDQuery
-    AfterOpen = selectselAfterOpen
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evMode, evRecordCountMode]
+    FetchOptions.Mode = fmAll
+    FetchOptions.RecordCountMode = cmFetched
     SQL.Strings = (
       'select * from Dict where usersel=true')
     Left = 448
@@ -155,6 +157,7 @@ object datamodule2: Tdatamodule2
   object Dict: TFDQuery
     Active = True
     AfterInsert = Dict1AfterInsert
+    AfterEdit = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
     Indexes = <
@@ -244,8 +247,8 @@ object datamodule2: Tdatamodule2
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
-    FetchOptions.AssignedValues = [evRecordCountMode]
-    FetchOptions.RecordCountMode = cmTotal
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False

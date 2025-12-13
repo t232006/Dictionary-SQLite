@@ -52,7 +52,6 @@ type
     procedure synchBeforeOpen(DataSet: TDataSet);
     procedure synchBeforeClose(DataSet: TDataSet);
     procedure Dict1AfterInsert(DataSet: TDataSet);
-    procedure selectselAfterOpen(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -99,12 +98,6 @@ begin
    else result:=false;
 
 
-end;
-
-procedure Tdatamodule2.selectselAfterOpen(DataSet: TDataSet);
-begin
-     if form1.test<>nil then 
-     form1.test.recreate:=true;
 end;
 
 procedure TDataModule2.synchAfterOpen(DataSet: TDataSet);

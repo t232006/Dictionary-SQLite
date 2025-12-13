@@ -3,7 +3,7 @@ unit thread2;
 interface
 
 uses
-  SysUtils, Classes, Controls, Forms, basemanipulation;
+  SysUtils, Classes, Controls, Forms, basemanipulation, variants;
 
 type
   synchthread = class(TThread)
@@ -27,7 +27,7 @@ end;
 
 procedure synchthread.synchprocess;
 var k,k1:word;
-     foundkey:string;
+     foundkey:variant;
     //tempbook:Tbookmark;
 begin
   with form1 do
@@ -54,13 +54,14 @@ begin
             Dict.Fields[2].AsString:=synch.Fields[1].AsString;
             //top.IndexName:='NameInd';
             foundkey:=top.lookup('Name',synch.Fields[2].AsString,'id');
-            if foundkey='' then //topic doesn't exist
+            if VarIsNull(foundkey) then //topic doesn't exist
             begin
               top.Append; //
               top.fields[1].AsString:=synch.Fields[2].AsString; //add into top
               top.Post;
+              foundkey:=top.lookup('Name',synch.Fields[2].AsString,'id');
             end;
-            Dict.Fields[3].AsInteger:=strtoint(foundkey);//pass key to Dict
+            Dict.Fields[3].AsInteger:=foundkey;//pass key to Dict
 
             Dict.Fields[4].AsDateTime:=synch.Fields[3].AsDateTime;
             Dict.Fields[5].AsInteger:=synch.Fields[4].AsInteger;

@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.SQLiteWrapper.Stat;
 
 type
-  TDataModule2 = class(TDataModule)
+  Tdatamodule2 = class(TDataModule)
     dspotential: TDataSource;
     dsselectsel: TDataSource;
     dstopic: TDataSource;
@@ -45,12 +45,14 @@ type
     DictSpot: TBooleanField;
     DictPhrase: TBooleanField;
     DictTopicName: TWideStringField;
+    FDQuery1: TFDQuery;
     procedure vokabAfterRefresh(DataSet: TDataSet);
     procedure synchAfterOpen(DataSet: TDataSet);
     function loadDB(dbPath:string):boolean;
     procedure synchBeforeOpen(DataSet: TDataSet);
     procedure synchBeforeClose(DataSet: TDataSet);
     procedure Dict1AfterInsert(DataSet: TDataSet);
+    procedure selectselAfterOpen(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -59,7 +61,7 @@ type
   //procedure edittable(op:boolean);
 
 var
-  DM2: TDataModule2;
+  DM2: Tdatamodule2;
 
 implementation
 
@@ -82,17 +84,27 @@ begin
     FDConnection.Params.Database:=dbPath;
     FDConnection.Connected:=false;
     FDConnection.Connected:=true;
-    Dict.Active:=true;
-    Top.Active:=true;
-    Topic.Active:=true;
-    selectsel.Active:=true;
-    if Dict.RecordCount<6 then form1.PagesBlock(true);
-    Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
-    result:=true;
+    try
+      Dict.Active:=true;
+      Top.Active:=true;
+      Topic.Active:=true;
+      selectsel.Active:=true;
+      if Dict.RecordCount<6 then form1.PagesBlock(true);
+      Form1.StBar.panels[0].Text:='Всего слов: '+inttostr(Dict.RecordCount);
+      result:=true;
+    except
+       result:=false;
+    end;
    end
    else result:=false;
 
 
+end;
+
+procedure Tdatamodule2.selectselAfterOpen(DataSet: TDataSet);
+begin
+     if form1.test<>nil then 
+     form1.test.recreate:=true;
 end;
 
 procedure TDataModule2.synchAfterOpen(DataSet: TDataSet);

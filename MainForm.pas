@@ -1790,6 +1790,9 @@ begin
      StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
    end else
    begin
+      try
+        StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
+      except end;
      StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
      if stBar.Tag<>1 then Fill4Status;
    end;
