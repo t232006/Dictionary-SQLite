@@ -1,0 +1,34 @@
+unit Logo;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Imaging.pngimage;
+
+type
+  TLogoForm = class(TForm)
+    ProgressBar1: TProgressBar;
+    Image1: TImage;
+    Timer1: TTimer;
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  LogoForm: TLogoForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TLogoForm.Timer1Timer(Sender: TObject);
+begin
+  progressbar1.Position:=Progressbar1.position+1;
+end;
+
+end.

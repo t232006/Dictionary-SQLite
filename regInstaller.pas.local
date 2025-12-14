@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject>
-	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.589,=C:\Users\Тим\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.148,C:\Users\Тим\Documents\Embarcadero\Studio\Projects\Project1.dproj=H:\программки\Dictionary ADO\Dictionary SQLite1\regInstaller.dproj</Transaction>
-    <Transaction>2023.02.27 18:40:19.749,H:\программки\Dictionary ADO\Dictionary SQLite1\regInstaller.pas=H:\программки\Dictionary ADO\Dictionary SQLite1\regInstaller.dproj</Transaction>
-  </Transactions>
-</BorlandProject>

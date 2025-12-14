@@ -2,45 +2,56 @@ program dictionary;
 
 uses
   Forms,
-  MainForm in 'MainForm.pas' {Form1},
-  lessons in 'lessons.pas',
-  lesson4 in 'lesson4.pas',
-  database in 'database.pas' {DataModule2: TDataModule},
-  addnewword in 'addnewword.pas' {addneword},
-  dialogtopic in 'dialogtopic.pas' {topicform},
-  frame in 'frame.pas' {Frame2: TFrame},
-  helpdict in 'helpdict.pas' {Manual},
-  thread2 in 'thread2.pas',
-  PoBukvam in 'PoBukvam.pas',
-  basemanipulation in 'basemanipulation.pas',
-  RowColorsUnit in 'RowColorsUnit.pas' {RowColors},
-  coloredRowFrame in 'coloredRowFrame.pas' {ColoredRow: TFrame},
-  saver in 'saver.pas',
+  thread2 in 'Utils\thread2.pas',
   Vcl.Themes,
   Vcl.Styles,
-  ToExcelUnit in 'ToExcelUnit.pas',
-  squares in 'squares.pas' {Frame3: TFrame},
-  UpDownHor in 'UpDownHor.pas' {Frame4: TFrame},
-  dateform in 'dateform.pas' {dateformm},
-  deepSearch in 'deepSearch.pas',
-  cards in 'cards.pas',
-  RemindCard in 'RemindCard.pas' {Card},
-  regInstaller in 'regInstaller.pas';
+  addnewword in 'forms\addnewword.pas' {addneword},
+  dateform in 'forms\dateform.pas' {dateformm},
+  dialogtopic in 'forms\dialogtopic.pas' {topicform},
+  basemanipulation in 'database\basemanipulation.pas',
+  deepSearch in 'database\deepSearch.pas',
+  coloredRowFrame in 'frames\coloredRowFrame.pas' {ColoredRow: TFrame},
+  frame in 'frames\frame.pas' {Frame2: TFrame},
+  RowColorsUnit in 'frames\RowColorsUnit.pas' {RowColors},
+  squares in 'frames\squares.pas' {Frame3: TFrame},
+  UpDownHor in 'frames\UpDownHor.pas' {Frame4: TFrame},
+  MainForm in 'MainForm.pas' {Form1},
+  RemindCard in 'frames\RemindCard.pas' {Card},
+  lesson4 in 'exercises\lesson4.pas',
+  lessons in 'exercises\lessons.pas',
+  PoBukvam in 'exercises\PoBukvam.pas',
+  saver in 'saver\saver.pas',
+  cardsUnit in 'frames\cardsUnit.pas',
+  Logo in 'forms\Logo.pas' {LogoForm},
+  CloudSaveThread in 'utils\CloudSaveThread.pas',
+  Utilite in 'Utils\Utilite.pas',
+  ToExcelUnit in 'Utils\ToExcelUnit.pas',
+  LogoThread in 'Utils\LogoThread.pas',
+  helpdict in 'forms\helpdict.pas' {Manual},
+  numFrame in 'frames\numFrame.pas' {numbers: TFrame},
+  database in 'database\database.pas' {datamodule2: TDataModule};
 
 {$R *.res}
-
 begin
-  Application.Initialize;
+   Application.Initialize;
 
+  TStyleManager.TrySetStyle('Windows10');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TManual, Manual);
+  {Logoform :=TLogoForm.Create(Application);
+  Logoform.show;
+
+
+  while LogoForm.Pgb.Tag<>1 do Application.ProcessMessages;
+   LogoForm.Free; }
+  //Application.CreateForm(TLogoForm, LogoForm);
   Application.CreateForm(Taddneword, addneword);
+  Application.CreateForm(Tdateformm, dateformm);
   Application.CreateForm(Ttopicform, topicform);
   Application.CreateForm(TManual, Manual);
   Application.CreateForm(TRowColors, RowColors);
-  Application.CreateForm(Tdateformm, dateformm);
-  Application.CreateForm(TCard, Card);
   Application.Run;
 
   end.

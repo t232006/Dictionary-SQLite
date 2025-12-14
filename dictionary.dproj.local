@@ -1,31 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.663,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\RemindCard.dfm=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.060,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\RemindCard.dfm=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.478,=H:\программки\Dictionary ADO\Dictionary SQLite1\New1.ini</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.455,H:\программки\Dictionary ADO\Dictionary SQLite1\addnewword.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.381,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\MainForm.pas=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.381,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\MainForm.dfm=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.483,H:\программки\Dictionary ADO\Dictionary SQLite1\New1.ini=H:\программки\Dictionary ADO\Dictionary SQLite1\init.ini</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.771,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\remaindCard.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.490,=H:\программки\Dictionary ADO\Dictionary SQLite1\New1</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.588,H:\программки\Dictionary ADO\remproc.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.956,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dateform.pas=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dataform.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.423,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\remaindCard.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.672,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\remaindCard.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.523,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\deepSearch.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.836,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\deepSearch.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.000,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\New1.txt</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.956,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dateform.dfm=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dataform.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.052,H:\программки\Dictionary ADO\Dictionary SQLite1\Unit1.pas=H:\программки\Dictionary ADO\Dictionary SQLite1\regInstaller.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.257,=H:\программки\Dictionary ADO\Dictionary SQLite1\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.007,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.060,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\RemindCard.pas=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.120,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dataform.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.013,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\dataform.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.066,=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.680,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\RemindCard.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.663,H:\программки\Dictionary-MS SQL Server\Individual-dictionary\RemindCard.pas=H:\программки\Dictionary-MS SQL Server\Individual-dictionary\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.001,G:\some folder\indDictionary\Dictionary-SQLite\Unit1.pas=G:\some folder\indDictionary\Dictionary-SQLite\frames\numbers.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.915,G:\some folder\indDictionary\Dictionary-SQLite\frames\numbers.pas=G:\some folder\indDictionary\Dictionary-SQLite\frames\numFrame.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.146,Z:\Программирование\repos\Dictionary-SQLite\frames\cardsUnit.pas=Z:\Программирование\repos\Dictionary-SQLite\frames\cards.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.138,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.313,=G:\some folder\indDictionary\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\Unit2.dfm=Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.335,G:\some folder\indDictionary\Dictionary-SQLite\database\database.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.650,=G:\some folder\indDictionary\Dictionary-SQLite\database\database.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.943,=Z:\Программирование\repos\Dictionary-SQLite\Utils\Utilite.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas=Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.784,=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.371,Z:\Программирование\repos\Dictionary-SQLite\CloudSaveThread.pas=Z:\Программирование\repos\Dictionary-SQLite\utilites\CloudSaveThread.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.001,G:\some folder\indDictionary\Dictionary-SQLite\Unit1.dfm=G:\some folder\indDictionary\Dictionary-SQLite\frames\numbers.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.570,=Z:\Программирование\repos\Dictionary-SQLite\Utils\ToExcelUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.271,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.953,Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas=Z:\Программирование\repos\Dictionary-SQLite\CloudSaveThread.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.458,Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas=Z:\Программирование\repos\Dictionary-SQLite\Utils\LogoThread.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.915,G:\some folder\indDictionary\Dictionary-SQLite\frames\numbers.dfm=G:\some folder\indDictionary\Dictionary-SQLite\frames\numFrame.dfm</Transaction>
   </Transactions>
 </BorlandProject>

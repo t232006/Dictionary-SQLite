@@ -4,13 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids, DBTables,
+  Dialogs, Grids, ValEdit, ComCtrls, DB, StdCtrls, DBGrids,
   ExtCtrls, lessons, PoBukvam, lesson4, database, DBCtrls, addnewword, dateform,
   Buttons, frame, helpdict, Mask, ActnList, ActnMan, ActnColorMaps, ImgList,
-  OleCtrls, SHDocVw, Gauges, thread2, DdeMan, Menus, System.Actions,
-  basemanipulation, cards, RowColorsUnit, saver, deepSearch, ToExcelUnit,
-  squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard, reginstaller,
-  registry;
+  OleCtrls, SHDocVw, Gauges, DdeMan, Menus, System.Actions,
+  basemanipulation, cardsUnit, RowColorsUnit, saver, deepSearch, ToExcelUnit,
+  squares, Vcl.PlatformDefaultStyleActnCtrls, UpDownHor, remindcard,
+  registry, CloudSaveThread, thread2, ShellAPI, Utilite, logo, LogoThread,
+  numFrame;
 
 type
   TForm1 = class(TForm)
@@ -28,7 +29,7 @@ type
     Grid: TDBGrid;
     DBNavigator1: TDBNavigator;
     Button3: TButton;
-    ComboBox1: TComboBox;
+    SelOper: TComboBox;
     DBMemo1: TDBMemo;
     DBMemo2: TDBMemo;
     TabSheet2: TTabSheet;
@@ -100,19 +101,7 @@ type
     N5: TMenuItem;
     N6: TMenuItem;
     N7: TMenuItem;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
     sg: TStringGrid;
-    Label16: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
     pb: TPaintBox;
     left1: TLabel;
     left2: TLabel;
@@ -149,7 +138,7 @@ type
     GridPanel1: TGridPanel;
     ShTableFontColor: TShape;
     Frame31: TFrame3;
-    ShScaleColor: TShape;
+    ChScaleColor: TShape;
     ChShowNumber: TCheckBox;
     ChShowScale: TCheckBox;
     ShCardColor: TShape;
@@ -163,8 +152,6 @@ type
     N11: TMenuItem;
     N13: TMenuItem;
     Label23: TLabel;
-    Label24: TLabel;
-    Label25: TLabel;
     st2: TLabel;
     st1: TLabel;
     Label28: TLabel;
@@ -174,7 +161,7 @@ type
     Label33: TLabel;
     Label34: TLabel;
     Label35: TLabel;
-    Label36: TLabel;
+    HelpLbl: TLabel;
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
@@ -184,10 +171,6 @@ type
     cardActivate: TCheckBox;
     DBText1: TDBText;
     deepbut: TSpeedButton;
-    Image1: TImage;
-    Image2: TImage;
-    Label7: TLabel;
-    lb: TLabel;
     rg: TRadioGroup;
     search: TLabeledEdit;
     selspot: TCheckBox;
@@ -200,6 +183,18 @@ type
     Label17: TLabel;
     Label26: TLabel;
     baseFolder: TLabel;
+    LFromClBut: TSpeedButton;
+    UToClBut: TSpeedButton;
+    ChShowScore: TCheckBox;
+    Panel2: TPanel;
+    Label24: TLabel;
+    Label25: TLabel;
+    SaveDlg: TSaveDialog;
+    cloudProgr: TProgressBar;
+    cloudTimer: TTimer;
+    CloudProcBut: TBitBtn;
+    numbers1: Tnumbers;
+    numbers2: Tnumbers;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -213,8 +208,7 @@ type
     procedure m1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure searchKeyPress(Sender: TObject; var Key: Char);
-    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure SelOperCloseUp(Sender: TObject);
     procedure GridCellClick(Column: TColumn);
     procedure caneditClick(Sender: TObject);
     procedure stringselect(po:boolean);
@@ -237,7 +231,7 @@ type
     procedure Action3Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
-    procedure ComboBox1DropDown(Sender: TObject);
+    procedure SelOperDropDown(Sender: TObject);
     procedure ChangeColrigth(p:boolean);
     procedure Action4Execute(Sender: TObject);
     procedure SpeedButton4Click(Sender: TObject);
@@ -293,7 +287,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
       Shift: TShiftState; X, Y: Integer);
     procedure Frame31Shape1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure ShScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure ChScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure N5Click(Sender: TObject);
     procedure ChShowNumberClick(Sender: TObject);
@@ -304,30 +298,50 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure cardActivateClick(Sender: TObject);
     procedure Fill4Status;
     procedure N11Click(Sender: TObject);
-    procedure N13Click(Sender: TObject);
     //procedure GridPanel1Click(Sender: TObject);
     procedure baseFolderClick(Sender: TObject);
-
+    procedure LFromClButClick(Sender: TObject);
+    procedure UToClButClick(Sender: TObject);
+    procedure ChShowScoreClick(Sender: TObject);
+    procedure searchChange(Sender: TObject);
+    procedure DBMemo1Change(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure PagesBlock(block:boolean);
+    procedure cloudTimerTimer(Sender: TObject);
+    procedure CloudProcButClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure LBMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure LBMouseLeave(Sender: TObject);
+    procedure LBClick(Sender: TObject);
+    procedure HelpLblClick(Sender: TObject);
   private
-    { Private declarations }
+    PopupListBox: TListBox;
+    constructor Create(AOwner: TComponent); override;
     procedure YesNoContinue(b:boolean);
     procedure Keynottab (var msg:TCMDialogKey); message CM_DialogKey;
     function memonumber (name:string):byte;
     procedure Ins;
     procedure FrameGeneralization(Sender: TObject; bool:boolean);
     procedure DragDrop(sender, source: TObject; mm7: boolean);
+    procedure N13active;
+    procedure StartTimer(disconnect:boolean);
+    procedure CancelCloud(var msg:TMessage); message CANCEL_CLOUD;
+    procedure CreatePopupListBox(var msg:TMessage); message CONTINUE_CLOUD;
   public
     color_scale:TColor;
+    LogoForm: TLogoForm;
+    test:TTest;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
       RowBrushColor2:Tcolor;
     end;
   end;
-  procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
+  //procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
 
 var
   Form1: TForm1;
+  FilesID :TStringList;   //contains IDs from google drive
   card:TCard;
   pravotv:byte;
   i:byte;   //ОСТОРОЖНО!
@@ -338,17 +352,19 @@ var
   f:textfile;
   kolright:word;
   synchtr:synchthread;
+  CloudSave: TSaveThread;
+  CloudLoad: TLoadThread;
+  CloudRead: TReadThread;
 
 
   YesNo:TYesNo;
   poBukv:TPoBukvam;
-  test:TTest;
+
   complience:TComplience;
   seAndCor:Tgrademanipulation;
   cards:Tcards;
-
-
-
+  //recreate:boolean;
+  //isOdd:boolean;
 
   conteiner:record
     leftnum:byte;
@@ -360,6 +376,16 @@ implementation
 uses dialogtopic;
 
 {$R *.dfm}
+procedure TForm1.PagesBlock(block: boolean);
+var i:byte;
+begin
+if block then
+      for I := 1 to 6 do
+        PageControl1.Pages[i].Enabled:=false
+  else
+      for I := 1 to 6 do
+        PageControl1.Pages[i].Enabled:=true;
+end;
 
 function Tform1.memonumber (name:string):byte;
 begin
@@ -368,9 +394,10 @@ end;
 
 procedure TForm1.Keynottab (var msg:TCMDialogKey);
 //label lab;
-const activpos:shortint=0;
 var keypressed:char;
+    activpos:shortint;
 begin
+  activpos:=0;
   if msg.Charcode<>VK_TAB then inherited;
 
   if (msg.CharCode=VK_TAB) and (getKeyState(VK_CONTROL)<0) and (getKeyState(VK_SHIFT)<0) then
@@ -424,20 +451,110 @@ begin
   end;
 end;
 
+procedure TForm1.HelpLblClick(Sender: TObject);
+begin
+  manual.WebBrowser.Navigate(ExtractFileDir(Application.ExeName)+ '\help.htm');
+  manual.Show;
+end;
+
+procedure TForm1.LBClick(Sender: TObject);
+var s:string;
+procedure LoadFiles(disconnect:boolean; WhereTo:string) ;
+begin
+      startTimer(disconnect);
+      cloudTimer.Enabled:=true;
+      CloudLoad:=TLoadThread.Create(true);
+      CloudLoad.DBDir:='"'+WhereTo+'"';
+      CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
+      CloudLoad.Priority:=tpNormal;
+      CloudLoad.FreeOnTerminate:=false;
+      if disconnect and fileExists(WhereTo) then
+      begin
+        DM2.FDConnection.Connected:=false;
+        deletefile(whereto);
+      end;
+      CloudLoad.Start;
+end;
+begin
+var mr: TModalResult;
+mr:= MessageDlg('Текущий словарь будет заменен.',TMsgDlgType.mtConfirmation,mbYesNoCancel,0);
+if mr=mrNo then
+    begin
+      s:=getCurrentDir;
+      if SaveDlg.Execute then   //to save into some dicrectory
+      begin
+         ChDir(s);
+         LoadFiles(false, SaveDlg.FileName);
+      end;
+    end else
+if mr=mrYes then
+    begin
+          LoadFiles(true, baseFolder.Caption);
+          
+    end;
+end;
+
+procedure TForm1.LBMouseLeave(Sender: TObject);
+begin
+  (Sender as TListBox).Visible:=false;
+end;
+
+procedure TForm1.LBMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var p:Tpoint;
+begin
+
+  p.X:=x; p.Y:=y;
+   (Sender as TListBox).ItemIndex:=(sender as Tlistbox).ItemAtPos(p,true);
+   (Sender as TlistBox).ItemRect((sender as Tlistbox).ItemAtPos(p,true));
+end;
+
+procedure TForm1.LFromClButClick(Sender: TObject);
+begin
+     if PopupListBox=nil then
+     begin
+        startTimer(false);
+        cloudTimer.Enabled:=true;
+        CloudRead:= TReadThread.Create(true);
+        CloudRead.Priority:=tpNormal;
+        CloudRead.FreeOnTerminate:=false;
+        CloudRead.Start;
+     end else
+     with PopupListBox do
+     begin
+          Visible:=true;
+          left:=Mouse.CursorPos.X-form1.left;
+          Top:=Mouse.CursorPos.Y-form1.top;
+     end;
+end;
+
+procedure TForm1.CreatePopUpListBox(var msg: TMessage);
+begin
+      FilesID:=CloudRead.FileIDs;
+      PopupListBox:=TListBox.Create(self);
+        with PopupListBox do
+        begin
+          left:=Mouse.CursorPos.X-form1.left;
+          Top:=Mouse.CursorPos.Y-form1.top;
+          Parent:=form1;
+          Items:=CloudRead.FileNames;
+          Font.Size:=13;
+          PopupListBox.height:=2*PopupListBox.font.Size*count;
+          PopupListBox.width:=CloudRead.MaxLength*PopupListBox.font.Size-30;
+          OnMouseLeave:=LBMouseLeave;
+          OnMouseMove:=LBMouseMove;
+          OnClick:=LBClick;
+        end;
+end;
+
 procedure TForm1.baseFolderClick(Sender: TObject);
 begin
     if od1.Execute then
-    try
-      baseFolder.Caption:=od1.FileName;
-      InstallReg(baseFolder.Caption);
-      DM2.ReloadConnection;
-      if messagedlg('Смена базы данных требует перезагрузки приложения. Закрыть приложение?',mtConfirmation,[mbYes, mbNo],0)=mrYes then
-        close;
-    except
-      on ERegistryException do
-        ShowMessage('Необходимы права администратора для данного действия');
+    begin
+      DM2.loadDB(od1.FileName);
+      Saver.startExercises;
+      (sender as TLabel).Caption:=od1.FileName;
     end;
-
 end;
 
 procedure Tform1.ChangeColrigth(p:boolean);
@@ -481,6 +598,29 @@ begin
      end;
 end;
 
+
+procedure TForm1.StartTimer(disconnect: boolean);
+begin
+  dm2.FDConnection.Connected:=not(disconnect);
+  cloudProgr.Visible:=true;
+  cloudProgr.Tag:=0;  //connectionError upon finish
+    cloudprogr.Position:=0;
+    cloudTimer.Enabled:=true;
+    cloudProcBut.Visible:=true;
+end;
+
+procedure TForm1.UToClButClick(Sender: TObject);
+begin
+    startTimer(true);
+    cloudTimer.Enabled:=true;
+    CloudSave:=TSaveThread.Create(true);
+    CloudSave.DBDir:='"'+baseFolder.Caption+'"';
+    CloudSave.Priority:=tpNormal;
+    CloudSave.FreeOnTerminate:=false;
+    CloudSave.Start;
+
+end;
+
 procedure Tform1.InitSlovoPer;
 //var k:byte;
 begin
@@ -496,7 +636,7 @@ end;// end;
 
 procedure Tform1.InitPerevodSlo;
 begin
-  test:=TTest.create(6);
+
   test.PerevodSlo(o,pravotv);
   st2.Caption:=o[0].perevod;
   Rg2.ItemIndex:=-1;
@@ -510,8 +650,7 @@ end; //end;
 procedure TForm1.InitPobukvam;
 var ii, jj: integer;
 begin
-  poBukv.Free;
-  poBukv:=TPoBukvam.create;
+
   for ii := 0 to 4 do
   for jj := 0 to 4 do
     sg.Cells[ii,jj] :=poBukv.table[ii,jj];
@@ -557,33 +696,48 @@ begin
   //rg1.ItemIndex:=-1;
 
 end;
-
+ //region bookmark PageControl
 procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
+
 begin
 
   case  PageControl1.ActivePageIndex of
-  0:
-  begin
-    //baserefrash;
-  end;
   1:
   begin
-      test:=TTest.create(6);
+      if Test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
       InitSlovoPer;
   end;
   2:
   begin
-      test:=TTest.create(6);
-      InitPerevodSlo;
+  if Test.recreate then
+      begin
+        test.Free;
+        test:=TTest.create(6);
+      end;
+        InitPerevodSlo;
   end;
   3:
   begin
-    InitPobukvam;
+  if Test.recreate then
+      begin
+        poBukv.Free;
+        poBukv:=TPoBukvam.create;
+      end;
+      InitPobukvam;
   end;
   4:
   begin
-    complience:= Tcomplience.Create;
+  if Test.recreate then
+      begin
+        complience.Free;
+        complience:= Tcomplience.Create(6);
+      end;
+      complience.Init;
     for t:=1 to 6 do
     begin
         TMemo(FindComponent('m'+IntToStr(t))).lines.text:=complience.o1[t].slovo;
@@ -597,7 +751,12 @@ begin
   end;
   5:
   begin
-     YesNo:=TYesNo.Create(1);
+  if Test.recreate then
+      begin
+       yesNo.Free;
+       YesNo:=TYesNo.Create(1);
+      end;
+        yesNo.Init;
   end;
   6:
   begin
@@ -615,7 +774,12 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-    cards:=Tcards.create(t1);
+      if Test.recreate then
+      begin
+        cards.Free;
+        cards:=Tcards.create(t1);
+      end;
+      cards.Init(t1);
     for t:=1 to t1 do
     begin
         if rg3.ItemIndex=0 then
@@ -756,7 +920,7 @@ begin
     end;
     ChangeColrigth(false);
   end;
-    pb.Canvas.FillRect(pb.Canvas.ClipRect);
+    //pb.Canvas.FillRect(pb.Canvas.ClipRect);
 End;
 
 procedure TForm1.m7DragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -778,33 +942,49 @@ begin
   addneword.ShowModal;
 end;
 
+procedure TForm1.CancelCloud(var msg: TMessage);
+begin
+   CloudProcButClick(Application);
+end;
+
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 with DM2 do
 begin
 Dict.Close;
 top.Close;
-topicquery.SQL.Clear;
+//topicquery.SQL.Clear;
 end;
-saveForm;
+Saver.saveForm;
+finishexercises;
 end;
 
-procedure TForm1.searchKeyPress(Sender: TObject; var Key: Char);
+procedure TForm1.searchChange(Sender: TObject);
+
+var s:string;
+    letter:char;    // last letter
 begin
-  if ord(key)<128 then
-    DM2.Dict.Locate('Translation',Search.Text+key,[loPartialKey, loCaseInsensitive])
+  s := search.Text;
+  if s <> '' then letter := s[length(s)];
+  if ord(letter) = 43 then  //'+'
+    begin
+      delete(s,length(s),1);
+      search.Text:=s;
+    end else
+  if ord(letter)<128 then
+    DM2.Dict.Locate('Translation', s, [loPartialKey, loCaseInsensitive])
   else
-    DM2.Dict.Locate('Word',Search.Text+key,[loPartialKey, loCaseInsensitive])
+    DM2.Dict.Locate('Word', s, [loPartialKey, loCaseInsensitive]);
 end;
 
-procedure TForm1.ComboBox1CloseUp(Sender: TObject);
+procedure TForm1.SelOperCloseUp(Sender: TObject);
 begin
 with DM2.topicquery do
 begin
-  if SQL.Text<>'update Dict set usersel=true where'#$D#$A
+  if SQL.Count > 1
   then if selspot.Checked then SQL.Add('and')//для добавления сложных условий
   else SQL.Add('or');
-  case combobox1.ItemIndex of
+  case SelOper.ItemIndex of
     0: SQL.Add('score<6');
     1: SQL.Add('score>0');
     2: dateformm.showmodal;
@@ -820,7 +1000,7 @@ begin
     1: SQL.Add('and phrase = true');
   end;
 
-  if SQL.Text<>'update Dict set usersel=true where'#$D#$A
+  if SQL.Count > 1
                      then
   try
      DM2.Dict.Filter:='';
@@ -832,11 +1012,13 @@ begin
   end;
 end;
 //DM2.Dict.Refresh;
-DM2.Dict.active:=false; DM2.Dict.Active:=true;
+//DM2.Dict.active:=false; DM2.Dict.Active:=true;
+baserefresh;
 Action3Execute(sender);
 DM2.Dict.Filter:=filtr;
 Grid.SetFocus;
-
+{if SelOper.ItemIndex <> 4 then selspot.Checked:=true else
+selspot.Checked:=false;}
 end;
 
 procedure TForm1.GridCellClick(Column: TColumn);
@@ -862,6 +1044,9 @@ begin
   if canedit.Down then Grid.options := Grid.options +[dgediting] else
 Grid.options := Grid.options -[dgediting];
   edittable(canedit.Down);
+  Grid.DataSource.DataSet.Next;
+  Grid.DataSource.DataSet.Prior;
+  //Prior;
   Grid.SetFocus;
 end;
 
@@ -874,7 +1059,10 @@ begin
         Label1.Caption:='правильно';
         SeAndCor.searchandcor(true,'word',sl);
         ChangeColrigth(true); //пишет в статусе
-        InitPobukvam;
+        //InitPobukvam;
+        test.recreate:=true;
+        PageControl1Change(sender);
+        test.recreate:=false;
         Edit1.Text:='';
       end else
       begin
@@ -886,6 +1074,13 @@ begin
       end;
   end;
     edit1.SetFocus;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  test.recreate:=true;
+  PageControl1Change(sender);
+  test.recreate:=false;
 end;
 
 procedure TForm1.Edit1KeyPress(Sender: TObject; var Key: Char);
@@ -1016,7 +1211,7 @@ end;
 
 procedure TForm1.FormActivate(Sender: TObject);
 begin
-     form1.WindowState:=wsMaximized;
+     //form1.WindowState:=wsMaximized;
 end;
 
 procedure TForm1.selspotClick(Sender: TObject);
@@ -1026,20 +1221,20 @@ begin
   begin
     DM2.Dict.Filter:='usersel=true';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clblue;
     lb.Caption:='операция И';
-    Image1.Visible:=true;
-    Image2.Visible:=false;
+    //Image1.Visible:=true;
+    //Image2.Visible:=false; }
   end else
   begin
     DM2.Dict.Filter:='';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clMaroon;
     lb.Caption:='операция ИЛИ';
-    Image2.Visible:=true;
-    Image1.Visible:=false;
+    //Image2.Visible:=true;
+    //Image1.Visible:=false; }
 
   end;
   DM2.Dict.Filter:=filtr;
@@ -1066,7 +1261,7 @@ begin
   Grid.Color:=RowColors.RowColor1;
 end;
 
-procedure TForm1.ShScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TForm1.ChScaleColorMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   n4.Click;
@@ -1091,29 +1286,30 @@ end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
 begin
-  with DM2.selectsel do
-  begin
-    Open;// ExecSQL;
-    //Refresh;
-    active:=false; active:=true; //don't know why, but works
-    StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
+
+    StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
     seAndCor.calcprogress;
     Fill4Status;
-  end;
+
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 //var sf:string; fk:1..12;
 begin
   Dpot.Parent:=StBar;
-  SeAndCor:=Tgrademanipulation.Create(DM2);
-  loadForm;
+  //logoform.show;
+
   //-------------------------------
+  //pb.canvas.Brush.color:=clwhite;
   Action3Execute(sender);
 PageControl1Change(sender);
 if (Screen.Width<form1.Width) or (Screen.Height<form1.Height)
-then form1.BorderStyle:=bsSizeable;
-StBar.panels[0].Text:='Всего слов: '+inttostr(DM2.Dict.RecordCount);
+then
+begin
+   form1.BorderStyle:=bsSizeable;
+   width:=screen.Width; height:=screen.Height-50;
+   //height:=650;
+end;
 end;
 
 procedure TForm1.FormKeyPress(Sender: TObject; var Key: Char);
@@ -1136,7 +1332,7 @@ begin
     if j-round(0.08*order)*6<>strtoint(key) then
     begin
       tecomp:=(FindComponent('m'+inttostr(j)) as tmemo);
-      rectt(color, tecomp);
+      rectt(pb.color, tecomp);
     end;
   end;
 end;
@@ -1175,7 +1371,7 @@ try
           end;
         end  else
         begin
-          rectt(color, mem);
+          rectt(pb.color, mem);
           with conteiner do
           begin
             if left1.Visible then leftnum:=0 else rightnum:=0;
@@ -1231,12 +1427,26 @@ end;
 
 procedure TForm1.ComboBox1KeyPress(Sender: TObject; var Key: Char);
 begin
- combobox1.itemindex:=-1;
+ SelOper.itemindex:=-1;
 end;
 
-procedure TForm1.ComboBox1DropDown(Sender: TObject);
+
+
+constructor TForm1.Create(AOwner: TComponent);
+var LThread:TlogoThread;
 begin
-ComboBox1.ItemIndex:=-1; //чтобы можно было закрыть без выбора
+  inherited;
+  LogoForm:=TLogoForm.Create(Application);
+  lThread:=TLogoThread.Create(false);
+  logoform.showmodal;
+  Lthread.terminate;
+
+
+end;
+
+procedure TForm1.SelOperDropDown(Sender: TObject);
+begin
+SelOper.ItemIndex:=-1; //чтобы можно было закрыть без выбора
 selspotClick(sender);
 end;
 
@@ -1299,7 +1509,7 @@ var a:string;
 begin
   a:=Grid.DataSource.DataSet.FieldByName('Number').AsString;
   Seeking(a);
-  baserefrash;
+  baserefresh;
 end;
 
 procedure TForm1.TB1Click(Sender: TObject);
@@ -1338,6 +1548,11 @@ begin
     card.Destroy;
 end;
 
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+  Dm2.FDConnection.Connected:=(Sender as Tcheckbox).Checked;
+end;
+
 procedure TForm1.CheckBox2Click(Sender: TObject);
 begin
 if CheckBox2.Checked then st3.Caption:='' else st3.Caption:=Pobukv.sl;
@@ -1353,6 +1568,71 @@ procedure TForm1.ChShowScaleClick(Sender: TObject);
 begin
     n5.Checked:=ChShowScale.Checked;
     Grid.Repaint;
+end;
+
+procedure TForm1.ChShowScoreClick(Sender: TObject);
+begin
+    n13.Checked:=ChShowScore.Checked;
+    if n13.Checked then
+    begin
+       Label38.Caption:='Шкала оценки';
+      Label31.Visible:=true;
+      label33.Visible:=true;
+      label34.Visible:=true;
+      chscalecolor.Visible:=true;
+      chshownumber.Visible:=true;
+      chshowscale.Visible:=true;
+      n13active;
+    end else
+    begin
+      Label38.Caption:='Шкала релевантности';
+      Label31.Visible:=false;
+      label33.Visible:=false;
+      label34.Visible:=false;
+      chscalecolor.Visible:=false;
+      chshownumber.Visible:=false;
+      chshowscale.Visible:=false;
+      n11.Click;
+    end;
+    Grid.Repaint;
+end;
+
+procedure TForm1.CloudProcButClick(Sender: TObject);
+begin
+  cloudProgr.Position:=cloudProgr.Max;
+  cloudProgr.Tag:=1;  //normal finish
+  //cloudProgr.Max:=0;
+  try
+
+  StBar.panels[0].Text:='Всего слов: '+Dm2.GetRecordCount;
+  Saver.startExercises;
+  finally
+
+  end;
+end;
+
+procedure TForm1.cloudTimerTimer(Sender: TObject);
+begin
+  if cloudProgr.Position>=cloudProgr.Max then
+  begin
+    cloudTimer.Enabled:=false;
+    cloudProgr.Visible:=false;
+    if CloudSave<>nil then CloudSave.Terminate;
+    if CloudLoad<>nil then CloudLoad.Terminate;
+    if CloudRead<>nil then CloudRead.Terminate;
+
+    CloudProcBut.Visible:=false;
+    with dm2 do
+    begin
+      FDConnection.Connected:=true;
+      Dict.active:=true;
+      Topic.Active:=true;
+    end;
+    if cloudProgr.Tag=0 then
+    MessageDlg('Похоже, проблемы с интернет соединением.',MTError,[mbOK],0);
+  end;
+  cloudProgr.StepIt;
+
 end;
 
 procedure TForm1.Action5Execute(Sender: TObject);
@@ -1402,18 +1682,21 @@ begin
    with DM2.Dict do
   begin
     case column.Index of
-      0: if Sort='Word ASC' then Sort:='Word DESC'
-      else Sort:='Word ASC';
-      1: if Sort='Translation ASC' then Sort:='Translation DESC'
-      else Sort:='Translation ASC';
-      2: if Sort='DateRec ASC' then Sort:='DateRec DESC'
-      else Sort:='DateRec ASC';
+      0:  if IndexName='WordInd' then IndexName:='WordIndD'
+      else IndexName:='WordInd';
+      1: if IndexName='TranslationInd' then IndexName:='TranslationIndD'
+      else IndexName:='TranslationInd';
+      2: if IndexName='DateRecInd' then IndexName:='DateRecD'
+      else IndexName:='DateRecInd';
       3: begin
     //
           nil_menu.Popup(mouse.CursorPos.X, mouse.CursorPos.Y);
       end;
-      4: if Sort='Topic ASC' then Sort:='Topic DESC'
-      else Sort:='Topic ASC';
+      4: if IndexName='topicind' then IndexName:='TopicIndD'
+      else IndexName:='topicind';
+      5: if IndexName='UserselInd' then IndexName:='UserselIndD'
+      else IndexName:='UserselInd';
+
     end;
       First;
   end;
@@ -1428,7 +1711,7 @@ if od1.Execute then
   begin
     dirbase:=od1.FileName;  //открываем
       //Close;
-      Dm2.synchConn.connectionString:='Provider=MSDASQL.1;Persist Security Info=False;Extended Properties="DSN=dictionarySource;Database='+dirbase+';"';
+      Dm2.synchConn.Params.Database:=dirbase;
     try
       dm2.synch.Open;
       StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
@@ -1444,7 +1727,7 @@ begin
   synchtr.FreeOnTerminate:=true;
    DBGrid2.Tag:=0; //resume
   BitBtn1.Visible:=true;
-  synchtr.Resume;
+  synchtr.Start;
 end;
 
 procedure TForm1.StBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
@@ -1495,23 +1778,26 @@ end;
 
 procedure TForm1.FormPaint(Sender: TObject);
 begin
-
+   //logoform.Close;
    if PageControl1.ActivePageIndex=8 then
    begin
      try
      StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
      except end;
-     StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
+     StBar.panels[1].Text:='Выделено слов: '+dm2.GetSelectedCount;
    end else
    begin
-     StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
-     Fill4Status;
+      try
+        StBar.panels[0].Text:='Всего слов: '+dm2.GetRecordCount;
+      except end;
+     StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
+     if stBar.Tag<>1 then Fill4Status;
    end;
 end;
 
 procedure TForm1.SpeedButton10Click(Sender: TObject);
 begin
-   ToExcel;
+  toExcel;
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
@@ -1548,8 +1834,9 @@ end;
 procedure TForm1.DBGrid2MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
   var posgridnew, j:word;
-  const posgrid:word=0;
+  posgrid:word;
 begin
+   posgrid:=0;
    with dbgrid2 do
    begin
    if SelectedRows.CurrentRowSelected then
@@ -1577,6 +1864,15 @@ begin
    end;
 end;
 
+procedure TForm1.DBMemo1Change(Sender: TObject);
+var fontheight:byte;
+begin
+  fontHeight:=(Sender as TDBMemo).height div ((length((Sender as TDBMemo).Text) div 25)+1);
+  if fontheight<=25 then
+  (Sender as TDBMemo).font.Height:=fontheight else
+  (Sender as TDBMemo).Font.Height:=25;
+end;
+
 procedure TForm1.DBMemo1KeyPress(Sender: TObject; var Key: Char);
 begin
 if key=#9 then DBMemo2.SetFocus;
@@ -1597,9 +1893,12 @@ end;
 procedure TForm1.GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
   DataCol: Integer; Column: TColumn; State: TGridDrawState);
   var style,rl,rr,rt,rb:integer; rect1:TRect;
+  //IsOdd:boolean;
+
 begin
 //-------------STRIPES-------------//
 //if ((DataCol=0) and not(gdselected in state)) then TableGreedRow.drawTrueBack:=not(TableGreedRow.drawTrueBack);
+//if odd((rect2.Top-21) div rect2.Height) then
 if odd(TDBGrid(sender).DataSource.DataSet.RecNo) then
   TDBGrid(Sender).Canvas.Brush.Color:=TableGreedRow.RowBrushColor1
 else
@@ -1615,15 +1914,16 @@ if gdselected in state then
     begin
       rr:=rect2.Right-3; rl:=rect2.Left+3; rb:=rect2.Bottom-3; rt:=Rect2.Top+3;
       rect1:=rect(rl,rt,rr,rb);
+
       if column.Field.AsBoolean=true then
         style:=dfcs_checked
         else style:=dfcs_buttoncheck;
-      DrawFrameControl(TDBGrid(Sender).Canvas.Handle,Rect1, DFC_BUTTON, style);
+      DrawFrameControl(TDBGrid(Sender).Canvas.Handle, Rect1, DFC_BUTTON, style);
     end;
   //-------------RATES-------------//
-  if column.FieldName='Score' then
+  if (column.FieldName='Score') or (column.FieldName='Relevation') then
     begin
-      TDBGrid(sender).Canvas.pen.Color:=TDBGrid(sender).Canvas.Brush.Color;
+      //TDBGrid(sender).Canvas.pen.Color:=TDBGrid(sender).Canvas.Brush.Color;
       TDBGrid(sender).Canvas.Rectangle(rect2);
       if N5.Checked then
         begin
@@ -1634,7 +1934,7 @@ if gdselected in state then
       //rect1:=rect(rect2.Left,rect2.Top,rr,rect2.Bottom);
           TDBGrid(sender).Canvas.Rectangle(rect2.Left,rect2.Top,rr,rect2.Bottom);
         end;
-      if N6.Checked then
+      if N6.Checked or N11.Checked then
         begin
            TDBGrid(sender).Canvas.Brush.Style:=bsClear;
            TDBGrid(sender).Canvas.TextOut(rect2.Left+20,rect2.Top+3,column.Field.AsString);
@@ -1657,7 +1957,7 @@ begin
         begin
           Style:=psOwnerDraw;
           Dpot.Visible:=true;
-          Dpot.Max:=DM2.selectsel.RecordCount * 6;
+          Dpot.Max:=DM2.selectedCount.fields[0].AsInteger * 6;
           Dpot.Position:=strtoint(seAndCor.potcount);
         end;
       end;
@@ -1675,7 +1975,10 @@ end;
 procedure TForm1.N11Click(Sender: TObject);
 begin
     grid.Columns[3].Title.Caption:='Релев.';
-    grid.Columns[3].FieldName:='seeked';
+    grid.Columns[3].FieldName:='Relevation';
+    if n5.Checked then n5.Click;
+    if n6.Checked=false then n6.Click;
+    Grid.Repaint;
 end;
 
 procedure TForm1.N12Click(Sender: TObject);
@@ -1685,32 +1988,28 @@ begin
   fill4Status;
 end;
 
-procedure TForm1.N13Click(Sender: TObject);
-begin
-    grid.Columns[3].Title.Caption:='оценка';
-    grid.Columns[3].FieldName:='score';
-end;
+
 
 procedure TForm1.N1Click(Sender: TObject);
 var quest:PWideChar; param:string;
 begin
 if n13.Checked then
-begin
-   quest:='Вы действительно хотите обнулить все оценки?';
-   param:='score';
-end
-
+  begin
+     quest:='Вы действительно хотите обнулить все оценки?';
+     param:='score';
+  end
 else
-begin
-   quest:='Вы действительно хотите обнулить релевантность?' ;
-   param:='seeked';
-end;
-DM2.droprate.CommandText:='UPDATE Dict SET '+param+'=0 WHERE usersel=true';
+  begin
+     quest:='Вы действительно хотите обнулить релевантность?' ;
+     param:='relevation';
+  end;
+DM2.droprate.CommandText.Add('UPDATE Dict SET '+param+'=0 WHERE usersel=true');
 
 if Application.MessageBox(quest,'Внимание',MB_YESNO+MB_ICONEXCLAMATION+MB_TASKMODAL)=IDYES then
      begin
       DM2.droprate.Execute;
-      DM2.Dict.Refresh;
+      //DM2.Dict.Refresh;
+      baserefresh;
      end;
 end;
 
@@ -1719,7 +2018,7 @@ begin
   if ColorDialog1.Execute then
   begin
     color_scale:=colorDialog1.color;
-    ShScaleColor.brush.color:=colorDialog1.color;
+    ChScaleColor.brush.color:=colorDialog1.color;
     Grid.Repaint;
   end;
 end;
@@ -1727,6 +2026,8 @@ end;
 procedure TForm1.N5Click(Sender: TObject);
 begin
   ChShowScale.Checked:=n5.Checked;
+
+  n13active;
   Grid.Repaint;
 end;
 
@@ -1736,13 +2037,13 @@ with DM2.Dict do
 begin
   if n13.Checked then
     begin
-      if Sort='Score ASC' then IndexName:='Score DESC'
-      else IndexName:='Score ASC';
+      if IndexName='ScoreInd' then IndexName:='ScoreIndD'
+      else IndexName:='ScoreInd';
     end
   else
   begin
-     if IndexName='Relevation ASC' then IndexName:='Relevation DESC'
-      else IndexName:='Relevation ASC';
+     if IndexName='RelInd' then IndexName:='RelIndD'
+      else IndexName:='RelInd';
   end;
   First;
 end;
@@ -1772,6 +2073,19 @@ end;
 procedure TForm1.N6Click(Sender: TObject);
 begin
   ChShowNumber.Checked:=n6.Checked;
+  n13active;
+  
   Grid.Repaint;
 end;
+
+procedure tform1.N13active;
+begin
+    if n13.Checked=false then
+  begin
+    n13.Checked:=true;
+    grid.Columns[3].Title.Caption:='оценка';
+    grid.Columns[3].FieldName:='score';
+  end;
+end;
+
 end.

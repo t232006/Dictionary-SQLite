@@ -1,0 +1,12 @@
+unit LogoThread;
+
+interface
+uses Classes;
+type
+TLogoThread=Class(TThread)
+
+End;
+
+implementation
+
+end.
