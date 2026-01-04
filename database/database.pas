@@ -93,6 +93,7 @@ begin
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
   Form1.StBar.panels[0].Text:='Всего слов: '+ GetRecordCount;
+  form1.test.recreate:=true;
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;

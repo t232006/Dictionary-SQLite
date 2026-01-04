@@ -1,30 +1,31 @@
 object datamodule2: Tdatamodule2
-  Height = 455
-  Width = 637
+  Height = 683
+  Width = 956
+  PixelsPerInch = 144
   object dspotential: TDataSource
     DataSet = potential
-    Left = 360
-    Top = 24
+    Left = 540
+    Top = 36
   end
   object dsselectsel: TDataSource
     DataSet = selectsel
-    Left = 440
-    Top = 344
+    Left = 660
+    Top = 516
   end
   object dstopic: TDataSource
     DataSet = Topic
-    Left = 472
-    Top = 96
+    Left = 708
+    Top = 144
   end
   object dsdict: TDataSource
     DataSet = Dict
-    Left = 560
-    Top = 96
+    Left = 840
+    Top = 144
   end
   object dssynch: TDataSource
     DataSet = synch
-    Left = 99
-    Top = 172
+    Left = 149
+    Top = 258
   end
   object synchConn: TFDConnection
     Params.Strings = (
@@ -33,8 +34,8 @@ object datamodule2: Tdatamodule2
     FormatOptions.ADOCompatibility = True
     Connected = True
     LoginPrompt = False
-    Left = 40
-    Top = 24
+    Left = 60
+    Top = 36
   end
   object synch: TFDQuery
     BeforeOpen = synchBeforeOpen
@@ -50,13 +51,13 @@ object datamodule2: Tdatamodule2
         'where a.Word not in (select Word from TempDB.Dict) and a.Transla' +
         'tion not in (select Translation from TempDB.Dict)'
       '')
-    Left = 40
-    Top = 112
+    Left = 60
+    Top = 168
   end
   object synchAttachDetach: TFDCommand
     Connection = synchConn
-    Left = 56
-    Top = 264
+    Left = 84
+    Top = 396
   end
   object FDConnection: TFDConnection
     Params.Strings = (
@@ -66,8 +67,8 @@ object datamodule2: Tdatamodule2
         'onary.db')
     Connected = True
     LoginPrompt = False
-    Left = 536
-    Top = 24
+    Left = 804
+    Top = 36
   end
   object Top: TFDTable
     Active = True
@@ -79,8 +80,8 @@ object datamodule2: Tdatamodule2
     UpdateOptions.EnableUpdate = False
     UpdateOptions.CheckReadOnly = False
     TableName = 'topic'
-    Left = 512
-    Top = 160
+    Left = 768
+    Top = 240
   end
   object Topic: TFDQuery
     Active = True
@@ -90,34 +91,34 @@ object datamodule2: Tdatamodule2
       'from topic left join dict'
       'on dict.topic=topic.id'
       'group by id, name')
-    Left = 472
-    Top = 160
+    Left = 708
+    Top = 240
   end
   object Topicquery: TFDQuery
     Connection = FDConnection
     SQL.Strings = (
       'update Dict set usersel=true where')
-    Left = 376
-    Top = 184
+    Left = 564
+    Top = 276
   end
   object potential: TFDQuery
     Connection = FDConnection
     SQL.Strings = (
       'select sum(Score) as sumScore from Dict where usersel=true')
-    Left = 360
-    Top = 80
+    Left = 540
+    Top = 120
   end
   object dropspot: TFDQuery
     Connection = FDConnection
     SQL.Strings = (
       'update Dict set spot=false')
-    Left = 456
-    Top = 264
+    Left = 684
+    Top = 396
   end
   object addball: TFDQuery
     Connection = FDConnection
-    Left = 520
-    Top = 280
+    Left = 780
+    Top = 420
   end
   object selectsel: TFDQuery
     Connection = FDConnection
@@ -125,33 +126,33 @@ object datamodule2: Tdatamodule2
     FetchOptions.RecordCountMode = cmFetched
     SQL.Strings = (
       'select * from Dict where usersel=true')
-    Left = 448
-    Top = 392
+    Left = 672
+    Top = 588
   end
   object deepsearch: TFDCommand
     Connection = FDConnection
     CommandText.Strings = (
       '')
-    Left = 216
-    Top = 288
+    Left = 324
+    Top = 432
   end
   object dropch: TFDCommand
     Connection = FDConnection
     CommandText.Strings = (
       'UPDATE Dict'
       'SET usersel=false')
-    Left = 200
-    Top = 368
+    Left = 300
+    Top = 552
   end
   object droprate: TFDCommand
     Connection = FDConnection
-    Left = 264
-    Top = 368
+    Left = 396
+    Top = 552
   end
   object dsTop: TDataSource
     DataSet = Top
-    Left = 520
-    Top = 104
+    Left = 780
+    Top = 156
   end
   object Dict: TFDQuery
     Active = True
@@ -258,8 +259,8 @@ object datamodule2: Tdatamodule2
         'Select Number, Word, Translation, Topic, DateRec, Relevation, Sc' +
         'ore, Usersel, Spot, Phrase, Name as TopicName'
       'from Dict inner join Topic on Dict.Topic=Topic.ID')
-    Left = 560
-    Top = 168
+    Left = 840
+    Top = 252
     object DictNumber: TFDAutoIncField
       FieldName = 'Number'
       Origin = 'Number'
@@ -321,23 +322,23 @@ object datamodule2: Tdatamodule2
     Connection = synchConn
     SQL.Strings = (
       'select * from Dict where spot=true')
-    Left = 216
-    Top = 160
+    Left = 324
+    Top = 240
   end
   object recordCount: TFDQuery
     Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select count(*) from Dict')
-    Left = 512
-    Top = 344
+    Left = 768
+    Top = 516
   end
   object SelectedCount: TFDQuery
     Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select count(*) from Dict where usersel=true')
-    Left = 568
-    Top = 376
+    Left = 852
+    Top = 564
   end
 end

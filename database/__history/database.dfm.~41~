@@ -74,15 +74,16 @@ object datamodule2: Tdatamodule2
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckReadOnly]
     UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
+    UpdateOptions.CheckReadOnly = False
     TableName = 'topic'
     Left = 512
     Top = 160
   end
   object Topic: TFDQuery
+    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select topic.id, topic.name, count(dict.topic)'
@@ -119,8 +120,9 @@ object datamodule2: Tdatamodule2
     Top = 280
   end
   object selectsel: TFDQuery
-    AfterOpen = selectselAfterOpen
     Connection = FDConnection
+    FetchOptions.AssignedValues = [evMode, evRecordCountMode]
+    FetchOptions.RecordCountMode = cmFetched
     SQL.Strings = (
       'select * from Dict where usersel=true')
     Left = 448
@@ -129,20 +131,7 @@ object datamodule2: Tdatamodule2
   object deepsearch: TFDCommand
     Connection = FDConnection
     CommandText.Strings = (
-      'UPDATE Dict set spot=true where :field like :needle ')
-    ParamData = <
-      item
-        Name = 'FIELD'
-        DataType = ftString
-        ParamType = ptInput
-        Value = 'Translation'
-      end
-      item
-        Name = 'NEEDLE'
-        DataType = ftString
-        ParamType = ptInput
-        Value = 'on'
-      end>
+      '')
     Left = 216
     Top = 288
   end
@@ -165,7 +154,9 @@ object datamodule2: Tdatamodule2
     Top = 104
   end
   object Dict: TFDQuery
+    Active = True
     AfterInsert = Dict1AfterInsert
+    AfterEdit = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
     Filtered = True
     Indexes = <
@@ -255,8 +246,7 @@ object datamodule2: Tdatamodule2
       'Number;Word;Translation;Topic;Usersel;DateRec;Phrase;Relevation;' +
       'Score;Spot;TopicName'
     Connection = FDConnection
-    FetchOptions.AssignedValues = [evRecordCountMode]
-    FetchOptions.RecordCountMode = cmTotal
+    FetchOptions.AssignedValues = [evMode]
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate, uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -267,8 +257,7 @@ object datamodule2: Tdatamodule2
       
         'Select Number, Word, Translation, Topic, DateRec, Relevation, Sc' +
         'ore, Usersel, Spot, Phrase, Name as TopicName'
-      'from Dict inner join Topic on Dict.Topic=Topic.ID'
-      'where spot=true')
+      'from Dict inner join Topic on Dict.Topic=Topic.ID')
     Left = 560
     Top = 168
     object DictNumber: TFDAutoIncField
@@ -334,5 +323,21 @@ object datamodule2: Tdatamodule2
       'select * from Dict where spot=true')
     Left = 216
     Top = 160
+  end
+  object recordCount: TFDQuery
+    Active = True
+    Connection = FDConnection
+    SQL.Strings = (
+      'select count(*) from Dict')
+    Left = 512
+    Top = 344
+  end
+  object SelectedCount: TFDQuery
+    Active = True
+    Connection = FDConnection
+    SQL.Strings = (
+      'select count(*) from Dict where usersel=true')
+    Left = 568
+    Top = 376
   end
 end
