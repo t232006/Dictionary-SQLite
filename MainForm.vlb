@@ -438,7 +438,7 @@ Coordinates=1473,502,64,58
 Coordinates=131,502,53,58
 
 []
-Coordinates=297,386,49,58
+Coordinates=1080,232,55,58
 
 [StBar]
 Coordinates=792,298,49,58
@@ -461,26 +461,17 @@ Coordinates=178,874,114,58
 [pb]
 Coordinates=617,241,40,36
 
-[left4]
-Coordinates=474,874,49,58
-
 [SaveDlg]
 Coordinates=73,666,63,36
 
 [numbers2.Label19]
 Coordinates=947,164,121,58
 
-[right2]
-Coordinates=0,816,49,58
-
 [numbers1.Label16]
 Coordinates=1151,970,121,58
 
 [GridPanel1]
 Coordinates=947,869,79,58
-
-[left1]
-Coordinates=284,734,49,58
 
 [selspot]
 Coordinates=700,579,114,58
@@ -548,12 +539,6 @@ Coordinates=0,0,114,102
 [datamodule2.dsselectsel]
 Coordinates=1597,188,156,36
 
-[right1]
-Coordinates=1063,1,49,58
-
-[Label24]
-Coordinates=859,87,60,58
-
 [Panel6]
 Coordinates=278,459,55,58
 
@@ -596,9 +581,6 @@ Coordinates=1080,78,64,58
 [N10]
 Coordinates=947,588,40,36
 
-[right3]
-Coordinates=876,970,49,58
-
 [ProgressBar]
 Coordinates=700,375,86,58
 
@@ -629,9 +611,6 @@ Coordinates=521,78,94,58
 [datamodule2.potential]
 Coordinates=1201,807,142,58
 
-[left5]
-Coordinates=1063,946,49,58
-
 [HelpLbl]
 Coordinates=1063,869,58,58
 
@@ -656,17 +635,8 @@ Coordinates=185,970,40,36
 [datamodule2.Topicquery]
 Coordinates=1597,111,156,58
 
-[left2]
-Coordinates=1063,715,49,58
-
-[Panel2]
-Coordinates=1080,232,55,58
-
 [N9]
 Coordinates=136,970,40,36
-
-[left6]
-Coordinates=50,874,49,58
 
 [ShCardColor]
 Coordinates=37,980,89,36
@@ -701,14 +671,8 @@ Coordinates=592,874,77,58
 [Panel5]
 Coordinates=388,598,55,58
 
-[left3]
-Coordinates=758,970,49,58
-
 [numbers2]
 Coordinates=1497,1035,71,36
-
-[Label25]
-Coordinates=689,970,60,58
 
 [sg]
 Coordinates=651,78,40,58
@@ -733,9 +697,6 @@ Coordinates=1696,761,103,36
 
 [datamodule2.Topic]
 Coordinates=1280,232,124,58
-
-[right4]
-Coordinates=859,761,49,58
 
 [DBText1]
 Coordinates=109,874,64,58
@@ -788,14 +749,8 @@ Coordinates=1310,724,40,36
 [Label34]
 Coordinates=994,970,60,58
 
-[right6]
-Coordinates=219,459,49,58
-
 [SpBut8]
 Coordinates=1201,197,57,36
-
-[right5]
-Coordinates=297,155,49,58
 
 [N11]
 Coordinates=1310,1038,40,36

@@ -103,18 +103,6 @@ type
     N7: TMenuItem;
     sg: TStringGrid;
     pb: TPaintBox;
-    left1: TLabel;
-    left2: TLabel;
-    left3: TLabel;
-    left4: TLabel;
-    left5: TLabel;
-    left6: TLabel;
-    right1: TLabel;
-    right2: TLabel;
-    right3: TLabel;
-    right4: TLabel;
-    right5: TLabel;
-    right6: TLabel;
     nexttack: TAction;
     StaticText3: TStaticText;
     Memo2: TMemo;
@@ -186,15 +174,16 @@ type
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
     ChShowScore: TCheckBox;
-    Panel2: TPanel;
-    Label24: TLabel;
-    Label25: TLabel;
     SaveDlg: TSaveDialog;
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
     numbers1: Tnumbers;
     numbers2: Tnumbers;
+    numbers3: Tnumbers;
+    numbers4: Tnumbers;
+    Label24: TLabel;
+    Label25: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -314,6 +303,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseLeave(Sender: TObject);
     procedure LBClick(Sender: TObject);
     procedure HelpLblClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     PopupListBox: TListBox;
     constructor Create(AOwner: TComponent); override;
@@ -856,14 +846,14 @@ begin
 
     if na>6 then
       begin
-      if left1.Visible then //2nd colunm and 1st selection
+      if numbers3.Visible then //2nd colunm and 1st selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
         end;
       na:=memonumber(Tmemo(sender).Name)-6;
       end else
-      if not(left1.Visible) then //1st colunt and 2nd selection
+      if not(numbers3.Visible) then //1st colunt and 2nd selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
@@ -1357,7 +1347,7 @@ try
     case ord(key) of
       49..54:
       begin
-        if left1.Visible then
+        if numbers3.Visible then
           mem:=(FindComponent('m'+key) as tmemo) else
           mem:=(FindComponent('m'+inttostr(strtoint(key)+6)) as tmemo);
         if mem.Tag<>clmoneygreen then
@@ -1365,7 +1355,7 @@ try
           rectt(clmoneygreen,mem);
           with conteiner do
           begin
-              if left1.visible then
+              if numbers3.visible then
               leftnum:=memonumber(mem.Name) else
               rightnum:=memonumber(mem.Name);
           end;
@@ -1374,10 +1364,10 @@ try
           rectt(pb.color, mem);
           with conteiner do
           begin
-            if left1.Visible then leftnum:=0 else rightnum:=0;
+            if numbers3.Visible then leftnum:=0 else rightnum:=0;
           end;
         end;
-        if not(left1.Visible) then
+        if not(numbers3.Visible) then
         radiorect(7,mem) else
         radiorect(1,mem);
         charr:=chr(9);
@@ -1385,25 +1375,21 @@ try
       end;
       9:  //selects columns by bevel
       begin
-        if not(left1.Visible) then
-        begin
-          for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=true;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=false;
-            end ;
-        end else
-            for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=false;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=true;
-            end;
+        if not(numbers3.Visible) then
+          begin
+            numbers3.visible:=true;
+            numbers4.visible:=false;
+          end else
+          begin
+             numbers4.visible:=true;
+             numbers3.visible:=false;
+          end;
       end;
       13:
       begin
           with conteiner do
           begin
-            if left1.Visible then
+            if numbers3.Visible then
                 m7DragDrop(findcomponent('m'+inttostr(rightnum)),findcomponent('m'+inttostr(leftnum)),0,0)
           else  m1DragDrop(findcomponent('m'+inttostr(leftnum)),findcomponent('m'+inttostr(rightnum)),0,0);
           rightnum:=0; leftnum:=0;
@@ -1793,6 +1779,23 @@ begin
      StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
      if stBar.Tag<>1 then Fill4Status;
    end;
+end;
+
+procedure TForm1.FormResize(Sender: TObject);
+var memoHeight: word;  curMemo: TMemo;
+    i,j:byte;
+begin
+//if ClientHeight < 100 then Exit; // минимальная защита
+  MemoHeight := (ClientHeight - 200) div 6; // 20 — суммарные отступы/промежутки
+  for j := 0 to 1 do
+    for i := 1 to 6 do
+    begin
+      curmemo:=FindComponent('m'+inttostr(i+6*j)) as TMemo;
+      curmemo.Height := MemoHeight; // предполагаем Memo1..Memo5
+      curmemo.Top := 10 + i * (MemoHeight + 10); // 10 — отступ сверху, 5 — промежуток
+    end;
+  numbers3.Height:=MemoHeight*6+50;
+  numbers4.Height:=numbers3.Height;
 end;
 
 procedure TForm1.SpeedButton10Click(Sender: TObject);
