@@ -1,4 +1,4 @@
-﻿unit MainForm;
+unit MainForm;
 
 interface
 
@@ -103,18 +103,6 @@ type
     N7: TMenuItem;
     sg: TStringGrid;
     pb: TPaintBox;
-    left1: TLabel;
-    left2: TLabel;
-    left3: TLabel;
-    left4: TLabel;
-    left5: TLabel;
-    left6: TLabel;
-    right1: TLabel;
-    right2: TLabel;
-    right3: TLabel;
-    right4: TLabel;
-    right5: TLabel;
-    right6: TLabel;
     nexttack: TAction;
     StaticText3: TStaticText;
     Memo2: TMemo;
@@ -171,7 +159,6 @@ type
     cardActivate: TCheckBox;
     DBText1: TDBText;
     deepbut: TSpeedButton;
-    lb: TLabel;
     rg: TRadioGroup;
     search: TLabeledEdit;
     selspot: TCheckBox;
@@ -187,15 +174,16 @@ type
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
     ChShowScore: TCheckBox;
-    Panel2: TPanel;
-    Label24: TLabel;
-    Label25: TLabel;
     SaveDlg: TSaveDialog;
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
     numbers1: Tnumbers;
     numbers2: Tnumbers;
+    numbers3: Tnumbers;
+    numbers4: Tnumbers;
+    Label24: TLabel;
+    Label25: TLabel;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -315,6 +303,7 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseLeave(Sender: TObject);
     procedure LBClick(Sender: TObject);
     procedure HelpLblClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     PopupListBox: TListBox;
     constructor Create(AOwner: TComponent); override;
@@ -331,6 +320,11 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
+    test:TTest;
+    YesNo:TYesNo;
+    poBukv:TPoBukvam;
+    cards:Tcards;
+    complience:TComplience;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -355,14 +349,8 @@ var
   CloudSave: TSaveThread;
   CloudLoad: TLoadThread;
   CloudRead: TReadThread;
-
-
-  YesNo:TYesNo;
-  poBukv:TPoBukvam;
-  test:TTest;
-  complience:TComplience;
   seAndCor:Tgrademanipulation;
-  cards:Tcards;
+
   //recreate:boolean;
   //isOdd:boolean;
 
@@ -464,12 +452,15 @@ begin
       startTimer(disconnect);
       cloudTimer.Enabled:=true;
       CloudLoad:=TLoadThread.Create(true);
-      CloudLoad.DBDir:=WhereTo;
+      CloudLoad.DBDir:='"'+WhereTo+'"';
       CloudLoad.ID:=FilesID[PopupListBox.ItemIndex];
       CloudLoad.Priority:=tpNormal;
       CloudLoad.FreeOnTerminate:=false;
-      {if disconnect and fileExists(WhereTo) then
-        deletefile(whereto);}
+      if disconnect and fileExists(WhereTo) then
+      begin
+        DM2.FDConnection.Connected:=false;
+        deletefile(whereto);
+      end;
       CloudLoad.Start;
 end;
 begin
@@ -487,8 +478,7 @@ if mr=mrNo then
 if mr=mrYes then
     begin
           LoadFiles(true, baseFolder.Caption);
-          StBar.panels[0].Text:='Всего слов: '+inttostr(Dm2.Dict.RecordCount);
-          Saver.startExercises;
+          
     end;
 end;
 
@@ -612,7 +602,7 @@ begin
     startTimer(true);
     cloudTimer.Enabled:=true;
     CloudSave:=TSaveThread.Create(true);
-    CloudSave.DBDir:=baseFolder.Caption;
+    CloudSave.DBDir:='"'+baseFolder.Caption+'"';
     CloudSave.Priority:=tpNormal;
     CloudSave.FreeOnTerminate:=false;
     CloudSave.Start;
@@ -699,7 +689,6 @@ procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
 
 begin
-
   case  PageControl1.ActivePageIndex of
   1:
   begin
@@ -721,16 +710,16 @@ begin
   end;
   3:
   begin
-  if Test.recreate then
+  if PoBukv.recreate then
       begin
         poBukv.Free;
-        poBukv:=TPoBukvam.create;
+        poBukv:=TPoBukvam.create(1);
       end;
       InitPobukvam;
   end;
   4:
   begin
-  if Test.recreate then
+  if complience.recreate then
       begin
         complience.Free;
         complience:= Tcomplience.Create(6);
@@ -749,7 +738,7 @@ begin
   end;
   5:
   begin
-  if Test.recreate then
+  if yesNo.recreate then
       begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
@@ -772,7 +761,7 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-      if Test.recreate then
+      if cards.recreate then
       begin
         cards.Free;
         cards:=Tcards.create(t1);
@@ -854,14 +843,14 @@ begin
 
     if na>6 then
       begin
-      if left1.Visible then //2nd colunm and 1st selection
+      if numbers3.Visible then //2nd colunm and 1st selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
         end;
       na:=memonumber(Tmemo(sender).Name)-6;
       end else
-      if not(left1.Visible) then //1st colunt and 2nd selection
+      if not(numbers3.Visible) then //1st colunt and 2nd selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
@@ -1219,20 +1208,20 @@ begin
   begin
     DM2.Dict.Filter:='usersel=true';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clblue;
     lb.Caption:='операция И';
     //Image1.Visible:=true;
-    //Image2.Visible:=false;
+    //Image2.Visible:=false; }
   end else
   begin
     DM2.Dict.Filter:='';
     rgClick(sender);
-    lb.Visible:=true;
+    {lb.Visible:=true;
     lb.Font.Color:=clMaroon;
     lb.Caption:='операция ИЛИ';
     //Image2.Visible:=true;
-    //Image1.Visible:=false;
+    //Image1.Visible:=false; }
 
   end;
   DM2.Dict.Filter:=filtr;
@@ -1284,15 +1273,11 @@ end;
 
 procedure TForm1.Action3Execute(Sender: TObject);
 begin
-  with DM2.selectsel do
-  begin
-    Open;// ExecSQL;
-    //Refresh;
-    active:=false; active:=true; //don't know why, but works
-    StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
+
+    StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
     seAndCor.calcprogress;
     Fill4Status;
-  end;
+
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -1359,7 +1344,7 @@ try
     case ord(key) of
       49..54:
       begin
-        if left1.Visible then
+        if numbers3.Visible then
           mem:=(FindComponent('m'+key) as tmemo) else
           mem:=(FindComponent('m'+inttostr(strtoint(key)+6)) as tmemo);
         if mem.Tag<>clmoneygreen then
@@ -1367,7 +1352,7 @@ try
           rectt(clmoneygreen,mem);
           with conteiner do
           begin
-              if left1.visible then
+              if numbers3.visible then
               leftnum:=memonumber(mem.Name) else
               rightnum:=memonumber(mem.Name);
           end;
@@ -1376,10 +1361,10 @@ try
           rectt(pb.color, mem);
           with conteiner do
           begin
-            if left1.Visible then leftnum:=0 else rightnum:=0;
+            if numbers3.Visible then leftnum:=0 else rightnum:=0;
           end;
         end;
-        if not(left1.Visible) then
+        if not(numbers3.Visible) then
         radiorect(7,mem) else
         radiorect(1,mem);
         charr:=chr(9);
@@ -1387,25 +1372,21 @@ try
       end;
       9:  //selects columns by bevel
       begin
-        if not(left1.Visible) then
-        begin
-          for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=true;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=false;
-            end ;
-        end else
-            for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=false;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=true;
-            end;
+        if not(numbers3.Visible) then
+          begin
+            numbers3.visible:=true;
+            numbers4.visible:=false;
+          end else
+          begin
+             numbers4.visible:=true;
+             numbers3.visible:=false;
+          end;
       end;
       13:
       begin
           with conteiner do
           begin
-            if left1.Visible then
+            if numbers3.Visible then
                 m7DragDrop(findcomponent('m'+inttostr(rightnum)),findcomponent('m'+inttostr(leftnum)),0,0)
           else  m1DragDrop(findcomponent('m'+inttostr(leftnum)),findcomponent('m'+inttostr(rightnum)),0,0);
           rightnum:=0; leftnum:=0;
@@ -1604,6 +1585,13 @@ begin
   cloudProgr.Position:=cloudProgr.Max;
   cloudProgr.Tag:=1;  //normal finish
   //cloudProgr.Max:=0;
+  try
+
+  StBar.panels[0].Text:='Всего слов: '+Dm2.GetRecordCount;
+  Saver.startExercises;
+  finally
+
+  end;
 end;
 
 procedure TForm1.cloudTimerTimer(Sender: TObject);
@@ -1779,12 +1767,32 @@ begin
      try
      StBar.panels[0].Text:='Найдено новых слов: '+inttostr(DM2.synch.RecordCount);
      except end;
-     StBar.panels[1].Text:='Выделено слов: '+inttostr(DBGrid2.SelectedRows.Count);
+     StBar.panels[1].Text:='Выделено слов: '+dm2.GetSelectedCount;
    end else
    begin
-     StBar.Panels[1].text:='Выделено слов: '+ inttostr(DM2.selectsel.RecordCount);
+      try
+        StBar.panels[0].Text:='Всего слов: '+dm2.GetRecordCount;
+      except end;
+     StBar.Panels[1].text:='Выделено слов: '+ dm2.GetSelectedCount;
      if stBar.Tag<>1 then Fill4Status;
    end;
+end;
+
+procedure TForm1.FormResize(Sender: TObject);
+var memoHeight: word;  curMemo: TMemo;
+    i,j:byte;
+begin
+//if ClientHeight < 100 then Exit; // минимальная защита
+  MemoHeight := (ClientHeight - 200) div 6; // 20 — суммарные отступы/промежутки
+  for j := 0 to 1 do
+    for i := 1 to 6 do
+    begin
+      curmemo:=FindComponent('m'+inttostr(i+6*j)) as TMemo;
+      curmemo.Height := MemoHeight; // предполагаем Memo1..Memo5
+      curmemo.Top := 10 + i * (MemoHeight + 10); // 10 — отступ сверху, 5 — промежуток
+    end;
+  numbers3.Height:=MemoHeight*6+50;
+  numbers4.Height:=numbers3.Height;
 end;
 
 procedure TForm1.SpeedButton10Click(Sender: TObject);
@@ -1949,7 +1957,7 @@ begin
         begin
           Style:=psOwnerDraw;
           Dpot.Visible:=true;
-          Dpot.Max:=DM2.selectsel.RecordCount * 6;
+          Dpot.Max:=DM2.selectedCount.fields[0].AsInteger * 6;
           Dpot.Position:=strtoint(seAndCor.potcount);
         end;
       end;

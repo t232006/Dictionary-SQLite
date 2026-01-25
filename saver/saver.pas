@@ -19,25 +19,45 @@ uses MainForm, Database, basemanipulation, logo;
 procedure finishExercises;
 begin
     form1.test.Destroy;
-    poBukv.Destroy;
-    complience.Destroy;
-    YesNo.Destroy;
-    cards.Destroy;
+    form1.poBukv.Destroy;
+    form1.complience.Destroy;
+    form1.YesNo.Destroy;
+    form1.cards.Destroy;
 end;
 
 procedure startExercises;
 var h:hwnd;
 begin
       h:=GetForegroundWindow;
-      form1.test:=TTest.create(6);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      poBukv:=TPoBukvam.create;
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      complience:= Tcomplience.Create(6);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      YesNo:=TYesNo.Create(1);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      cards:=Tcards.create(12);
+      if DM2.selectsel.RecordCount>=6 then
+      begin
+        form1.test:=TTest.create(6);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.complience:= Tcomplience.Create(6);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end else
+      begin
+         form1.test:=TTest.create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.complience:= Tcomplience.Create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end;
+      if DM2.selectsel.RecordCount>=1 then
+      begin
+        form1.poBukv:=TPoBukvam.create(1);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.YesNo:=TYesNo.Create(1);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end else
+      begin
+         form1.poBukv:=TPoBukvam.create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.YesNo:=TYesNo.Create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end;
+      if DM2.selectsel.RecordCount>=12 then
+        form1.cards:=Tcards.create(12) else
+        form1.cards:=Tcards.create(0);
       SendMessage(h, MSG_PROGRESS, 0, 20);
 end;
 

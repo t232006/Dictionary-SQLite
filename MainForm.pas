@@ -321,6 +321,10 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     color_scale:TColor;
     LogoForm: TLogoForm;
     test:TTest;
+    YesNo:TYesNo;
+    poBukv:TPoBukvam;
+    cards:Tcards;
+    complience:TComplience;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
@@ -345,14 +349,8 @@ var
   CloudSave: TSaveThread;
   CloudLoad: TLoadThread;
   CloudRead: TReadThread;
-
-
-  YesNo:TYesNo;
-  poBukv:TPoBukvam;
-
-  complience:TComplience;
   seAndCor:Tgrademanipulation;
-  cards:Tcards;
+
   //recreate:boolean;
   //isOdd:boolean;
 
@@ -691,7 +689,6 @@ procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
 
 begin
-
   case  PageControl1.ActivePageIndex of
   1:
   begin
@@ -713,16 +710,16 @@ begin
   end;
   3:
   begin
-  if Test.recreate then
+  if PoBukv.recreate then
       begin
         poBukv.Free;
-        poBukv:=TPoBukvam.create;
+        poBukv:=TPoBukvam.create(1);
       end;
       InitPobukvam;
   end;
   4:
   begin
-  if Test.recreate then
+  if complience.recreate then
       begin
         complience.Free;
         complience:= Tcomplience.Create(6);
@@ -741,7 +738,7 @@ begin
   end;
   5:
   begin
-  if Test.recreate then
+  if yesNo.recreate then
       begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
@@ -764,7 +761,7 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-      if Test.recreate then
+      if cards.recreate then
       begin
         cards.Free;
         cards:=Tcards.create(t1);

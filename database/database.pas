@@ -94,6 +94,9 @@ begin
     form1.PagesBlock(false);
   Form1.StBar.panels[0].Text:='Всего слов: '+ GetRecordCount;
   form1.test.recreate:=true;
+  form1.YesNo.recreate:=true;
+  form1.poBukv.recreate:=true;
+  form1.cards.recreate:=true;
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
