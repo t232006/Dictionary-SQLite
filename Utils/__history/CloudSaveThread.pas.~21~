@@ -2,7 +2,7 @@ unit CloudSaveThread;
 
 interface
 uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows, messages,
-ShlObj, IOUtils, dialogs;
+ShlObj;
 const CANCEL_CLOUD = WM_USER+110;
        CONTINUE_CLOUD = WM_USER+120;
 
@@ -116,12 +116,9 @@ var cmd: TCmd;
     FilesList: TFilesList;
     TempList: TStringList;
 begin
-  SetCurrentDir(GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary');
-  //showmessage('ghbafwe');
-  TFile.AppendAllText('log.txt', s);
+  SetCurrentDir(ExtractFilePath(ParamStr(0)));
   cmd:=Tcmd.Create(GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\fileListfromdrive.exe', command);
   s:= cmd.CmdScreen;
-  //TFile.AppendAllText('log.txt', s);
 
     _FileIDs:=TStringList.Create;
   _FileNames:=TStringList.Create;

@@ -19,11 +19,11 @@
     <Transaction>1899.12.30 00:00:00.000.953,Z:\Программирование\repos\Dictionary-SQLite\CloudSaveThread.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.784,=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.600,G:\some folder\indDictionary\Dictionary-SQLite\forms\ExcelForm.pas=G:\some folder\indDictionary\Dictionary-SQLite\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.271,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.138,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.600,G:\some folder\indDictionary\Dictionary-SQLite\forms\ExcelForm.dfm=G:\some folder\indDictionary\Dictionary-SQLite\Unit2.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.806,=G:\some folder\indDictionary\Dictionary-SQLite\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.290,G:\some folder\indDictionary\Dictionary-SQLite\Utils\BusyCheckerThread.pas=G:\some folder\indDictionary\Dictionary-SQLite\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.811,Z:\Программирование\repos\Dictionary-SQLite\forms\Logo.pas=Z:\Программирование\repos\Dictionary-SQLite\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.138,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.271,=Z:\Программирование\repos\Dictionary-SQLite\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

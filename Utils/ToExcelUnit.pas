@@ -1,9 +1,10 @@
 unit ToExcelUnit;
 
 interface
-uses comobj, database, system.SysUtils, busyCheckerThread, winapi.Messages, strutils;
+uses comobj, database, system.SysUtils, busyCheckerThread, winapi.Messages,
+strutils, ShlObj, utilite;
 const
-  FILENAME='Inserter/InsertForm5.xlsx';
+  FILENAME='Inserter/InsertForm.xlsx';
   DBLOADLISTNAME='Inserter/FromExcel.db';
 type
 TExcelUnit=class
@@ -41,7 +42,15 @@ var j:word;
 begin
     busythread.Terminate;
     //busythread.free;
-    workbook:=excel.Workbooks.open(ExtractFilePath(ParamStr(0)) + FILENAME);
+    {$IFDEF DEBUG}
+      workbook:=excel.Workbooks.open(ExtractFilePath(ParamStr(0)) + FILENAME);
+    {$ENDIF}
+    {$IFDEF RELEASE}
+      workbook := GetSpecialPath(CSIDL_APPDATA)+'\'+FILENAME;
+    {$ENDIF}
+
+
+
     Worksheet := Workbook.Worksheets[1];
     j:=2; sTopic:=''; sDict:='';
     s:='select id from Topic where Name=''';

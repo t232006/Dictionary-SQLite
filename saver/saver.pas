@@ -81,7 +81,7 @@ begin
         result:=false;
         baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
         if not(FileExists(baseFolder.Caption)) then
-          baseFolder.Caption:=IniPath+'\dictionary.db';
+          baseFolder.Caption:=IniPath+'\db\dictionary.db';
 
         //if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
 
