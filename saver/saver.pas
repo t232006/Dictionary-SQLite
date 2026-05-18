@@ -15,6 +15,8 @@ uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
 
 implementation
 uses MainForm, Database, basemanipulation, logo;
+var  f:TIniFile;
+    IniPath: string;
 
 procedure finishExercises;
 begin
@@ -64,11 +66,10 @@ end;
 function loadForm: boolean;  //true - succsess
   var
     fk:byte;
-    f:TIniFile;
-    IniPath: string;
+
 begin
     {$IFDEF DEBUG}
-    IniPath := '';//GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
+    IniPath := ExtractFilePath(ParamStr(0));
     {$ENDIF}
     {$IFDEF RELEASE}
     IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
@@ -134,16 +135,11 @@ begin
 
       end;
     finally
-    f.Free;
     end;
 end;
 
 procedure saveForm;
-var f:TIniFile;
-    IniPath:string;
 begin
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
-    f:=TIniFile.Create(IniPath);
     try
     with form1 do
     begin
