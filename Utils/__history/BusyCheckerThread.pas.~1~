@@ -1,0 +1,74 @@
+unit BusyCheckerThread;
+
+interface
+
+uses
+  System.Classes, winapi.activeX, windows;
+
+type
+  IOleMessageFilter = class(TInterfacedObject, IMessageFilter)
+  public
+    function HandleInComingCall(dwCallType: Longint; htaskCaller: HTask;
+      dwTickCount: Longint; lpInterfaceInfo: PInterfaceInfo): Longint;stdcall;
+    function RetryRejectedCall(htaskCallee: HTask; dwTickCount: Longint;
+      dwRejectType: Longint): Longint;stdcall;
+    function MessagePending(htaskCallee: HTask; dwTickCount: Longint;
+      dwPendingType: Longint): Longint;stdcall;
+    procedure RegisterFilter();
+    procedure RevokeFilter();
+  end;
+  BusyChecker = class(TThread)
+  private
+    { Private declarations }
+  protected
+    procedure Execute; override;
+  end;
+
+implementation
+function IOleMessageFilter.HandleInComingCall(dwCallType: Longint;
+  htaskCaller: HTask; dwTickCount: Longint;
+  lpInterfaceInfo: PInterfaceInfo): Longint;
+begin
+
+end;
+
+function IOleMessageFilter.MessagePending(htaskCallee: HTask; dwTickCount, dwPendingType: Integer): Longint;
+begin
+  Result := 2 //PENDINGMSG_WAITDEFPROCESS
+end;
+
+procedure IOleMessageFilter.RegisterFilter;
+var
+  OldFilter: IMessageFilter;
+  NewFilter: IMessageFilter;
+begin
+  OldFilter := nil;
+  NewFilter := IOleMessageFilter.Create;
+  CoRegisterMessageFilter(NewFilter,OldFilter);
+end;
+
+function IOleMessageFilter.RetryRejectedCall(htaskCallee: HTask; dwTickCount, dwRejectType: Integer): Longint;
+begin
+  Result := -1;
+  if dwRejectType = 2 then
+    Result := 99;
+end;
+
+procedure IOleMessageFilter.RevokeFilter;
+var
+  OldFilter: IMessageFilter;
+  NewFilter: IMessageFilter;
+begin
+  OldFilter := nil;
+  NewFilter := nil;
+  CoRegisterMessageFilter(NewFilter,OldFilter);
+end;
+
+{ BusyChecker }
+
+procedure BusyChecker.Execute;
+begin
+  { Place thread code here }
+end;
+
+end.

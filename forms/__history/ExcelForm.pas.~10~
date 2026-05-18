@@ -1,0 +1,62 @@
+unit ExcelForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.OleCtnrs;
+const
+FILENAME='Inserter/InsertForm.xlsx';
+type
+  TInsertForm = class(TForm)
+    Container: TOleContainer;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InsertForm: TInsertForm;
+implementation
+uses MainForm;
+
+{$R *.dfm}
+
+function GetExcelAppSafe(Ole: TOleContainer): OleVariant;
+var
+  i: Integer;
+begin
+  for i := 1 to 10 do
+  begin
+    try
+      Application.ProcessMessages;
+
+      Result := Ole.OleObject.Application;
+      Exit;
+    except
+        Sleep(100);
+    end;
+  end;
+
+  raise Exception.Create('Excel не отвечает (RPC_E_CALL_REJECTED)');
+end;
+
+procedure TInsertForm.FormClose(Sender: TObject; var Action: TCloseAction);
+ var ExcelApp, Workbook: Variant;
+begin
+  //if container.OleObject = nil then Exit;
+  GetExcelAppSafe(container);
+  ExcelApp := container.OleObject.Application;
+  ExcelApp.DisplayAlerts := False;
+
+  Workbook := ExcelApp.ActiveWorkbook;
+
+  Workbook.SaveAs(FileName);
+
+  if form1.ef<>nil then form1.ef.FromExcel;
+  form1.ef.free;
+end;
+
+end.

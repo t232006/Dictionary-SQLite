@@ -184,6 +184,7 @@ type
     numbers4: Tnumbers;
     Label24: TLabel;
     Label25: TLabel;
+    SpeedButton8: TSpeedButton;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -240,7 +241,7 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure DBGrid2MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure rg3Click(Sender: TObject);
     procedure GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
@@ -304,8 +305,12 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBClick(Sender: TObject);
     procedure HelpLblClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure completeListLoader;
+    procedure Button5Click(Sender: TObject);
   private
     PopupListBox: TListBox;
+
     constructor Create(AOwner: TComponent); override;
     procedure YesNoContinue(b:boolean);
     procedure Keynottab (var msg:TCMDialogKey); message CM_DialogKey;
@@ -325,11 +330,13 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     poBukv:TPoBukvam;
     cards:Tcards;
     complience:TComplience;
+    ef: TExcelUnit;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
       RowBrushColor2:Tcolor;
     end;
+
   end;
   //procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
 
@@ -929,6 +936,11 @@ begin
   addneword.ShowModal;
 end;
 
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  dm2.synch.Close; dm2.synch.open;
+end;
+
 procedure TForm1.CancelCloud(var msg: TMessage);
 begin
    CloudProcButClick(Application);
@@ -1415,6 +1427,15 @@ end;
 
 
 
+procedure TForm1.completeListLoader;
+begin
+  ef.FromExcel;
+  ef.free;
+  PageControl1.ActivePageIndex:=8;
+  dm2.synch.Close;
+  dm2.synch.Open;
+end;
+
 constructor TForm1.Create(AOwner: TComponent);
 var LThread:TlogoThread;
 begin
@@ -1469,6 +1490,12 @@ begin
    end;
 
 
+end;
+
+procedure TForm1.SpeedButton8Click(Sender: TObject);
+begin
+  ef:=TExcelUnit.Create;
+  ef.FromExcelInit;
 end;
 
 procedure TForm1.deepbutClick(Sender: TObject);
@@ -1796,8 +1823,11 @@ begin
 end;
 
 procedure TForm1.SpeedButton10Click(Sender: TObject);
+var te:TExcelUnit;
 begin
-  toExcel;
+  te:=TExcelUnit.Create;
+  te.toExcel;
+  te.Destroy;
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);

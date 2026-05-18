@@ -1,0 +1,112 @@
+unit ToExcelUnit;
+
+interface
+uses comobj, database, ExcelForm, system.SysUtils, OleCtnrs;
+
+type
+TExcelUnit=class
+private
+  Excel, Workbook, Worksheet: variant;
+  const
+    DBNAME='Inserter/FromExcel.db';
+
+
+public
+  procedure ToExcel;
+  procedure FromExcelInit;
+  constructor Create;
+  procedure FromExcel;
+end;
+
+implementation
+
+constructor TExcelUnit.Create;
+begin
+   Excel:=createOLEobject('excel.application');
+  Workbook:=Excel.workbooks.add;
+  //Excel.visible:=true;
+  Worksheet:=Excel.workbooks[1].worksheets[1];
+
+  Worksheet.cells[1,2]:='слово';
+  Worksheet.cells[1,3]:='перевод';
+  Worksheet.cells[1,4]:='тема';
+  Worksheet.cells[1,5]:='дата';
+end;
+
+procedure TExcelUnit.FromExcel;
+var j:word;
+    sTopic, sDict, s:string;
+begin
+    workbook:=excel.Workbooks.open(ExtractFilePath(ParamStr(0)) + FILENAME);
+    Worksheet := Workbook.Worksheets[1];
+    j:=2; sTopic:=''; sDict:='';
+    s:='select id from TempDB.Topic where Name=';
+    with dm2 do
+    begin
+      synchConn.Params.Database:=DBNAME;
+      ///synch.open;
+      while worksheet.cells[j,2]<>'' do
+      begin
+         sTopic:=sTopic+string.Format('(%s),',[worksheet.cells[j,4]]);
+         sDict:=sDict+string.Format('(%s),(%s),(%s),',[
+          worksheet.cells[j,2],
+          worksheet.cells[j,3],
+          s+worksheet.cells[j,4]]);
+         delete(sTopic,length(STopic),1);
+         delete(sDict,length(sDict),1);
+         insertListtopic.CommandText.Insert(1,sTopic);
+         insertListDict.CommandText.Insert(1,sDict);
+         insertListTopic.Execute;
+         insertListDict.Execute;
+         inc(j);
+      end;
+    end;
+    workbook.close(false);
+    deletefile(FILENAME);
+end;
+
+procedure TExcelUnit.FromExcelInit;
+var  path:string;
+begin
+    Worksheet.columns[2].columnwidth:=30;
+  Worksheet.columns[3].columnwidth:=30;
+  Worksheet.columns[4].columnwidth:=25;
+  Worksheet.columns[5].columnwidth:=0;
+    path:=ExtractFilePath(ParamStr(0))+FileName;
+    Workbook.SaveAs(path);
+    Workbook.Close(false);
+    InsertForm.Container.CreateObjectFromFile(path, false);
+
+    InsertForm.Show;
+    InsertForm.Container.DoVerb(ovShow);
+    //
+end;
+
+procedure TExcelUnit.ToExcel;
+var ij:variant;
+begin
+   Worksheet.columns[2].columnwidth:=60;
+  Worksheet.columns[3].columnwidth:=60;
+  Worksheet.columns[4].columnwidth:=50;
+  Worksheet.columns[5].columnwidth:=40;
+  with DM2.Dict do
+  begin
+      //sh.name:=FieldByName('topic').AsString;
+      first;
+      ij:=2;
+      while not(eof) do
+      begin
+          Worksheet.cells[ij,2]:=FieldByName('word').AsString;
+          Worksheet.cells[ij,3]:=FieldByName('translation').AsString;
+          Worksheet.cells[ij,4]:=FieldByName('topic').AsString;
+          Worksheet.cells[ij,5]:=FieldByName('daterec').AsString;
+          next;
+          inc(ij);
+      end;
+
+  end;
+  excel.visible:=true;
+
+end;
+
+end.

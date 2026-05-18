@@ -20,7 +20,6 @@ type
     dssynch: TDataSource;
     synchConn: TFDConnection;
     synch: TFDQuery;
-    synchAttachDetach: TFDCommand;
     FDConnection: TFDConnection;
     Top: TFDTable;
     Topic: TFDQuery;
@@ -48,6 +47,9 @@ type
     FDQuery1: TFDQuery;
     recordCount: TFDQuery;
     SelectedCount: TFDQuery;
+    InsertListTopic: TFDCommand;
+    InsertListDict: TFDCommand;
+    synchAttachDetach: TFDQuery;
     function GetRecordCount:string;
     function GetSelectedCount:string;
     procedure vokabAfterRefresh(DataSet: TDataSet);
@@ -56,6 +58,7 @@ type
     procedure synchBeforeOpen(DataSet: TDataSet);
     procedure synchBeforeClose(DataSet: TDataSet);
     procedure Dict1AfterInsert(DataSet: TDataSet);
+    procedure CommandDoAndReset(command: TFDCommand; lastCommand:string);
   private
     { Private declarations }
   public
@@ -86,6 +89,21 @@ begin
     SelectedCount.open;
     result:=inttostr(SelectedCount.fields[0].asInteger);
 end;
+
+//=============   special for InsertList
+procedure Tdatamodule2.CommandDoAndReset(command: TFDCommand; lastCommand:string); //
+var s:string;
+begin
+   with command do
+      begin
+           CommandText[CommandText.Count-1]:=lastCommand;
+           execute;
+           s:=commandText[0];
+           CommandText.Clear;
+           CommandText.Add(s);
+      end;
+end;
+//===========================================
 
 procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
@@ -135,13 +153,13 @@ end;
 
 procedure TDataModule2.synchBeforeClose(DataSet: TDataSet);
 begin
-  synchAttachDetach.CommandText.Add('detach database TempDB');
+  synchAttachDetach.SQL.Text:='detach database TempDB';
   synchAttachDetach.Execute;
 end;
 
 procedure TDataModule2.synchBeforeOpen(DataSet: TDataSet);
 begin
-    synchAttachDetach.CommandText.Add('attach database '''+form1.baseFolder.Caption+''' as TempDB');
+    synchAttachDetach.SQL.Text:='attach database '''+form1.baseFolder.Caption+''' as TempDB';
     synchAttachDetach.Execute;
 end;
 
