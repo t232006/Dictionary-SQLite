@@ -950,8 +950,12 @@ procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 with DM2 do
 begin
+try
 Dict.Close;
 top.Close;
+finally
+
+end;
 //topicquery.SQL.Clear;
 end;
 Saver.saveForm;

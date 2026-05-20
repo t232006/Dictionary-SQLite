@@ -72,16 +72,16 @@ begin
     IniPath := ExtractFilePath(ParamStr(0));
     {$ENDIF}
     {$IFDEF RELEASE}
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
+    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\';
     {$ENDIF}
-    f:=TIniFile.Create(IniPath+'\init.ini');
+    f:=TIniFile.Create(IniPath+'init.ini');
     try
     with form1 do
       begin
         result:=false;
-        baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
+        baseFolder.Caption:= f.ReadString('database','database', IniPath+'dictionary.db');
         if not(FileExists(baseFolder.Caption)) then
-          baseFolder.Caption:=IniPath+'\db\dictionary.db';
+          baseFolder.Caption:=IniPath+'db\dictionary.db';
 
         //if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
 

@@ -7,7 +7,7 @@ uses WinAPI.Windows, System.SysUtils, VCL.forms,
 type arraydir = array[0..255] of char;
 
 TCmd = class
-    private Programname, params: string;
+    private Programname, params, dir: string;
     StartupInfo:TStartupInfo;
     saSecurity: TSecurityAttributes;
     public

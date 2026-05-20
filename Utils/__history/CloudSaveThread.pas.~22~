@@ -54,7 +54,6 @@ var  command, filename:string;
 begin
     filename := ExtractFileName(WhereFrom);
     WhereFrom := ExtractFileDir(WhereFrom);
-    SetCurrentDir(GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary');
     command := Format(' "client_secret.json" %s" "%s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
     cmd:=TCmd.Create(spfolder+'\UploaderDB.exe', command);
     cmd.WinExecAndWait;
