@@ -4,8 +4,8 @@ interface
 uses comobj, database, system.SysUtils, busyCheckerThread, winapi.Messages,
 strutils, ShlObj, utilite;
 const
-  FILENAME='Inserter/InsertForm.xlsx';
-  DBLOADLISTNAME='Inserter/FromExcel.db';
+  FILENAME='Inserter\InsertForm.xlsx';
+  DBLOADLISTNAME='Inserter\FromExcel.db';
 type
 TExcelUnit=class
 private
@@ -42,15 +42,7 @@ var j:word;
 begin
     busythread.Terminate;
     //busythread.free;
-    {$IFDEF DEBUG}
-      workbook:=excel.Workbooks.open(ExtractFilePath(ParamStr(0)) + FILENAME);
-    {$ENDIF}
-    {$IFDEF RELEASE}
-      workbook := GetSpecialPath(CSIDL_APPDATA)+'\'+FILENAME;
-    {$ENDIF}
-
-
-
+    workbook:=excel.Workbooks.open(getActualPath+FILENAME);
     Worksheet := Workbook.Worksheets[1];
     j:=2; sTopic:=''; sDict:='';
     s:='select id from Topic where Name=''';
@@ -96,7 +88,7 @@ begin
   Worksheet.columns[3].columnwidth:=30;
   Worksheet.columns[4].columnwidth:=25;
   Worksheet.columns[5].columnwidth:=0;
-  workbook.saveas(ExtractFileDir(paramstr(0))+ '\'+FILENAME, 51);
+  workbook.saveas(getactualpath + FILENAME, 51);
   excel.visible:=true;
    if busyThread=nil then
     busyThread:=busyChecker.Create(false)

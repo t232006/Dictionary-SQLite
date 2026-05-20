@@ -68,12 +68,7 @@ function loadForm: boolean;  //true - succsess
     fk:byte;
 
 begin
-    {$IFDEF DEBUG}
-    IniPath := ExtractFilePath(ParamStr(0));
-    {$ENDIF}
-    {$IFDEF RELEASE}
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\';
-    {$ENDIF}
+    iniPath:=getActualPath;
     f:=TIniFile.Create(IniPath+'init.ini');
     try
     with form1 do

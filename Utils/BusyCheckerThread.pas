@@ -3,7 +3,7 @@ unit BusyCheckerThread;
 interface
 
 uses
-  System.Classes, winapi.activeX, windows, sysutils;
+  System.Classes, winapi.activeX, windows, sysutils, utilite;
 
 
 
@@ -51,7 +51,7 @@ procedure BusyChecker.Execute;
 begin
    repeat
       sleep(200);
-   until not(IsDocumentLocked(FILENAME));
+   until not(IsDocumentLocked(GetActualPath+FILENAME));
    synchronize(procedure
    begin
      form1.completeListLoader;
