@@ -36,7 +36,6 @@ uses
 begin
    Application.Initialize;
 
-  TStyleManager.TrySetStyle('Windows10');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);

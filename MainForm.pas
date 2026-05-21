@@ -951,15 +951,16 @@ begin
 with DM2 do
 begin
 try
-Dict.Close;
-top.Close;
+  Dict.Close;
+  top.Close;
+  Saver.saveForm;
+  finishexercises;
 finally
 
 end;
 //topicquery.SQL.Clear;
 end;
-Saver.saveForm;
-finishexercises;
+
 end;
 
 procedure TForm1.searchChange(Sender: TObject);
@@ -1433,11 +1434,13 @@ end;
 
 procedure TForm1.completeListLoader;
 begin
-  ef.FromExcel;
+  cloudProgr.Visible:=true;
+  ef.FromExcel(cloudProgr);
   ef.free;
   PageControl1.ActivePageIndex:=8;
   dm2.synch.Close;
   dm2.synch.Open;
+  cloudProgr.Visible:=false;
 end;
 
 constructor TForm1.Create(AOwner: TComponent);

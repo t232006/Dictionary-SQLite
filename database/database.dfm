@@ -149,7 +149,7 @@ object datamodule2: Tdatamodule2
     AfterInsert = Dict1AfterInsert
     AfterEdit = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
-    Filtered = True
+    Filter = 'usersel=true'
     Indexes = <
       item
         Active = True
@@ -308,10 +308,13 @@ object datamodule2: Tdatamodule2
       Lookup = True
     end
   end
-  object FDQuery1: TFDQuery
-    Connection = synchConn
+  object toExcelQuery: TFDQuery
+    Connection = FDConnection
     SQL.Strings = (
-      'select * from Dict where spot=true')
+      
+        'select word, translation, name as Topic, dateRec from Dict join ' +
+        'topic on Dict.topic=topic.id'
+      'where usersel=true')
     Left = 216
     Top = 160
   end

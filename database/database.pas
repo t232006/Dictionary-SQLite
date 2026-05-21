@@ -3,7 +3,7 @@ unit database;
 interface
 
 uses
-  SysUtils, Classes, DB, Data.Win.ADODB, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  SysUtils, Classes, DB, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
@@ -44,7 +44,7 @@ type
     DictSpot: TBooleanField;
     DictPhrase: TBooleanField;
     DictTopicName: TWideStringField;
-    FDQuery1: TFDQuery;
+    toExcelQuery: TFDQuery;
     recordCount: TFDQuery;
     SelectedCount: TFDQuery;
     InsertListTopic: TFDCommand;
