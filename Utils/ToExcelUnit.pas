@@ -55,9 +55,9 @@ begin
       while s2<>'' do
       begin
         s3:=worksheet.cells[j,3]; s4:=worksheet.cells[j,4];
-         sTopic:=sTopic+string.Format('(''%s''),',[s4]);
+         sTopic:=string.Format('(''%s''),',[s4]);
 
-         sDict:=sDict+string.Format('select (''%s''),(''%s''),(%s) union ',[s2,s3,s+s4+'''']);
+         sDict:=string.Format('select (''%s''),(''%s''),(%s) union ',[s2,s3,s+s4+'''']);
 
 //         insertListtopic.CommandText.Insert(1,sTopic);
  //        insertListDict.CommandText.Insert(1,sDict);
