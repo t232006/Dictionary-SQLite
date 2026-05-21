@@ -2,24 +2,23 @@ unit ToExcelUnit;
 
 interface
 uses comobj, database, system.SysUtils, busyCheckerThread, winapi.Messages,
-strutils, ShlObj, utilite, classes, comCtrls;
+strutils, ShlObj, utilite, classes, comCtrls, activex;
 const
-  FILENAME='Inserter\InsertForm.xlsx';
+  FILENAME='Inserter\InsertForm3.xlsx';
   DBLOADLISTNAME='Inserter\FromExcel.db';
 type
 TLoaderThread = class(TThread)
 private
-  fExcel:OleVariant;
+
   FOnFinish: TNotifyEvent;
   fErrorMessage: string;
-  workbook, worksheet: variant;
   fBar: TProgressBar;
   procedure OnFinish;
 protected
   procedure Execute; override;
 public
   //property RowCount:word; read FRowCount;
-  constructor Create(AExcel:OleVariant;
+  constructor Create(//AExcel:OleVariant;
                       AOnFinish: TNotifyEvent;
                       var ABar:TProgressBar);
 end;
@@ -58,7 +57,10 @@ procedure TExcelUnit.FromExcel(var bar:TProgressBar);
 
 begin
     busythread.Terminate;
-    EUT:=TLoaderThread.create(Excel, OnThreadFinish, Bar);
+    EUT:=TLoaderThread.create(OnThreadFinish, Bar);
+    eut.Start;
+    eut.WaitFor;
+    eut.Free;
 end;
 
 procedure TExcelUnit.FromExcelInit;
@@ -80,7 +82,8 @@ procedure TExcelUnit.onThreadFinish(sender:TObject);
 begin
     if EUT.fErrorMessage<>'' then
       raise Exception.Create(TLoaderThread(sender).fErrorMessage);
-    EUT:=nil;
+    eut.Terminate;
+    //EUT:=nil;
 end;
 
 procedure TExcelUnit.ToExcel;
@@ -113,14 +116,19 @@ end;
 
 { TExcelUnitThread }
 
-constructor TLoaderThread.Create(AExcel: OleVariant;
+constructor TLoaderThread.Create(//AExcel: OleVariant;
                                     AOnFinish: TNotifyEvent;
                                     var ABar:TProgressBar);
 begin
   inherited Create(true);
-  FExcel:=AExcel;
+  //FExcel:=AExcel;
   FOnFinish:=AOnFinish;
-  FreeOnTerminate:=true;
+  FBar:=ABar;
+  FreeOnTerminate:=false;
+
+  //Workbook:=FExcel.workbooks.add;
+  //Excel.visible:=true;
+  //Worksheet:=fExcel.workbooks[1].worksheets[1];
 
 end;
 
@@ -128,7 +136,11 @@ procedure TLoaderThread.Execute;
 var j:word;
     sTopic, sDict, s,s2,s3,s4:string;
     RowCount: word;
+    fExcel:OleVariant;
+    workbook, worksheet: variant;
 begin
+    coinitialize(nil);
+    FExcel:=createOLEobject('excel.application');
     RowCount:=2;
     FBar.Min:=RowCount;
     workbook:=Fexcel.Workbooks.open(getActualPath+FILENAME);
@@ -144,11 +156,12 @@ begin
         while s2<>'' do
         begin
           inc(RowCount);
+          inc(j);
           s2:=worksheet.cells[j,2];
         end;
         FBar.Max:=RowCount-2;
-
-        For var i:=2 to RowCount do
+        fbar.Position:=fBar.Min;
+        For var i:=2 to RowCount-2 do
         begin
           if Terminated then break;
 
@@ -159,7 +172,7 @@ begin
 
            insertListtopic.CommandText.add(sTopic);
            insertListDict.CommandText.add(sDict);
-
+           fbar.stepby(1);
         end;
         delete(sTopic,length(STopic),1);
         sDict:=reverseString(sDict);
@@ -173,6 +186,7 @@ begin
         on E: Exception do fErrorMessage:=e.Message;
     end;
         workbook.close(false);
+        couninitialize;
         deletefile(getActualPath + FILENAME);
         if not(terminated) then synchronize(OnFinish);
 end;
