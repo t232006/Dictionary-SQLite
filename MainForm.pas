@@ -322,6 +322,7 @@ type
     procedure StartTimer(disconnect:boolean);
     procedure CancelCloud(var msg:TMessage); message CANCEL_CLOUD;
     procedure CreatePopupListBox(var msg:TMessage); message CONTINUE_CLOUD;
+    procedure ShowFeedbackFromCloud(var msg:TMessage); message SHOW_MESSAGE;
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
@@ -1275,6 +1276,11 @@ procedure TForm1.ShCardColorMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   SpeedButton1.Click;
+end;
+
+procedure TForm1.ShowFeedbackFromCloud(var msg: TMessage);
+begin
+  ShowMessage(CloudSave.Feedback);
 end;
 
 procedure TForm1.ShowNumberExecute(Sender: TObject);

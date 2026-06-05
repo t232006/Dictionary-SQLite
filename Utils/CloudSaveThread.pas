@@ -5,19 +5,26 @@ uses Utilite, SysUtils, Classes, Controls, Forms, ShellAPI, Windows, messages,
 ShlObj, IOUtils, dialogs;
 const CANCEL_CLOUD = WM_USER+110;
        CONTINUE_CLOUD = WM_USER+120;
+       SHOW_MESSAGE = WM_USER+130;
 
 type
   Tcloud = class
   private
     spFolder: string;
+    _feedback: string;
     public
+      property feedback: string read _feedback;
       constructor create;
       procedure saveToCloud(whereFrom:string);
       procedure loadFromCloud(id, whereTo:string);
   end;
 
 TSaveThread = class(TThread)
+  private
+  _feedback:string;
   public DBDir:string;
+  property Feedback:string read _feedback;
+
   protected
   procedure Execute; override;
   procedure SaveProcess;
@@ -58,6 +65,7 @@ begin
     command := Format(' "client_secret.json" %s" "%s', [WhereFrom, filename]);// %s %s',[GetCurrentDir,'saver\client_secret_for_Delphi.json', WhereTo, 'Dictionary.db']);
     cmd:=TCmd.Create(spfolder+'\UploaderDB.exe', command);
     cmd.WinExecAndWait;
+    _feedback:= cmd.CmdScreen;
     SendMessage(getforegroundWindow, CANCEL_CLOUD, 0, 0);
     //shellexecute(0, 'open', 'UploaderDB.exe', Pchar(command), 'saver', SW_show);
     //shellexecute(0, 'open', PChar(theprogr), Pchar(command), nil, SW_SHOW);
@@ -104,6 +112,8 @@ var Cloud: TCloud;
 begin
     Cloud:=Tcloud.Create();
     Cloud.SaveToCloud(DBDir);
+    _feedback:=Cloud.feedback;
+    SendMessage(getforegroundWindow, SHOW_MESSAGE, 0,0);
     Cloud.Free;
 end;
 

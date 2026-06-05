@@ -6,3 +6,7 @@ database/__history/
 __history/
 
 __recovery/
+
+db/
+
+*.json

@@ -149,7 +149,7 @@ object datamodule2: Tdatamodule2
     AfterInsert = Dict1AfterInsert
     AfterEdit = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
-    Filter = 'usersel=true'
+    Filtered = True
     Indexes = <
       item
         Active = True
