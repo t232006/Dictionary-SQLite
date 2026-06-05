@@ -44,21 +44,21 @@ begin
   for i:=1 to 6 do
   begin
      repeat
-     l:=random(length(v)); //взяли случайно слово
+     l:=random(length(SelectContainer)); //взяли случайно слово
      until not (l in oo); //чтобы не повторялось
      oo:=oo+[l];
      repeat
      jk:=random(6)+1; //индекс первого массива ответов
      until not (jk in oo1);
      oo1:=oo1+[jk];
-     o1[jk].slovo:=v[l].slovo; //кладем слово
-     o1[jk].perevod:=v[l].perevod;
+     o1[jk].slovo:=SelectContainer[l].slovo; //кладем слово
+     o1[jk].perevod:=SelectContainer[l].perevod;
      repeat
       jk:=random(6)+1; //индекс второго массива ответов
      until not (jk in oo2);
      oo2:=oo2+[jk];
-     o2[jk].perevod:=v[l].perevod; //кладем слово
-     o2[jk].slovo:=v[l].slovo;
+     o2[jk].perevod:=SelectContainer[l].perevod; //кладем слово
+     o2[jk].slovo:=SelectContainer[l].slovo;
 
   end;
 end;

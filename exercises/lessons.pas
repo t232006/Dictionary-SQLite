@@ -12,7 +12,7 @@ type
  otv=array[0..6] of SlPerSl; //массив,отвечающий за ответы
 
  TGeneral=class
-     v:array of SlPerSl;  //заполнение массива отдельной процедурой
+     SelectContainer:array of SlPerSl;  //заполнение массива отдельной процедурой
      recreate:boolean;
      constructor Create(countrec:byte);
  end;
@@ -86,19 +86,19 @@ begin
   seAndCor:=Tgrademanipulation.Create(DM2);
   randomize;
   giveTrue:=random(2);
-  l:=random(length(v)); //conjectived word
+  l:=random(length(SelectContainer)); //conjectived word
   repeat
-    ll:=random(length(v)); //wrong answer
+    ll:=random(length(SelectContainer)); //wrong answer
   until l<>ll;
   if giveTrue=1 then
   begin
-    word1:=v[l].slovo;
-    word2:=v[l].perevod;
+    word1:=SelectContainer[l].slovo;
+    word2:=SelectContainer[l].perevod;
     IsItTrue:=true;
   end else
   begin
-    word1:=v[l].slovo;
-    word2:=v[ll].perevod;
+    word1:=SelectContainer[l].slovo;
+    word2:=SelectContainer[ll].perevod;
     IsItTrue:=false;
   end;
   _GetString:=word1+' = '+word2;
@@ -113,8 +113,8 @@ procedure zapmas (kl:word);
 begin
     with DM2.SelectSel do
   begin
-    v[kl].slovo:=Fields[1].AsString;
-    v[kl].perevod:=fields[2].AsString;
+    SelectContainer[kl].slovo:=Fields[1].AsString;
+    SelectContainer[kl].perevod:=fields[2].AsString;
   end;
 end;
 begin
@@ -123,22 +123,27 @@ begin
   recreate:=false;
   with DM2.SelectSel do
   begin
-    Open;
-    if RecordCount<countrec then
+    if countrec<>0 then
     begin
-      DM2.topicquery.SQL.Text:='UPDATE Dict SET usersel=true';//если отмечено менее 6 записей, то выделить все записи
-      DM2.topicquery.ExecSQL;
-      showmessage('выделены все записи, поскольку должно быть не менее '+inttostr(countrec));
-      Close; Open;
-    end;
+      Open;
+      if RecordCount<countrec then
+      begin
+        DM2.topicquery.SQL.Text:='UPDATE Dict SET usersel=true';//если отмечено менее 6 записей, то выделить все записи
+        DM2.topicquery.ExecSQL;
+        dm2.Dict.Refresh;
+        showmessage('выделены все записи, поскольку должно быть не менее '+inttostr(countrec));
+        Close; Open;
+      end;
 
-    setlength(v,RecordCount);
-    First;
-    for i:=0 to RecordCount-1 do
-    begin
-      zapmas (i); //заполнить нулевой
-      Next;
-    end;
+
+      setlength(SelectContainer,RecordCount);
+      First;
+      for i:=0 to RecordCount-1 do
+      begin
+        zapmas (i); //заполнить нулевой
+        Next;
+      end;
+    end else recreate:=true;
   end;
 end;
 
@@ -150,10 +155,10 @@ var l:integer;
 begin
     randomize;
     j:=[]; jj:=j;
-    l:=random(length(v)); //загаданное слово (индекс)
-    w[0].perevod:=v[l].perevod; //загаданное слово
+    l:=random(length(SelectContainer)); //загаданное слово (индекс)
+    w[0].perevod:=SelectContainer[l].perevod; //загаданное слово
     g:=random(6)+1;  //любому варианту
-    w[g].slovo:=v[l].slovo;  // даем верный ответ
+    w[g].slovo:=SelectContainer[l].slovo;  // даем верный ответ
     ind:=g;
     j:=j+[g];  jj:=jj+[l];
     for i:=2 to 6 do  //остальным даем неверные
@@ -163,11 +168,11 @@ begin
       until not(g in j);
       j:=j+[g];
       repeat
-        l:=random(length(v));//генерим любой вариант
+        l:=random(length(SelectContainer));//генерим любой вариант
       until not(l in jj);
       jj:=jj+[l];      //чтобы не было повторов
-      w[g].slovo:=v[l].slovo; //кладем в неверный вариант
-      w[g].perevod:=v[l].perevod;
+      w[g].slovo:=SelectContainer[l].slovo; //кладем в неверный вариант
+      w[g].perevod:=SelectContainer[l].perevod;
     end;
 end;
 
@@ -179,10 +184,10 @@ var l:integer;
 begin
     randomize;
     j:=[]; jj:=j;
-    l:=random(length(v)); //загаданное слово (индекс)
-    w[0].slovo:=v[l].slovo; //загаданное слово
+    l:=random(length(SelectContainer)); //загаданное слово (индекс)
+    w[0].slovo:=SelectContainer[l].slovo; //загаданное слово
       g:=random(6)+1;  //любому варианту
-       w[g].perevod:=v[l].perevod;  // даем верный ответ
+       w[g].perevod:=SelectContainer[l].perevod;  // даем верный ответ
     ind:=g;
       j:=j+[g];  jj:=jj+[l];
     for i:=2 to 6 do  //остальным даем неверные
@@ -192,11 +197,11 @@ begin
       until not(g in j);
       j:=j+[g];
       repeat
-        l:=random(length(v));//генерим любой вариант
+        l:=random(length(SelectContainer));//генерим любой вариант
       until not(l in jj);
       jj:=jj+[l];      //чтобы не было повторов
-      w[g].perevod:=v[l].perevod; //кладем в неверный вариант
-      w[g].slovo:=v[l].slovo; //put wrong word
+      w[g].perevod:=SelectContainer[l].perevod; //кладем в неверный вариант
+      w[g].slovo:=SelectContainer[l].slovo; //put wrong word
     end;
 end;
 

@@ -3,7 +3,7 @@ unit database;
 interface
 
 uses
-  SysUtils, Classes, DB, Data.Win.ADODB, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  SysUtils, Classes, DB, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
@@ -20,7 +20,6 @@ type
     dssynch: TDataSource;
     synchConn: TFDConnection;
     synch: TFDQuery;
-    synchAttachDetach: TFDCommand;
     FDConnection: TFDConnection;
     Top: TFDTable;
     Topic: TFDQuery;
@@ -45,9 +44,12 @@ type
     DictSpot: TBooleanField;
     DictPhrase: TBooleanField;
     DictTopicName: TWideStringField;
-    FDQuery1: TFDQuery;
+    toExcelQuery: TFDQuery;
     recordCount: TFDQuery;
     SelectedCount: TFDQuery;
+    InsertListTopic: TFDCommand;
+    InsertListDict: TFDCommand;
+    synchAttachDetach: TFDQuery;
     function GetRecordCount:string;
     function GetSelectedCount:string;
     procedure vokabAfterRefresh(DataSet: TDataSet);
@@ -56,6 +58,7 @@ type
     procedure synchBeforeOpen(DataSet: TDataSet);
     procedure synchBeforeClose(DataSet: TDataSet);
     procedure Dict1AfterInsert(DataSet: TDataSet);
+    procedure CommandDoAndReset(command: TFDCommand; lastCommand:string);
   private
     { Private declarations }
   public
@@ -87,12 +90,31 @@ begin
     result:=inttostr(SelectedCount.fields[0].asInteger);
 end;
 
+//=============   special for InsertList
+procedure Tdatamodule2.CommandDoAndReset(command: TFDCommand; lastCommand:string); //
+var s:string;
+begin
+   with command do
+      begin
+           CommandText[CommandText.Count-1]:=lastCommand;
+           execute;
+           s:=commandText[0];
+           CommandText.Clear;
+           CommandText.Add(s);
+      end;
+end;
+//===========================================
+
 procedure TDataModule2.Dict1AfterInsert(DataSet: TDataSet);
 begin
   //FDConnection.Commit;
   if DataSet.RecordCount=6 then
     form1.PagesBlock(false);
   Form1.StBar.panels[0].Text:='Всего слов: '+ GetRecordCount;
+  form1.test.recreate:=true;
+  form1.YesNo.recreate:=true;
+  form1.poBukv.recreate:=true;
+  form1.cards.recreate:=true;
 end;
 
 function TDataModule2.loadDB(dbPath:string):boolean;
@@ -131,13 +153,13 @@ end;
 
 procedure TDataModule2.synchBeforeClose(DataSet: TDataSet);
 begin
-  synchAttachDetach.CommandText.Add('detach database TempDB');
+  synchAttachDetach.SQL.Text:='detach database TempDB';
   synchAttachDetach.Execute;
 end;
 
 procedure TDataModule2.synchBeforeOpen(DataSet: TDataSet);
 begin
-    synchAttachDetach.CommandText.Add('attach database '''+form1.baseFolder.Caption+''' as TempDB');
+    synchAttachDetach.SQL.Text:='attach database '''+form1.baseFolder.Caption+''' as TempDB';
     synchAttachDetach.Execute;
 end;
 

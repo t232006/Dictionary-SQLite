@@ -29,13 +29,13 @@ uses
   LogoThread in 'Utils\LogoThread.pas',
   helpdict in 'forms\helpdict.pas' {Manual},
   numFrame in 'frames\numFrame.pas' {numbers: TFrame},
-  database in 'database\database.pas' {datamodule2: TDataModule};
+  database in 'database\database.pas' {datamodule2: TDataModule},
+  BusyCheckerThread in 'Utils\BusyCheckerThread.pas';
 
 {$R *.res}
 begin
    Application.Initialize;
 
-  TStyleManager.TrySetStyle('Windows10');
   Application.Title := 'Individual dictionary';
   Application.CreateForm(TDataModule2, DM2);
   Application.CreateForm(TForm1, Form1);

@@ -19,10 +19,10 @@ oo:=[];
 for i:=1 to cou do
 begin
     repeat
-     l:=random(length(v)); //взяли случайно слово
+     l:=random(length(SelectContainer)); //взяли случайно слово
     until not (l in oo); //чтобы не повторялось
      oo:=oo+[l];
-    o1[i]:=v[l];
+    o1[i]:=SelectContainer[l];
 end;
 end;
 

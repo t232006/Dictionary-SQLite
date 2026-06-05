@@ -31,7 +31,6 @@ object datamodule2: Tdatamodule2
       'DriverID=SQLite')
     FormatOptions.AssignedValues = [fvADOCompatibility]
     FormatOptions.ADOCompatibility = True
-    Connected = True
     LoginPrompt = False
     Left = 40
     Top = 24
@@ -53,11 +52,6 @@ object datamodule2: Tdatamodule2
     Left = 40
     Top = 112
   end
-  object synchAttachDetach: TFDCommand
-    Connection = synchConn
-    Left = 56
-    Top = 264
-  end
   object FDConnection: TFDConnection
     Params.Strings = (
       'DriverID=SQLite'
@@ -70,7 +64,6 @@ object datamodule2: Tdatamodule2
     Top = 24
   end
   object Top: TFDTable
-    Active = True
     IndexFieldNames = 'id'
     Connection = FDConnection
     ResourceOptions.AssignedValues = [rvEscapeExpand]
@@ -83,7 +76,6 @@ object datamodule2: Tdatamodule2
     Top = 160
   end
   object Topic: TFDQuery
-    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'select topic.id, topic.name, count(dict.topic)'
@@ -132,21 +124,21 @@ object datamodule2: Tdatamodule2
     Connection = FDConnection
     CommandText.Strings = (
       '')
-    Left = 216
-    Top = 288
+    Left = 248
+    Top = 296
   end
   object dropch: TFDCommand
     Connection = FDConnection
     CommandText.Strings = (
       'UPDATE Dict'
       'SET usersel=false')
-    Left = 200
-    Top = 368
+    Left = 232
+    Top = 376
   end
   object droprate: TFDCommand
     Connection = FDConnection
-    Left = 264
-    Top = 368
+    Left = 296
+    Top = 376
   end
   object dsTop: TDataSource
     DataSet = Top
@@ -154,7 +146,6 @@ object datamodule2: Tdatamodule2
     Top = 104
   end
   object Dict: TFDQuery
-    Active = True
     AfterInsert = Dict1AfterInsert
     AfterEdit = Dict1AfterInsert
     AfterDelete = Dict1AfterInsert
@@ -317,10 +308,13 @@ object datamodule2: Tdatamodule2
       Lookup = True
     end
   end
-  object FDQuery1: TFDQuery
-    Connection = synchConn
+  object toExcelQuery: TFDQuery
+    Connection = FDConnection
     SQL.Strings = (
-      'select * from Dict where spot=true')
+      
+        'select word, translation, name as Topic, dateRec from Dict join ' +
+        'topic on Dict.topic=topic.id'
+      'where usersel=true')
     Left = 216
     Top = 160
   end
@@ -339,5 +333,24 @@ object datamodule2: Tdatamodule2
       'select count(*) from Dict where usersel=true')
     Left = 568
     Top = 376
+  end
+  object InsertListTopic: TFDCommand
+    Connection = synchConn
+    CommandText.Strings = (
+      'Insert or ignore into Topic(name) values ')
+    Left = 40
+    Top = 368
+  end
+  object InsertListDict: TFDCommand
+    Connection = synchConn
+    CommandText.Strings = (
+      'Insert into Dict(word, translation, topic)')
+    Left = 128
+    Top = 368
+  end
+  object synchAttachDetach: TFDQuery
+    Connection = synchConn
+    Left = 128
+    Top = 240
   end
 end

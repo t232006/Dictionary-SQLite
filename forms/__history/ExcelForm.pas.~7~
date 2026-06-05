@@ -1,0 +1,37 @@
+unit ExcelForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.OleCtnrs;
+
+type
+  TInsertForm = class(TForm)
+    Container: TOleContainer;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InsertForm: TInsertForm;
+const
+  FILENAME='Inserter/InsertForm.xlsx';
+
+implementation
+uses MainForm;
+
+{$R *.dfm}
+
+procedure TInsertForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  container.copyonsave:=true;
+  container.SaveToFile(FILENAME);
+  if form1.ef<>nil then form1.ef.FromExcel;
+  form1.ef.free;
+end;
+
+end.

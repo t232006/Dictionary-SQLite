@@ -15,47 +15,68 @@ uses VCL.Graphics, Classes, Sysutils, System.IniFiles,
 
 implementation
 uses MainForm, Database, basemanipulation, logo;
+var  f:TIniFile;
+    IniPath: string;
 
 procedure finishExercises;
 begin
     form1.test.Destroy;
-    poBukv.Destroy;
-    complience.Destroy;
-    YesNo.Destroy;
-    cards.Destroy;
+    form1.poBukv.Destroy;
+    form1.complience.Destroy;
+    form1.YesNo.Destroy;
+    form1.cards.Destroy;
 end;
 
 procedure startExercises;
 var h:hwnd;
 begin
       h:=GetForegroundWindow;
-      form1.test:=TTest.create(6);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      poBukv:=TPoBukvam.create;
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      complience:= Tcomplience.Create(6);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      YesNo:=TYesNo.Create(1);
-      SendMessage(h, MSG_PROGRESS, 0, 20);
-      cards:=Tcards.create(12);
+      if DM2.selectsel.RecordCount>=6 then
+      begin
+        form1.test:=TTest.create(6);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.complience:= Tcomplience.Create(6);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end else
+      begin
+         form1.test:=TTest.create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.complience:= Tcomplience.Create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end;
+      if DM2.selectsel.RecordCount>=1 then
+      begin
+        form1.poBukv:=TPoBukvam.create(1);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.YesNo:=TYesNo.Create(1);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end else
+      begin
+         form1.poBukv:=TPoBukvam.create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+        form1.YesNo:=TYesNo.Create(0);
+        SendMessage(h, MSG_PROGRESS, 0, 20);
+      end;
+      if DM2.selectsel.RecordCount>=12 then
+        form1.cards:=Tcards.create(12) else
+        form1.cards:=Tcards.create(0);
       SendMessage(h, MSG_PROGRESS, 0, 20);
 end;
 
 function loadForm: boolean;  //true - succsess
   var
     fk:byte;
-    f:TIniFile;
-    IniPath: string;
+
 begin
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary';
-    f:=TIniFile.Create(IniPath+'\init.ini');
+    iniPath:=getActualPath;
+    f:=TIniFile.Create(IniPath+'init.ini');
     try
     with form1 do
       begin
         result:=false;
-        baseFolder.Caption:= f.ReadString('database','database', IniPath+'\dictionary.db');
+        baseFolder.Caption:= f.ReadString('database','database', IniPath+'dictionary.db');
         if not(FileExists(baseFolder.Caption)) then
-          baseFolder.Caption:=IniPath+'\dictionary.db';
+          baseFolder.Caption:=IniPath+'db\dictionary.db';
 
         //if baseFolder.Caption='' then baseFolder.Caption:='Выберите расположение словаря';
 
@@ -109,16 +130,11 @@ begin
 
       end;
     finally
-    f.Free;
     end;
 end;
 
 procedure saveForm;
-var f:TIniFile;
-    IniPath:string;
 begin
-    IniPath := GetSpecialPath(CSIDL_APPDATA)+'\Individual dictionary\init.ini';
-    f:=TIniFile.Create(IniPath);
     try
     with form1 do
     begin

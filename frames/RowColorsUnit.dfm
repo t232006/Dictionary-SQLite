@@ -12,7 +12,6 @@ object RowColors: TRowColors
   Font.Name = 'Tahoma'
   Font.Style = []
   Position = poMainFormCenter
-  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   TextHeight = 13
   inline ColoredRow1: TColoredRow
@@ -46,5 +45,15 @@ object RowColors: TRowColors
     State = cbChecked
     TabOrder = 0
     OnClick = CheckBox1Click
+  end
+  object BitBtn: TBitBtn
+    Left = 0
+    Top = 8
+    Width = 34
+    Height = 33
+    Kind = bkOK
+    NumGlyphs = 2
+    TabOrder = 3
+    OnClick = BitBtnClick
   end
 end

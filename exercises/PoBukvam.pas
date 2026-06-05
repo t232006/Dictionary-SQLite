@@ -16,16 +16,17 @@ private
   procedure Implement;
   procedure writeslovo;
 public
-  constructor Create;
+  constructor Create (countrec: byte);
 end;
 
 implementation
 
-constructor TPoBukvam.Create;
+constructor TPoBukvam.Create(countrec: byte);
 var
 ii,jj:byte;
 begin
-    inherited create(1);
+    inherited create(countrec);
+    if countrec=0 then exit;
     buf:=TStringList.Create;
     bmas:=TStringList.Create;
     writeslovo;//загаданные слово и перевод
@@ -40,8 +41,8 @@ procedure TPoBukvam.writeslovo;//ind-индекс верного ответа
 var ind:integer;
 begin
   randomize;
-  ind:=random(length(v));
-  _per:=v[ind].perevod;  _sl:=v[ind].slovo;
+  ind:=random(length(SelectContainer));
+  _per:=SelectContainer[ind].perevod;  _sl:=SelectContainer[ind].slovo;
 end;
 
 function TPoBukvam.phrase:boolean; //отвечает фраза ли это или слово

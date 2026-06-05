@@ -4,17 +4,19 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, coloredRowFrame;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, coloredRowFrame,
+  Vcl.Buttons;
 
 type
   TRowColors = class(TForm)
     CheckBox1: TCheckBox;
     ColoredRow1: TColoredRow;
     ColoredRow2: TColoredRow;
+    BitBtn: TBitBtn;
     procedure CheckBox1Click(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
     procedure ColoredRow1Panel1Click(Sender: TObject);
+    procedure BitBtnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,6 +31,12 @@ implementation
 uses MainForm;
 
 {$R *.dfm}
+
+procedure TRowColors.BitBtnClick(Sender: TObject);
+begin
+  RowColor1:=ColoredRow1.Panel1.Color;
+  RowColor2:=ColoredRow2.Panel1.Color;
+end;
 
 procedure TRowColors.CheckBox1Click(Sender: TObject);
 begin
@@ -45,12 +53,6 @@ procedure TRowColors.ColoredRow1Panel1Click(Sender: TObject);
 begin
   ColoredRow1.Panel1Click(Sender);
   coloredrow2.panel1.color:=coloredrow1.Panel1.Color;
-end;
-
-procedure TRowColors.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-begin
-  RowColor1:=ColoredRow1.Panel1.Color;
-  RowColor2:=ColoredRow2.Panel1.Color;
 end;
 
 procedure TRowColors.FormShow(Sender: TObject);

@@ -4,10 +4,11 @@ interface
 uses WinAPI.Windows, System.SysUtils, VCL.forms,
       shellAPI, Classes, strUtils, ShlObj, RegularExpressions;
 
-type arraydir = array[0..255] of char;
+type
+arraydir = array[0..255] of char;
 
 TCmd = class
-    private Programname, params, dir: string;
+    private Programname, params: string;
     StartupInfo:TStartupInfo;
     saSecurity: TSecurityAttributes;
     public
@@ -27,7 +28,6 @@ TFilesList = class
     //property MaxLength:byte; read getMaxLength;
    //function getfilesList(): TStringList; overload;
    function getfilesList(source: string): TStringList; overload;
-
 end;
 
 Treg = class
@@ -38,6 +38,7 @@ Treg = class
 end;
 
 function GetSpecialPath(CSIDL: word):string;
+function GetActualPath:string;
 
 
 implementation
@@ -51,6 +52,16 @@ end;
 class function Treg.Start(source:string):string;
 begin
   result:=tRegEx.Replace(source,' [\w-_]{33} ',M);
+end;
+
+function GetActualPath: string;
+begin
+{$IFDEF DEBUG}
+      result:=ExtractFilePath(ParamStr(0));
+    {$ENDIF}
+    {$IFDEF RELEASE}
+      result:=GetSpecialPath(CSIDL_APPDATA)+'Individual dictionary\';
+    {$ENDIF}
 end;
 
 function TFilesList.getfilesList(source: string): TStringList;
@@ -94,7 +105,7 @@ begin
 s:=stralloc(max_path);
 if not SHGetSpecialFolderPath(0, s, CSIDL, true)
 then s := '';
-result := s;
+result := s + '\';
 end;
 
 

@@ -103,18 +103,6 @@ type
     N7: TMenuItem;
     sg: TStringGrid;
     pb: TPaintBox;
-    left1: TLabel;
-    left2: TLabel;
-    left3: TLabel;
-    left4: TLabel;
-    left5: TLabel;
-    left6: TLabel;
-    right1: TLabel;
-    right2: TLabel;
-    right3: TLabel;
-    right4: TLabel;
-    right5: TLabel;
-    right6: TLabel;
     nexttack: TAction;
     StaticText3: TStaticText;
     Memo2: TMemo;
@@ -186,15 +174,17 @@ type
     LFromClBut: TSpeedButton;
     UToClBut: TSpeedButton;
     ChShowScore: TCheckBox;
-    Panel2: TPanel;
-    Label24: TLabel;
-    Label25: TLabel;
     SaveDlg: TSaveDialog;
     cloudProgr: TProgressBar;
     cloudTimer: TTimer;
     CloudProcBut: TBitBtn;
     numbers1: Tnumbers;
     numbers2: Tnumbers;
+    numbers3: Tnumbers;
+    numbers4: Tnumbers;
+    Label24: TLabel;
+    Label25: TLabel;
+    SpeedButton8: TSpeedButton;
     procedure rg1Click(Sender: TObject);
     procedure rg2Click(Sender: TObject);
     procedure InitSlovoPer;
@@ -251,7 +241,7 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure DBGrid2MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure rg3Click(Sender: TObject);
     procedure GridDrawColumnCell(Sender: TObject; const Rect2: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
@@ -314,8 +304,13 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure LBMouseLeave(Sender: TObject);
     procedure LBClick(Sender: TObject);
     procedure HelpLblClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure completeListLoader;
+    procedure Button5Click(Sender: TObject);
   private
     PopupListBox: TListBox;
+
     constructor Create(AOwner: TComponent); override;
     procedure YesNoContinue(b:boolean);
     procedure Keynottab (var msg:TCMDialogKey); message CM_DialogKey;
@@ -327,15 +322,22 @@ procedure sgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure StartTimer(disconnect:boolean);
     procedure CancelCloud(var msg:TMessage); message CANCEL_CLOUD;
     procedure CreatePopupListBox(var msg:TMessage); message CONTINUE_CLOUD;
+    procedure ShowFeedbackFromCloud(var msg:TMessage); message SHOW_MESSAGE;
   public
     color_scale:TColor;
     LogoForm: TLogoForm;
     test:TTest;
+    YesNo:TYesNo;
+    poBukv:TPoBukvam;
+    cards:Tcards;
+    complience:TComplience;
+    ef: TExcelUnit;
     TableGreedRow:record
       //drawTrueBack:boolean;
       RowBrushColor1:TColor;
       RowBrushColor2:Tcolor;
     end;
+
   end;
   //procedure InstallReg(filename:string); stdcall; External 'reginstaller.dll';
 
@@ -355,14 +357,8 @@ var
   CloudSave: TSaveThread;
   CloudLoad: TLoadThread;
   CloudRead: TReadThread;
-
-
-  YesNo:TYesNo;
-  poBukv:TPoBukvam;
-
-  complience:TComplience;
   seAndCor:Tgrademanipulation;
-  cards:Tcards;
+
   //recreate:boolean;
   //isOdd:boolean;
 
@@ -701,7 +697,6 @@ procedure TForm1.PageControl1Change(Sender: TObject);
 var t,t1:byte; //parentcontrol:TWinControl;
 
 begin
-
   case  PageControl1.ActivePageIndex of
   1:
   begin
@@ -723,16 +718,16 @@ begin
   end;
   3:
   begin
-  if Test.recreate then
+  if PoBukv.recreate then
       begin
         poBukv.Free;
-        poBukv:=TPoBukvam.create;
+        poBukv:=TPoBukvam.create(1);
       end;
       InitPobukvam;
   end;
   4:
   begin
-  if Test.recreate then
+  if complience.recreate then
       begin
         complience.Free;
         complience:= Tcomplience.Create(6);
@@ -751,7 +746,7 @@ begin
   end;
   5:
   begin
-  if Test.recreate then
+  if yesNo.recreate then
       begin
        yesNo.Free;
        YesNo:=TYesNo.Create(1);
@@ -774,7 +769,7 @@ begin
             Frame211.Visible:=true;
                   Frame212.Visible:=true;
     end;
-      if Test.recreate then
+      if cards.recreate then
       begin
         cards.Free;
         cards:=Tcards.create(t1);
@@ -856,14 +851,14 @@ begin
 
     if na>6 then
       begin
-      if left1.Visible then //2nd colunm and 1st selection
+      if numbers3.Visible then //2nd colunm and 1st selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
         end;
       na:=memonumber(Tmemo(sender).Name)-6;
       end else
-      if not(left1.Visible) then //1st colunt and 2nd selection
+      if not(numbers3.Visible) then //1st colunt and 2nd selection
         begin
           ch:=chr(9);
           formkeypress(sender,ch);
@@ -942,6 +937,11 @@ begin
   addneword.ShowModal;
 end;
 
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  dm2.synch.Close; dm2.synch.open;
+end;
+
 procedure TForm1.CancelCloud(var msg: TMessage);
 begin
    CloudProcButClick(Application);
@@ -951,12 +951,17 @@ procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 with DM2 do
 begin
-Dict.Close;
-top.Close;
+try
+  Dict.Close;
+  top.Close;
+  Saver.saveForm;
+  finishexercises;
+finally
+
+end;
 //topicquery.SQL.Clear;
 end;
-Saver.saveForm;
-finishexercises;
+
 end;
 
 procedure TForm1.searchChange(Sender: TObject);
@@ -1273,6 +1278,11 @@ begin
   SpeedButton1.Click;
 end;
 
+procedure TForm1.ShowFeedbackFromCloud(var msg: TMessage);
+begin
+  ShowMessage(CloudSave.Feedback);
+end;
+
 procedure TForm1.ShowNumberExecute(Sender: TObject);
 begin
   n6.Click;
@@ -1357,7 +1367,7 @@ try
     case ord(key) of
       49..54:
       begin
-        if left1.Visible then
+        if numbers3.Visible then
           mem:=(FindComponent('m'+key) as tmemo) else
           mem:=(FindComponent('m'+inttostr(strtoint(key)+6)) as tmemo);
         if mem.Tag<>clmoneygreen then
@@ -1365,7 +1375,7 @@ try
           rectt(clmoneygreen,mem);
           with conteiner do
           begin
-              if left1.visible then
+              if numbers3.visible then
               leftnum:=memonumber(mem.Name) else
               rightnum:=memonumber(mem.Name);
           end;
@@ -1374,10 +1384,10 @@ try
           rectt(pb.color, mem);
           with conteiner do
           begin
-            if left1.Visible then leftnum:=0 else rightnum:=0;
+            if numbers3.Visible then leftnum:=0 else rightnum:=0;
           end;
         end;
-        if not(left1.Visible) then
+        if not(numbers3.Visible) then
         radiorect(7,mem) else
         radiorect(1,mem);
         charr:=chr(9);
@@ -1385,25 +1395,21 @@ try
       end;
       9:  //selects columns by bevel
       begin
-        if not(left1.Visible) then
-        begin
-          for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=true;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=false;
-            end ;
-        end else
-            for I := 1 to 6 do
-            begin
-            (FindComponent('left'+inttostr(i))as Tlabel).visible:=false;
-            (FindComponent('right'+inttostr(i))as Tlabel).visible:=true;
-            end;
+        if not(numbers3.Visible) then
+          begin
+            numbers3.visible:=true;
+            numbers4.visible:=false;
+          end else
+          begin
+             numbers4.visible:=true;
+             numbers3.visible:=false;
+          end;
       end;
       13:
       begin
           with conteiner do
           begin
-            if left1.Visible then
+            if numbers3.Visible then
                 m7DragDrop(findcomponent('m'+inttostr(rightnum)),findcomponent('m'+inttostr(leftnum)),0,0)
           else  m1DragDrop(findcomponent('m'+inttostr(leftnum)),findcomponent('m'+inttostr(rightnum)),0,0);
           rightnum:=0; leftnum:=0;
@@ -1431,6 +1437,17 @@ begin
 end;
 
 
+
+procedure TForm1.completeListLoader;
+begin
+  cloudProgr.Visible:=true;
+  ef.FromExcel(cloudProgr);
+  ef.free;
+  PageControl1.ActivePageIndex:=8;
+  dm2.synch.Close;
+  dm2.synch.Open;
+  cloudProgr.Visible:=false;
+end;
 
 constructor TForm1.Create(AOwner: TComponent);
 var LThread:TlogoThread;
@@ -1486,6 +1503,12 @@ begin
    end;
 
 
+end;
+
+procedure TForm1.SpeedButton8Click(Sender: TObject);
+begin
+  ef:=TExcelUnit.Create;
+  ef.FromExcelInit;
 end;
 
 procedure TForm1.deepbutClick(Sender: TObject);
@@ -1795,9 +1818,29 @@ begin
    end;
 end;
 
-procedure TForm1.SpeedButton10Click(Sender: TObject);
+procedure TForm1.FormResize(Sender: TObject);
+var memoHeight: word;  curMemo: TMemo;
+    i,j:byte;
 begin
-  toExcel;
+//if ClientHeight < 100 then Exit; // минимальная защита
+  MemoHeight := (ClientHeight - 200) div 6; // 20 — суммарные отступы/промежутки
+  for j := 0 to 1 do
+    for i := 1 to 6 do
+    begin
+      curmemo:=FindComponent('m'+inttostr(i+6*j)) as TMemo;
+      curmemo.Height := MemoHeight; // предполагаем Memo1..Memo5
+      curmemo.Top := 10 + i * (MemoHeight + 10); // 10 — отступ сверху, 5 — промежуток
+    end;
+  numbers3.Height:=MemoHeight*6+50;
+  numbers4.Height:=numbers3.Height;
+end;
+
+procedure TForm1.SpeedButton10Click(Sender: TObject);
+var te:TExcelUnit;
+begin
+  te:=TExcelUnit.Create;
+  te.toExcel;
+  te.Destroy;
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
